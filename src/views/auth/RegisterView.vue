@@ -25,7 +25,7 @@ function onClick() {
       <v-main>
         <v-container>
           <v-row>
-            <v-col cols="12" md="6" class="mx-auto mt-16 pt-16">
+            <v-col cols="12" md="6" class="mx-auto pt-14">
               <v-card
                 class="mx-auto"
                 prepend-icon="mdi-storefront"
@@ -38,6 +38,8 @@ function onClick() {
 
                 <v-card-text class="bg-surface-light pt-4">
                   <v-form fast-fail @submit.prevent>
+                    <v-text-field label="Fullname" variant="outlined"></v-text-field>
+                    <v-text-field label="Lastname" variant="outlined"></v-text-field>
                     <v-text-field label="Email" variant="outlined"></v-text-field>
 
                     <v-text-field
@@ -46,16 +48,22 @@ function onClick() {
                       variant="outlined"
                     ></v-text-field>
 
-                    <v-btn class="mt-2" type="submit" block>Submit</v-btn>
+                    <v-text-field
+                      label="Password Confirmation"
+                      type="password"
+                      variant="outlined"
+                    ></v-text-field>
 
-                    <v-divider></v-divider>
-                    <br />
-                    <h5 class="text-center">
-                      Don't have account?<RouterLink to="/register" class="text-primary">
-                        Click here to Register!</RouterLink
-                      >
-                    </h5>
+                    <v-btn class="mt-2" type="submit" block>Submit</v-btn>
                   </v-form>
+
+                  <v-divider></v-divider>
+                  <br />
+                  <h5 class="text-center">
+                    Already have account?<RouterLink to="/" class="text-primary">
+                      Click here to Login!</RouterLink
+                    >
+                  </h5>
                 </v-card-text>
               </v-card></v-col
             >
