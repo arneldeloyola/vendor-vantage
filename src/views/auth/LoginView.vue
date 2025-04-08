@@ -7,10 +7,18 @@ import LoginForm from '@/components/auth/LoginForm.vue'
   <AppLayout>
     <template #content>
       <v-row>
-        <v-col cols="12" md="6" class="mx-auto mt-16 pt-16">
+        <v-col cols="4s" md="6" class="mx-auto pt-16">
           <v-card class="mx-auto pt-2" elevation="24">
             <v-card-title class="text-center">
+              <img
+                src="/public/images/vendorlogo.jpg"
+                class="rounded-circle"
+                alt="..."
+                width="300"
+                height="230"
+              /><img />
               <h1 class="font-weight-black">Vendor Vantage</h1>
+
               <p>"Your Spot, Your Business, Your Advantage!"</p>
               <v-divider class="my-3"></v-divider>
             </v-card-title>
