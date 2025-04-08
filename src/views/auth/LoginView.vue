@@ -21,7 +21,10 @@ import LoginForm from '@/components/auth/LoginForm.vue'
               <v-divider class="my-3"></v-divider>
               <br />
               <h5 class="text-center">
-                Don't have account?<RouterLink to="/register" class="text-primary">
+                Don't have account?<RouterLink
+                  to="/register"
+                  class="text-primary font-weight-black"
+                >
                   Click here to Register!</RouterLink
                 >
               </h5>
