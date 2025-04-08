@@ -1,9 +1,6 @@
 <script setup>
 import AppLayout from '@/components/layout/AppLayout.vue'
 import LoginForm from '@/components/auth/LoginForm.vue'
-import { ref } from 'vue'
-
-const role = ref('vendor') // Default to vendor
 </script>
 
 <template>
@@ -29,21 +26,12 @@ const role = ref('vendor') // Default to vendor
                 height="230"
               />
               <h2 class="font-weight-black mt-4">Login Form</h2>
+
               <v-divider class="my-3"></v-divider>
             </v-card-title>
 
             <v-card-text class="bg-surface-light pt-2">
-              <LoginForm :role="role">
-                <!-- Role Selection Slot -->
-                <template #after-password>
-                  <div class="role-selection mt-4 mb-4">
-                    <v-radio-group v-model="role" inline hide-details>
-                      <v-radio label="Vendor" value="vendor" color="primary"></v-radio>
-                      <v-radio label="Admin" value="admin" color="primary"></v-radio>
-                    </v-radio-group>
-                  </div>
-                </template>
-              </LoginForm>
+              <LoginForm></LoginForm>
 
               <v-divider class="my-3"></v-divider>
               <br />
@@ -64,7 +52,6 @@ const role = ref('vendor') // Default to vendor
 </template>
 
 <style scoped>
-/* Existing styles remain the same */
 .full-page-container {
   position: static;
   width: 100%;
@@ -100,15 +87,6 @@ const role = ref('vendor') // Default to vendor
   border-radius: 12px !important;
 }
 
-.role-selection {
-  display: flex;
-  justify-content: center;
-}
-
-.role-selection .v-radio-group {
-  gap: 1.5rem;
-}
-
 @media (max-width: 768px) {
   .login-card-container {
     right: 50%;
@@ -118,10 +96,6 @@ const role = ref('vendor') // Default to vendor
 
   .background-image {
     object-position: 100% center;
-  }
-
-  .role-selection .v-radio-group {
-    gap: 1rem;
   }
 }
 </style>
