@@ -1,48 +1,24 @@
 <script setup>
 import AppLayout from '@/components/layout/AppLayout.vue'
+import RegisterForm from '@/components/auth/RegisterForm.vue'
 </script>
 
 <template>
   <AppLayout>
     <template #content>
       <v-row>
-        <v-col cols="12" md="6" class="mx-auto pt-14">
-          <v-card
-            class="mx-auto"
-            prepend-icon="mdi-storefront"
-            subtitle="Your Spot, Your Business, Your Advantage!"
-            elevation="24"
-          >
-            <template v-slot:title>
-              <span class="font-weight-black">Vendor Vantage</span>
-            </template>
+        <v-col cols="12" md="6" class="mx-auto pt-10">
+          <v-card class="mx-auto pt-2" elevation="24">
+            <v-card-title class="text-center">
+              <v-image src="/public/images/vendorlogo.jpg"></v-image>
+              <h1 class="font-weight-black">Vendor Vantage</h1>
+              <p>"Your Spot, Your Business, Your Advantage!"</p>
+              <v-divider class="my-3"></v-divider>
+            </v-card-title>
 
-            <v-card-text class="bg-surface-light pt-4">
-              <v-form fast-fail @submit.prevent>
-                <v-text-field label="Fullname" variant="outlined"></v-text-field>
-                <v-text-field label="Lastname" variant="outlined"></v-text-field>
-                <v-text-field label="Email" variant="outlined"></v-text-field>
-
-                <v-text-field label="Password" type="password" variant="outlined"></v-text-field>
-
-                <v-text-field
-                  label="Password Confirmation"
-                  type="password"
-                  variant="outlined"
-                ></v-text-field>
-                <hr />
-                <v-btn
-                  class="mt-2"
-                  type="submit"
-                  block
-                  color="primary"
-                  elevation="5"
-                  prepend-icon="mdi-account-plus"
-                  >Register</v-btn
-                >
-              </v-form>
-
-              <v-divider></v-divider>
+            <v-card-text class="bg-surface-light pt-2">
+              <RegisterForm></RegisterForm>
+              <v-divider class="my-3"></v-divider>
               <br />
 
               <h5 class="text-center">
