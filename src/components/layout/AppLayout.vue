@@ -13,7 +13,7 @@ function onClick() {
     <v-app :theme="theme">
       <v-app-bar
         class="px-3"
-        :color="theme === 'light' ? 'blue-lighten-3' : 'blue-lighten-2'"
+        :color="theme === 'light' ? 'grey-lighten-2' : 'grey-darken-1'"
         border
       >
         <v-spacer></v-spacer>
@@ -34,7 +34,7 @@ function onClick() {
       </v-main>
 
       <v-footer
-        :color="theme === 'light' ? 'blue-lighten-3' : 'blue-lighten-2'"
+        :color="theme === 'light' ? 'grey-lighten-2' : 'grey-darken-1'"
         border
         app
         elevation="24"

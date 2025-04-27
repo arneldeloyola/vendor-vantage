@@ -9,28 +9,28 @@ import LoginForm from '@/components/auth/LoginForm.vue'
       <div class="full-page-container">
         <div class="background-image-container">
           <img
-            src="/public/images/vendorlogo.jpg"
+            src="/images/v-background.jpg"
             alt="Vendor Vantage Background"
             class="background-image"
           />
         </div>
 
         <div class="login-card-container">
-          <v-card class="login-card" elevation="24">
+          <v-card class="login-card" elevation="24" style="background: rgba(220, 231, 117, 0.5)">
             <v-card-title class="text-center">
               <img
-                src="/public/images/vendorlogo.jpg"
-                class="rounded-circle"
+                src="/images/v-ventageLogo.png"
+                class="rounded-circle border-lg"
                 alt="Vendor Logo"
                 width="300"
                 height="230"
               />
-              <h2 class="font-weight-black mt-4">Login Form</h2>
+              <h5 class="font-weight-black mt-4">"Your Spot, Your Business, Your Advantage!"</h5>
 
               <v-divider class="my-3"></v-divider>
             </v-card-title>
 
-            <v-card-text class="bg-surface-light pt-2">
+            <v-card-text class="bg-surface-light pt-2 rounded">
               <LoginForm></LoginForm>
 
               <v-divider class="my-3"></v-divider>
@@ -38,7 +38,7 @@ import LoginForm from '@/components/auth/LoginForm.vue'
               <h5 class="text-center">
                 Don't have account?<RouterLink
                   to="/register"
-                  class="text-primary font-weight-black"
+                  class="text-success font-weight-black"
                 >
                   Click here to Register!</RouterLink
                 >

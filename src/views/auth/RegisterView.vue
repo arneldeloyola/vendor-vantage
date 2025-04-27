@@ -9,34 +9,34 @@ import RegisterForm from '@/components/auth/RegisterForm.vue'
       <div class="full-page-container">
         <div class="background-image-container">
           <img
-            src="/public/images/vendorlogo.jpg"
+            src="/images/v-background.jpg"
             alt="Vendor Vantage Background"
             class="background-image"
           />
         </div>
 
-        <div class="login-card-container">
-          <v-card class="login-card" elevation="24">
+        <div class="register-card-container">
+          <v-card class="register-card" elevation="24" style="background: rgba(220, 231, 117, 0.5)">
             <v-card-title class="text-center">
               <img
-                src="/public/images/vendorlogo.jpg"
-                class="rounded-circle"
+                src="/images/v-ventageLogo.png"
+                class="rounded-circle border-lg shadow"
                 alt="Vendor Logo"
                 width="300"
                 height="230"
               />
-              <h2 class="font-weight-black mt-4">Register Form</h2>
+              <h5 class="font-weight-black mt-4">"Your Spot, Your Business, Your Advantage!"</h5>
 
               <v-divider class="my-3"></v-divider>
             </v-card-title>
 
-            <v-card-text class="bg-surface-light pt-2">
+            <v-card-text class="bg-surface-light pt-2 rounded">
               <RegisterForm></RegisterForm>
 
               <v-divider class="my-3"></v-divider>
               <br />
               <h5 class="text-center">
-                Already have account?<RouterLink to="/" class="text-primary font-weight-black">
+                Already have account?<RouterLink to="/" class="text-success font-weight-black">
                   Click here to Login!</RouterLink
                 >
               </h5>
@@ -70,7 +70,7 @@ import RegisterForm from '@/components/auth/RegisterForm.vue'
   object-fit: fill;
 }
 
-.login-card-container {
+.register-card-container {
   position: absolute;
   top: 50%;
   right: 5%;
@@ -79,14 +79,14 @@ import RegisterForm from '@/components/auth/RegisterForm.vue'
   max-width: 90%;
 }
 
-.login-card {
+.register-card {
   padding: 24px;
   border-radius: 12px !important;
 }
 
 /* For mobile responsiveness */
 @media (max-width: 768px) {
-  .login-card-container {
+  .register-card-container {
     right: 50%;
     transform: translate(50%, -50%);
     width: 90%;
