@@ -13,7 +13,7 @@
       class="mt-2"
       type="submit"
       block
-      color="blue-lighten-1"
+      color="green-darken-3"
       elevation="5"
       prepend-icon="mdi-account-plus"
       >Register</v-btn
