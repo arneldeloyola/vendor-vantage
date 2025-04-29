@@ -6,44 +6,51 @@ import RegisterForm from '@/components/auth/RegisterForm.vue'
 <template>
   <AppLayout>
     <template #content>
-      <div class="full-page-container">
-        <div class="background-image-container">
-          <img
-            src="/images/v-background.jpg"
-            alt="Vendor Vantage Background"
-            class="background-image"
-          />
+      <v-container fluid>
+        <div class="full-page-container">
+          <div class="background-image-container">
+            <img
+              src="/images/v-background.jpg"
+              alt="Vendor Vantage Background"
+              class="background-image"
+            />
+          </div>
+
+          <div class="register-card-container">
+            <v-card
+              class="register-card"
+              elevation="24"
+              style="background: rgba(220, 231, 117, 0.5)"
+            >
+              <v-card-title class="text-center">
+                <img
+                  src="/images/v-ventageLogo.png"
+                  class="rounded-circle border-lg shadow"
+                  alt="Vendor Logo"
+                  width="300"
+                  height="230"
+                />
+                <h5 class="font-weight-black mt-4">"Your Spot, Your Business, Your Advantage!"</h5>
+
+                <v-divider class="my-3"></v-divider>
+              </v-card-title>
+
+              <v-card-text class="bg-surface-light pt-2 rounded">
+                <RegisterForm></RegisterForm>
+
+                <v-divider class="my-3"></v-divider>
+                <br />
+
+                <h5 class="text-center">
+                  Already have account?<RouterLink to="/" class="text-success font-weight-black">
+                    Click here to Login!</RouterLink
+                  >
+                </h5>
+              </v-card-text>
+            </v-card>
+          </div>
         </div>
-
-        <div class="register-card-container">
-          <v-card class="register-card" elevation="24" style="background: rgba(220, 231, 117, 0.5)">
-            <v-card-title class="text-center">
-              <img
-                src="/images/v-ventageLogo.png"
-                class="rounded-circle border-lg shadow"
-                alt="Vendor Logo"
-                width="300"
-                height="230"
-              />
-              <h5 class="font-weight-black mt-4">"Your Spot, Your Business, Your Advantage!"</h5>
-
-              <v-divider class="my-3"></v-divider>
-            </v-card-title>
-
-            <v-card-text class="bg-surface-light pt-2 rounded">
-              <RegisterForm></RegisterForm>
-
-              <v-divider class="my-3"></v-divider>
-              <br />
-              <h5 class="text-center">
-                Already have account?<RouterLink to="/" class="text-success font-weight-black">
-                  Click here to Login!</RouterLink
-                >
-              </h5>
-            </v-card-text>
-          </v-card>
-        </div>
-      </div>
+      </v-container>
     </template>
   </AppLayout>
 </template>
@@ -75,7 +82,7 @@ import RegisterForm from '@/components/auth/RegisterForm.vue'
   top: 50%;
   right: 5%;
   transform: translateY(-50%);
-  width: 500px;
+  width: 600px;
   max-width: 90%;
 }
 
