@@ -30,10 +30,17 @@ import RegisterForm from '@/components/auth/RegisterForm.vue'
                   width="300"
                   height="230"
                 />
-                <h5 class="font-weight-black mt-4">"Your Spot, Your Business, Your Advantage!"</h5>
 
-                <v-divider class="my-3"></v-divider>
+                <v-divider></v-divider>
               </v-card-title>
+
+              <v-row>
+                <v-col cols="12"
+                  ><h3 class="font-weight-black mt-4 text-center my-5">
+                    "Your Spot, Your Business, Your Advantage!"
+                  </h3>
+                </v-col>
+              </v-row>
 
               <v-card-text class="bg-surface-light pt-2 rounded">
                 <RegisterForm></RegisterForm>

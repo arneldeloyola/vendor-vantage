@@ -76,7 +76,7 @@ const onSubmit = () => {
       <v-col cols="12" md="6">
         <v-text-field
           v-model="formData.firstname"
-          prepend-icon="mdi-account"
+          prepend-inner-icon="mdi-account"
           :counter="10"
           label="First name"
           required
@@ -97,18 +97,20 @@ const onSubmit = () => {
       </v-col>
     </v-row>
     <v-text-field
+      class="pt-2"
       v-model="formData.email"
       label="Email"
       variant="outlined"
-      prepend-icon="mdi-email"
+      prepend-inner-icon="mdi-email"
       :rules="[requiredValidator, emailValidator]"
     ></v-text-field>
 
     <v-row>
       <v-col cols="12" md="6">
         <v-text-field
+          class="pt-2"
           v-model="formData.password"
-          prepend-icon="mdi-lock"
+          prepend-inner-icon="mdi-lock"
           label="Password"
           variant="outlined"
           :type="isPasswordVisible ? 'text' : 'password'"
