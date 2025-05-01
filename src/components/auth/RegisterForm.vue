@@ -5,8 +5,9 @@ import {
   passwordValidator,
   confirmedValidator,
 } from '@/utils/validators'
-
 import { ref } from 'vue'
+import AlertNotification from '../common/AlertNotification.vue'
+import { supabase, formActionDefault } from '@/utils/supabase.js'
 
 const isPasswordVisible = ref(false)
 const isConfirmationVisible = ref(false)
@@ -24,8 +25,36 @@ const formData = ref({
   ...formDataDefault,
 })
 
-const onRegister = () => {
-  //alert(formData.value.email)
+const formAction = ref({
+  ...formActionDefault,
+})
+
+const onRegister = async () => {
+  formAction.value = { ...formActionDefault }
+  formAction.value.formProcess = true
+
+  const { data, error } = await supabase.auth.signUp({
+    email: formData.value.email,
+    password: formData.value.password,
+    options: {
+      data: {
+        firstname: formData.value.firstname,
+        lastname: formData.value.lastname,
+      },
+    },
+  })
+
+  if (error) {
+    console.log(error)
+    formAction.value.formErrorMessage = error.message
+    formAction.value.formStatus = error.status
+  } else if (data) {
+    console.log(data)
+    formAction.value.formSuccessMessage = 'Successfully Registered Account!'
+    refVForm.value?.reset()
+  }
+
+  formAction.value.formProcess = false
 }
 
 const onSubmit = () => {
@@ -36,7 +65,12 @@ const onSubmit = () => {
 </script>
 
 <template>
-  <v-form ref="refVForm" @submit.prevent="onSubmit">
+  <AlertNotification
+    :form-success-message="formAction.formSuccessMessage"
+    :form-error-message="formAction.formErrorMessage"
+  ></AlertNotification>
+
+  <v-form class="mt-5" ref="refVForm" @submit.prevent="onSubmit">
     <br />
     <v-row>
       <v-col cols="12" md="6">
@@ -106,6 +140,8 @@ const onSubmit = () => {
       color="green-darken-3"
       elevation="5"
       prepend-icon="mdi-account-plus"
+      :disabled="formAction.formProcess"
+      :loading="formAction.formProcess"
       >Register</v-btn
     >
   </v-form>
