@@ -8,11 +8,15 @@ import {
 import { ref } from 'vue'
 import AlertNotification from '../common/AlertNotification.vue'
 import { supabase, formActionDefault } from '@/utils/supabase.js'
+import { useRouter } from 'vue-router'
 
 const isPasswordVisible = ref(false)
 const isConfirmationVisible = ref(false)
 const refVForm = ref()
 
+const router = useRouter()
+
+//Load variables
 const formDataDefault = {
   firstname: '',
   lastname: '',
@@ -29,8 +33,11 @@ const formAction = ref({
   ...formActionDefault,
 })
 
+// Register Functionality
 const onRegister = async () => {
+  //Reset Form Action utils
   formAction.value = { ...formActionDefault }
+  // Turn on proccesing
   formAction.value.formProcess = true
 
   const { data, error } = await supabase.auth.signUp({
@@ -40,20 +47,24 @@ const onRegister = async () => {
       data: {
         firstname: formData.value.firstname,
         lastname: formData.value.lastname,
+        //is_admin:true
       },
     },
   })
 
   if (error) {
-    console.log(error)
+    // Add error message and status code
     formAction.value.formErrorMessage = error.message
     formAction.value.formStatus = error.status
   } else if (data) {
-    console.log(data)
+    //Add success messsage
     formAction.value.formSuccessMessage = 'Successfully Registered Account!'
-    refVForm.value?.reset()
+    router.replace('/dashboard')
   }
 
+  //Reset Form
+  refVForm.value?.reset()
+  //Turn off proccesing
   formAction.value.formProcess = false
 }
 

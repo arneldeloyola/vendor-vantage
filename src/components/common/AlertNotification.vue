@@ -9,7 +9,7 @@ const props = defineProps(['formSuccessMessage', 'formErrorMessage'])
     title="Success!"
     type="success"
     variant="tonal"
-    density="compact"
+    density="compacnpmt"
     border="start"
     closable
   >
