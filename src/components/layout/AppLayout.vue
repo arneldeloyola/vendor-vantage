@@ -1,10 +1,8 @@
 <script setup>
 import { isAuthenticated } from '@/utils/supabase'
 import ProfileHeader from './ProfileHeader.vue'
-
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useDisplay } from 'vuetify'
-import { ref } from 'vue'
 
 const props = defineProps(['isWithAppBarNavIcon'])
 
@@ -15,7 +13,7 @@ const { mobile } = useDisplay()
 const theme = ref(localStorage.getItem('theme') ?? 'light')
 
 //Load Variables
-const isloggedIn = ref(false)
+const isLoggedIn = ref(false)
 
 // toggle theme
 function onToggleThene() {
@@ -25,7 +23,7 @@ function onToggleThene() {
 
 //Get Authentication status form supabase
 const getLoggedStatus = async () => {
-  isloggedIn.value = await isAuthenticated()
+  isLoggedIn.value = await isAuthenticated()
 }
 
 //Load functions durinfg component rendering
@@ -45,21 +43,20 @@ onMounted(() => {
           v-if="props.isWithAppBarNavIcon"
           icon="mdi-menu"
           :theme="theme"
-          @click="emit('isDwawerVisible')"
+          @click="emit('isDrawerVisible')"
         ></v-app-bar-nav-icon>
-
         <v-spacer></v-spacer>
 
         <v-btn
+          class="me-2 bg-success"
           :icon="theme === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
-          class="bg-success"
-          variant="elavated"
+          variant="elevated"
           text="Toggle Theme"
           slim
           @click="onToggleThene"
         ></v-btn>
 
-        <ProfileHeader v-if="isloggedIn"></ProfileHeader>
+        <ProfileHeader v-if="isLoggedIn"></ProfileHeader>
       </v-app-bar>
 
       <slot name="navigation "></slot>
@@ -69,7 +66,7 @@ onMounted(() => {
       </v-main>
 
       <v-footer
-        class="font-weight-bold"
+        class="font-weight-bold d-flex justify-center"
         :class="mobile ? 'text-caption' : ''"
         :color="theme === 'light' ? 'grey-lighten-2' : 'grey-darken-1'"
         border

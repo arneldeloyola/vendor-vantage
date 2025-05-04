@@ -16,10 +16,17 @@ export const formActionDefault = {
 
 // Check if the session exist and is valid; Return false if there's an error
 export const isAuthenticated = async () => {
-  const { data, error } = await supabase.auth.getSession()
+  const { data: { session } = {}, error } = await supabase.auth.getSession()
 
   if (error) {
     console.error('Error getting session:', error.message)
     return false
   }
+
+  if (session) {
+    console.log('Session exists:', session)
+    return true
+  }
+
+  return false
 }

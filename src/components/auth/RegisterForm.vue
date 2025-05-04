@@ -10,10 +10,6 @@ import AlertNotification from '../common/AlertNotification.vue'
 import { supabase, formActionDefault } from '@/utils/supabase.js'
 import { useRouter } from 'vue-router'
 
-const isPasswordVisible = ref(false)
-const isConfirmationVisible = ref(false)
-const refVForm = ref()
-
 const router = useRouter()
 
 //Load variables
@@ -32,6 +28,10 @@ const formData = ref({
 const formAction = ref({
   ...formActionDefault,
 })
+
+const isPasswordVisible = ref(false)
+const isConfirmationVisible = ref(false)
+const refVForm = ref()
 
 // Register Functionality
 const onRegister = async () => {
@@ -136,8 +136,8 @@ const onSubmit = () => {
           label="Password Confirmation"
           variant="outlined"
           :type="isConfirmationVisible ? 'text' : 'password'"
-          :append-inner-icon="isConfirmationVisible ? 'mdi-eye' : 'mdi-eye-off'"
-          @click:append-inner="isConfirmationVisible = !isConfirmationVisible"
+          :append-inner-icon="isPasswordConfirmVisible ? 'mdi-eye' : 'mdi-eye-off'"
+          @click:append-inner="isPasswordConfirmVisible = !isConfirmationVisible"
           :rules="[
             requiredValidator,
             confirmedValidator(formData.password_confirmation, formData.password),

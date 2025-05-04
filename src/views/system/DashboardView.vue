@@ -1,11 +1,12 @@
 <script setup>
-import AppLayout from '@/components/layout/AppLayout.vue'
 import SideNavigation from '@/components/layout/SideNavigation.vue'
-
+import AppLayout from '@/components/layout/AppLayout.vue'
 import { ref } from 'vue'
 
+// Control the visibility of the drawer
 const isDrawerVisible = ref(true)
 
+// Carousel items
 const items = [
   {
     src: '/public/images/vendo1.jpg',
@@ -24,52 +25,62 @@ const items = [
 
 <template>
   <AppLayout
-    :is-with-app-bar-nave-icon="true"
+    :is-with-app-bar-nav-icon="true"
     @is-drawer-visible="isDrawerVisible = !isDrawerVisible"
   >
+    <!-- Side Navigation -->
     <template #navigation>
       <SideNavigation :is-drawer-visible="isDrawerVisible"></SideNavigation>
     </template>
 
+    <!-- Main Content -->
     <template #content>
       <v-container fluid class="px-5" style="background: rgba(220, 206, 63, 0.81)">
         <br />
         <br />
         <v-row class="d-flex justify-center px-5">
-          <v-col cols="4" lg="4" class=""
-            ><v-carousel height="630px" hide-delimiters>
-              <v-carousel-item
-                class="border-xl rounded"
-                variant="elevated"
-                v-for="(item, i) in items"
-                :key="i"
-                :src="item.src"
-                cover
-              ></v-carousel-item> </v-carousel
-          ></v-col>
-          <v-col cols="4" lg="4" class=""
-            ><v-carousel height="630px" hide-delimiters>
+          <!-- First Column Carousel -->
+          <v-col cols="12" md="4" class="d-flex justify-center">
+            <v-carousel height="630px" hide-delimiters>
               <v-carousel-item
                 class="border-xl rounded"
                 v-for="(item, i) in items"
                 :key="i"
                 :src="item.src"
                 cover
-              ></v-carousel-item> </v-carousel
-          ></v-col>
-          <v-col cols="4" lg="4" class=""
-            ><v-carousel height="630px" hide-delimiters>
+              ></v-carousel-item>
+            </v-carousel>
+          </v-col>
+
+          <!-- Second Column Carousel -->
+          <v-col cols="12" md="4" class="d-flex justify-center">
+            <v-carousel height="630px" hide-delimiters>
               <v-carousel-item
                 class="border-xl rounded"
                 v-for="(item, i) in items"
                 :key="i"
                 :src="item.src"
                 cover
-              ></v-carousel-item> </v-carousel
-          ></v-col>
+              ></v-carousel-item>
+            </v-carousel>
+          </v-col>
+
+          <!-- Third Column Carousel -->
+          <v-col cols="12" md="4" class="d-flex justify-center">
+            <v-carousel height="630px" hide-delimiters>
+              <v-carousel-item
+                class="border-xl rounded"
+                v-for="(item, i) in items"
+                :key="i"
+                :src="item.src"
+                cover
+              ></v-carousel-item>
+            </v-carousel>
+          </v-col>
         </v-row>
 
-        <br /><br /><br />
+        <!-- Additional Spacing -->
+        
         <br /><br /><br />
         <br /><br /><br />
         <br /><br /><br />
