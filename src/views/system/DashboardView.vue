@@ -142,14 +142,14 @@ const tab = ref('one')
                     <v-list-item>
                       <v-list-item-title class="text-grey">Shop Name</v-list-item-title>
                       <template v-slot:append>
-                        <span class="font-weight-medium">Sweet Treats Bakery</span>
+                        <span class="font-weight-medium">Kwek Kwek papart</span>
                       </template>
                     </v-list-item>
 
                     <v-list-item>
                       <v-list-item-title class="text-grey">Contact</v-list-item-title>
                       <template v-slot:append>
-                        <span class="font-weight-medium">(555) 123-4567</span>
+                        <span class="font-weight-medium">+63-917-1234-5678</span>
                       </template>
                     </v-list-item>
 
