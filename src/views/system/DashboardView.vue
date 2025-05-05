@@ -9,7 +9,7 @@ const tab = ref('one')
   <AppLayout>
     <template #content>
       <v-row>
-        <v-col cols="12" md="3" class="mt-4 mx-2">
+        <v-col cols="12" md="3" class="mt-8 ml-5">
           <v-card class="rounded-lg" flat>
             <div class="d-flex justify-space-evenly bg-grey-lighten-3 rounded-lg pa-1">
               <v-btn
@@ -89,16 +89,97 @@ const tab = ref('one')
                   <div class="text-caption text-grey-darken-1">Last updated 2 days ago</div>
                 </v-card>
               </v-col>
-              <v-col cols="12" md="7"></v-col>
-              <v-col cols="12" md="5"></v-col>
+              <v-col cols="12" md="7">
+                <v-card class="elevation-2" rounded>
+                  <v-card-title class="text-h6 font-weight-bold py-3">
+                    <v-icon start class="me-2">mdi-calendar-clock</v-icon>
+                    Upcoming Bookings
+                  </v-card-title>
+
+                  <v-list lines="two">
+                    <v-list-item>
+                      <v-list-item-title class="font-weight-bold text-body-2"
+                        >Spring Festival</v-list-item-title
+                      >
+                      <v-list-item-subtitle>
+                        <div class="d-flex flex-column">
+                          <span class="text-caption">May 15, 2025</span>
+                        </div>
+                        <v-chip size="x-small"> Booth #12 </v-chip>
+                      </v-list-item-subtitle>
+                      <template v-slot:append>
+                        <v-chip color="success" size="small">Confirmed</v-chip>
+                      </template>
+                    </v-list-item>
+
+                    <v-divider></v-divider>
+
+                    <v-list-item>
+                      <v-list-item-title class="font-weight-bold text-body-2"
+                        >Tech Expo</v-list-item-title
+                      >
+                      <v-list-item-subtitle>
+                        <div class="d-flex flex-column">
+                          <span class="text-caption">June 10, 2025</span>
+                        </div>
+                        <v-chip size="x-small"> Booth #5 </v-chip>
+                      </v-list-item-subtitle>
+                      <template v-slot:append>
+                        <v-chip color="warning" size="small">Pending Payment</v-chip>
+                      </template>
+                    </v-list-item>
+                  </v-list>
+                </v-card>
+              </v-col>
+              <v-col cols="12" md="5">
+                <v-card class="elevation-2" rounded>
+                  <v-card-title class="text-h6 font-weight-bold py-3">
+                    <v-icon start class="me-2">mdi-store</v-icon>
+                    Your Business
+                  </v-card-title>
+
+                  <v-list density="compact">
+                    <v-list-item>
+                      <v-list-item-title class="text-grey">Shop Name</v-list-item-title>
+                      <template v-slot:append>
+                        <span class="font-weight-medium">Sweet Treats Bakery</span>
+                      </template>
+                    </v-list-item>
+
+                    <v-list-item>
+                      <v-list-item-title class="text-grey">Contact</v-list-item-title>
+                      <template v-slot:append>
+                        <span class="font-weight-medium">(555) 123-4567</span>
+                      </template>
+                    </v-list-item>
+
+                    <v-list-item>
+                      <v-list-item-title class="text-grey">Business Type</v-list-item-title>
+                      <template v-slot:append>
+                        <v-chip size="small" class="text-capitalize">food</v-chip>
+                      </template>
+                    </v-list-item>
+
+                    <v-list-item>
+                      <v-list-item-title class="text-grey">Member Since</v-list-item-title>
+                      <template v-slot:append>
+                        <span class="font-weight-medium">1/15/2025</span>
+                      </template>
+                    </v-list-item>
+                  </v-list>
+
+                  <v-card-actions class="pa-4">
+                    <v-spacer></v-spacer>
+                    <v-btn variant="outlined" prepend-icon="mdi-pencil"> Edit Profile </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-col>
             </v-row>
           </div>
           <div v-else-if="tab === 'two'" class="pa-4">Tab Two Content</div>
           <div v-else-if="tab === 'three'" class="pa-4">Tab Three Content</div>
         </v-col>
       </v-row>
-
-      <v-sheet class="mt-4" :height="200" :width="200" rounded />
     </template>
   </AppLayout>
 </template>
