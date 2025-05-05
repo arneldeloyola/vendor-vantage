@@ -13,6 +13,7 @@ const registerDialog = ref(false)
     <v-main>
       <v-container fluid class="pa-0">
         <!-- Section 1 -->
+
         <v-sheet color="grey-lighten-4" class="pa-6" width="100%">
           <v-row class="pt-16">
             <v-col cols="12" md="6" class="pl-10 pt-16">

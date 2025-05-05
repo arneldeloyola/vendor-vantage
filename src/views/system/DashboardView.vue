@@ -5,7 +5,6 @@ import { ref } from 'vue'
 
 // Control the visibility of the drawer
 const isDrawerVisible = ref(true)
-
 // Carousel items
 const items = [
   {
@@ -80,7 +79,7 @@ const items = [
         </v-row>
 
         <!-- Additional Spacing -->
-        
+
         <br /><br /><br />
         <br /><br /><br />
         <br /><br /><br />
