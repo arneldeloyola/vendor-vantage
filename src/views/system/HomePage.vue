@@ -57,7 +57,80 @@ const registerDialog = ref(false)
         <v-divider class="my-0" />
 
         <!-- Section 2 -->
-        <v-sheet class="pa-6 pt-16" width="100%"> </v-sheet>
+        <v-sheet class="pa-6 pt-16" width="100%"
+          ><h1 class="d-flex justify-center">Upcoming Events</h1>
+          <p class="d-flex justify-center text-grey-lighten-1 text-subtitle-1">
+            Discover the latest campus events with available vendor slots
+          </p>
+          <v-row>
+            <v-col cols="12" md="4"
+              ><v-card class="mx-auto my-4" max-width="400" elevation="3">
+                <v-card-title class="text-h6 font-weight-bold">Spring Festival</v-card-title>
+
+                <v-card-subtitle class="pb-0">
+                  <v-icon class="mr-2">mdi-calendar</v-icon>May 15, 2025<br />
+                  <v-icon class="mr-2">mdi-map-marker</v-icon> CCIS
+                </v-card-subtitle>
+
+                <v-card-text>
+                  Annual spring celebration with music, food, and activities.
+                </v-card-text>
+
+                <v-card-actions class="px-4">
+                  <span class="font-weight-medium text-green-darken-2">
+                    <v-icon class="mr-2">mdi-store</v-icon>12 booths available</span
+                  >
+                  <v-spacer></v-spacer>
+                  <v-btn variant="outlined" color="black">View Details</v-btn>
+                </v-card-actions>
+              </v-card></v-col
+            >
+            <v-col cols="12" md="4"
+              ><v-card class="mx-auto my-4" max-width="400" elevation="3">
+                <v-card-title class="text-h6 font-weight-bold">Tech Expo</v-card-title>
+
+                <v-card-subtitle class="pb-0">
+                  <v-icon class="mr-2">mdi-calendar</v-icon>June 10, 2025<br />
+                  <v-icon class="mr-2">mdi-map-marker</v-icon>Engineering Building
+                </v-card-subtitle>
+
+                <v-card-text>
+                  Showcase of the latest technology innovations from students and local businesses
+                </v-card-text>
+
+                <v-card-actions class="px-4">
+                  <span class="font-weight-medium text-green-darken-2">
+                    <v-icon class="mr-2">mdi-store</v-icon>8 booths available</span
+                  >
+                  <v-spacer></v-spacer>
+                  <v-btn variant="outlined" color="black">View Details</v-btn>
+                </v-card-actions>
+              </v-card></v-col
+            >
+            <v-col cols="12" md="4"
+              ><v-card class="mx-auto my-4" max-width="400" elevation="3">
+                <v-card-title class="text-h6 font-weight-bold">Welcome Week</v-card-title>
+
+                <v-card-subtitle class="pb-0">
+                  <v-icon class="mr-2">mdi-calendar</v-icon> September 5, 2025<br />
+                  <v-icon class="mr-2">mdi-map-marker</v-icon>Gymnasium
+                </v-card-subtitle>
+
+                <v-card-text>
+                  AOrientation event for new students with various activities and information booths
+                </v-card-text>
+
+                <v-card-actions class="px-4">
+                  <span class="font-weight-medium text-green-darken-2">
+                    <v-icon class="mr-2">mdi-store</v-icon>15 booths available</span
+                  >
+                  <v-spacer></v-spacer>
+                  <v-btn variant="outlined" color="black">View Details</v-btn>
+                </v-card-actions>
+              </v-card></v-col
+            >
+          </v-row>
+        </v-sheet>
 
         <!-- Divider -->
         <v-divider class="my-0" />
