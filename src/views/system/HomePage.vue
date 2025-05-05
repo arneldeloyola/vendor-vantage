@@ -57,8 +57,8 @@ const registerDialog = ref(false)
         <v-divider class="my-0" />
 
         <!-- Section 2 -->
-        <v-sheet class="pa-6 pt-16" width="100%"
-          ><h1 class="d-flex justify-center">Upcoming Events</h1>
+        <v-sheet class="pa-6 pt-16" width="100%">
+          <h1 class="d-flex justify-center">Upcoming Events</h1>
           <p class="d-flex justify-center text-grey-lighten-1 text-subtitle-1">
             Discover the latest campus events with available vendor slots
           </p>
@@ -136,8 +136,108 @@ const registerDialog = ref(false)
         <v-divider class="my-0" />
 
         <!-- Section 3 -->
-        <v-sheet color="grey-lighten-4" class="pa-6" width="100%"> </v-sheet>
+        <v-sheet color="grey-lighten-4" class="pa-6" width="100%">
+          <v-row>
+            <v-col cols="12" md="7">
+              <h1>How it Works</h1>
+              <v-row justify="center" align="center" spacing="4">
+                <!-- Step 1 -->
+
+                <v-col cols="12" md="12" class="d-flex align-center">
+                  <v-btn
+                    class="d-flex align-center justify-center"
+                    color="black"
+                    fab
+                    dark
+                    tile
+                    size="40"
+                    :style="{ borderRadius: '50%' }"
+                  >
+                    <span class="headline">1</span>
+                  </v-btn>
+                  <div class="ml-4">
+                    <p class="headline">Register as a Vendor</p>
+                    <p>Create an account with your business details and contact information</p>
+                  </div>
+                </v-col>
+
+                <!-- Step 2 -->
+                <v-col cols="12" md="12" class="d-flex align-center">
+                  <v-btn
+                    class="d-flex align-center justify-center"
+                    color="black"
+                    fab
+                    dark
+                    tile
+                    size="40"
+                    :style="{ borderRadius: '50%' }"
+                  >
+                    <span class="headline">2</span>
+                  </v-btn>
+                  <div class="ml-4">
+                    <p class="headline">Browse Available Events</p>
+                    <p>Explore upcoming campus events with available vendor slots</p>
+                  </div>
+                </v-col>
+
+                <!-- Step 3 -->
+                <v-col cols="12" md="12" class="d-flex align-center">
+                  <v-btn
+                    class="d-flex align-center justify-center"
+                    color="black"
+                    fab
+                    dark
+                    tile
+                    size="40"
+                    :style="{ borderRadius: '50%' }"
+                  >
+                    <span class="headline">3</span>
+                  </v-btn>
+                  <div class="ml-4">
+                    <p class="headline">Book Your Booth</p>
+                    <p>Select an available booth and submit your booking request</p>
+                  </div>
+                </v-col>
+
+                <!-- Step 4 -->
+                <v-col cols="12" md="12" class="d-flex align-center">
+                  <v-btn
+                    class="d-flex align-center justify-center"
+                    color="black"
+                    fab
+                    dark
+                    tile
+                    size="40"
+                    :style="{ borderRadius: '50%' }"
+                  >
+                    <span class="headline">4</span>
+                  </v-btn>
+                  <div class="ml-4">
+                    <p class="headline">Confirm and Pay</p>
+                    <p>Once approved, complete your payment to secure your spot</p>
+                  </div>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-sheet>
       </v-container>
     </v-main>
   </v-app>
 </template>
+
+<style scoped>
+.headline {
+  font-size: 18px;
+  font-weight: bold;
+}
+p {
+  font-size: 14px;
+}
+.v-btn {
+  transition: background-color 0.3s ease;
+}
+.v-btn:hover {
+  background-color: rgba(0, 0, 0, 0.12);
+}
+</style>
