@@ -1,90 +1,60 @@
 <script setup>
-import SideNavigation from '@/components/layout/SideNavigation.vue'
 import AppLayout from '@/components/layout/AppLayout.vue'
 import { ref } from 'vue'
 
-// Control the visibility of the drawer
-const isDrawerVisible = ref(true)
-
-// Carousel items
-const items = [
-  {
-    src: '/public/images/vendo1.jpg',
-  },
-  {
-    src: '/public/images/vendo2.jpg',
-  },
-  {
-    src: '/public/images/vendo3.jpg',
-  },
-  {
-    src: '/public/images/vendo4.jpg',
-  },
-]
+const tab = ref('one')
 </script>
 
 <template>
-  <AppLayout
-    :is-with-app-bar-nav-icon="true"
-    @is-drawer-visible="isDrawerVisible = !isDrawerVisible"
-  >
-    <!-- Side Navigation -->
-    <template #navigation>
-      <SideNavigation :is-drawer-visible="isDrawerVisible"></SideNavigation>
-    </template>
-
-    <!-- Main Content -->
+  <AppLayout>
     <template #content>
-      <v-container fluid class="px-5" style="background: rgba(220, 206, 63, 0.81)">
-        <br />
-        <br />
-        <v-row class="d-flex justify-center px-5">
-          <!-- First Column Carousel -->
-          <v-col cols="12" md="4" class="d-flex justify-center">
-            <v-carousel height="630px" hide-delimiters>
-              <v-carousel-item
-                class="border-xl rounded"
-                v-for="(item, i) in items"
-                :key="i"
-                :src="item.src"
-                cover
-              ></v-carousel-item>
-            </v-carousel>
-          </v-col>
+      <v-row>
+        <v-col cols="12" md="3" class="mt-4 mx-2">
+          <v-card class="rounded-lg" flat>
+            <div class="d-flex justify-space-evenly bg-grey-lighten-1 rounded-lg pa-1">
+              <v-btn
+                :color="tab === 'one' ? 'white' : 'grey-lighten-1'"
+                :variant="tab === 'one' ? 'elevated' : 'text'"
+                :class="[' rounded-lg', tab === 'one' ? 'text-black' : 'text-grey-darken-3']"
+                @click="tab = 'one'"
+              >
+                <span class="text-subtitle-2">Overview</span>
+              </v-btn>
+              <v-btn
+                :color="tab === 'two' ? 'white' : 'grey-lighten-1'"
+                :variant="tab === 'two' ? 'elevated' : 'text'"
+                :class="[' rounded-lg', tab === 'two' ? 'text-black' : 'text-grey-darken-3']"
+                @click="tab = 'two'"
+              >
+                <span class="text-subtitle-2">Bookings</span>
+              </v-btn>
+              <v-btn
+                :color="tab === 'three' ? 'white' : 'grey-lighten-1'"
+                :variant="tab === 'three' ? 'elevated' : 'text'"
+                :class="[' rounded-lg', tab === 'three' ? 'text-black' : 'text-grey-darken-3']"
+                @click="tab = 'three'"
+              >
+                <span class="text-subtitle-2">Events</span>
+              </v-btn>
+            </div>
+          </v-card>
+        </v-col>
+        <v-col cols="12" md="9"></v-col>
+        <v-col cols="12" md="12" class="mt-n4">
+          <div v-if="tab === 'one'" class="pa-4">
+            <v-row>
+              <v-col cols="12" md="3"> </v-col>
+              <v-col cols="12" md="3"> </v-col>
+              <v-col cols="12" md="3"> </v-col>
+              <v-col cols="12" md="3"> </v-col>
+            </v-row>
+          </div>
+          <div v-else-if="tab === 'two'" class="pa-4">Tab Two Content</div>
+          <div v-else-if="tab === 'three'" class="pa-4">Tab Three Content</div>
+        </v-col>
+      </v-row>
 
-          <!-- Second Column Carousel -->
-          <v-col cols="12" md="4" class="d-flex justify-center">
-            <v-carousel height="630px" hide-delimiters>
-              <v-carousel-item
-                class="border-xl rounded"
-                v-for="(item, i) in items"
-                :key="i"
-                :src="item.src"
-                cover
-              ></v-carousel-item>
-            </v-carousel>
-          </v-col>
-
-          <!-- Third Column Carousel -->
-          <v-col cols="12" md="4" class="d-flex justify-center">
-            <v-carousel height="630px" hide-delimiters>
-              <v-carousel-item
-                class="border-xl rounded"
-                v-for="(item, i) in items"
-                :key="i"
-                :src="item.src"
-                cover
-              ></v-carousel-item>
-            </v-carousel>
-          </v-col>
-        </v-row>
-
-        <!-- Additional Spacing -->
-        
-        <br /><br /><br />
-        <br /><br /><br />
-        <br /><br /><br />
-      </v-container>
+      <v-sheet class="mt-4" :height="200" :width="200" rounded />
     </template>
   </AppLayout>
 </template>
