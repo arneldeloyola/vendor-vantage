@@ -1,5 +1,6 @@
 <script setup>
 import AppLayout from '@/components/layout/AppLayout.vue'
+
 import { ref } from 'vue'
 
 const tab = ref('three') // Default tab
@@ -96,7 +97,7 @@ const cancelBooking = (bookingIndex) => {
     <template #content>
       <v-row>
         <!-- Tabs -->
-        <v-col cols="12" md="3" class="mt-8 ml-5">
+        <v-col cols="12" md="3" class="mt-8 ml-8">
           <v-card class="rounded-lg" flat>
             <div class="d-flex justify-space-evenly bg-grey-lighten-3 rounded-lg pa-1">
               <v-btn
@@ -132,7 +133,7 @@ const cancelBooking = (bookingIndex) => {
         <v-col cols="12" md="12" v-if="tab === 'one'" class="pa-4">
           <v-row class="mx-5">
             <v-col cols="12" md="3">
-              <v-card class="pa-4" elevation="2" rounded>
+              <v-card class="pa-4" elevation="5" rounded>
                 <div class="d-flex align-center mb-2">
                   <div class="text-subtitle-2 font-weight-medium"><b>Spring Festival</b></div>
                   <v-icon class="ms-auto" size="small">mdi-calendar-check</v-icon>
@@ -144,7 +145,7 @@ const cancelBooking = (bookingIndex) => {
 
             <!-- Upcoming Events -->
             <v-col cols="12" md="3">
-              <v-card class="pa-4" elevation="2" rounded>
+              <v-card class="pa-4" elevation="5" rounded>
                 <div class="d-flex align-center mb-2">
                   <div class="text-subtitle-2 font-weight-medium">
                     <b>Upcoming Events</b>
@@ -158,7 +159,7 @@ const cancelBooking = (bookingIndex) => {
 
             <!-- Pending Payments -->
             <v-col cols="12" md="3">
-              <v-card class="pa-4" elevation="2" rounded>
+              <v-card class="pa-4" elevation="5" rounded>
                 <div class="d-flex align-center mb-2">
                   <div class="text-subtitle-2 font-weight-medium"><b>Pending Payments</b></div>
                   <v-icon class="ms-auto" size="small">mdi-currency-usd</v-icon>
@@ -170,7 +171,7 @@ const cancelBooking = (bookingIndex) => {
 
             <!-- Profile Status -->
             <v-col cols="12" md="3">
-              <v-card class="pa-4" elevation="2" rounded>
+              <v-card class="pa-4" elevation="5" rounded>
                 <div class="d-flex align-center mb-2">
                   <div class="text-subtitle-2 font-weight-medium"><b>Profile Status</b></div>
                   <v-icon class="ms-auto" size="small">mdi-account-check</v-icon>
@@ -183,7 +184,7 @@ const cancelBooking = (bookingIndex) => {
 
           <v-row class="mx-5">
             <v-col cols="12" md="7">
-              <v-card class="pa-4" elevation="2" rounded>
+              <v-card class="pa-4" elevation="5" rounded>
                 <div class="d-flex align-center mb-2">
                   <div class="text-subtitle-2 font-weight-medium"><b>Upcoming Bookings</b></div>
                   <v-icon class="ms-auto" size="small">mdi-calendar-check</v-icon>
@@ -193,7 +194,7 @@ const cancelBooking = (bookingIndex) => {
               </v-card>
             </v-col>
             <v-col cols="12" md="5">
-              <v-card class="elevation-2" rounded>
+              <v-card class="elevation-5" rounded>
                 <v-card-title class="text-h6 font-weight-bold py-3">
                   <v-icon start class="me-2">mdi-store</v-icon>
                   <b>Your Business</b>
@@ -243,16 +244,16 @@ const cancelBooking = (bookingIndex) => {
         </v-col>
 
         <!-- Bookings Section -->
-        <v-col cols="12" md="12" v-if="tab === 'two'" class="pa-4 mx-5">
-          <v-sheet :elevation="6" height="700px" width="1800px" class="pb-10 px-2" rounded>
+        <v-col cols="12" md="12" v-if="tab === 'two'" class="pa-4">
+          <v-sheet :elevation="6" height="auto" class="pb-10 px-10" rounded>
             <div class="px-5 mb-6">
               <h1 class="tight-heading pt-4">My Bookings</h1>
               <span class="text-caption text-grey-darken-1">Manage your event bookings</span>
             </div>
             <v-row>
               <v-col cols="12" md="6" v-for="(booking, index) in bookings" :key="index">
-                <v-card class="pa-4" elevation="2" rounded>
-                  <v-img :src="booking.image" height="150px" width="150px" class="mb-3"></v-img>
+                <v-card class="pa-7" elevation="10" rounded>
+                  <v-img :src="booking.image" height="300px" width="300px" class="mb-3"></v-img>
                   <v-card-title class="text-h6 font-weight-bold">{{ booking.name }}</v-card-title>
                   <v-card-subtitle class="text-caption">
                     <p>{{ booking.date }}</p>
@@ -284,16 +285,18 @@ const cancelBooking = (bookingIndex) => {
               >
             </div>
             <v-row class="px-5">
-              <v-col cols="12" md="6" v-for="event in events" :key="event.id">
-                <v-card class="pa-4 d-flex" elevation="2" rounded>
+              <v-col cols="12" md="3" v-for="event in events" :key="event.id">
+                <v-card class="pa-4" elevation="10" rounded>
                   <!-- Event Image -->
-                  <v-img :src="event.image" height="300px" width="300px" class=""></v-img>
+                  <v-img :src="event.image"></v-img>
 
                   <!-- Event Content -->
                   <div>
                     <v-card-title class="text-h6 font-weight-bold">{{ event.name }}</v-card-title>
                     <v-card-subtitle class="text-caption">
-                      <p>{{ event.date }}</p>
+                      <p>
+                        <b>{{ event.date }}</b>
+                      </p>
                       <p>{{ event.boothsAvailable }} booths available</p>
                     </v-card-subtitle>
                     <v-card-text class="text-caption">{{ event.description }}</v-card-text>

@@ -3,7 +3,6 @@ import HomePage from '@/views/system/HomePage.vue'
 import LoginView from '@/views/auth/LoginView.vue'
 import RegisterView from '@/views/auth/RegisterView.vue'
 import DashboardView from '@/views/system/DashboardView.vue'
-import MyApplication from '@/views/system/MyApplication.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,11 +26,6 @@ const router = createRouter({
       path: '/dashboard',
       name: 'dashboard',
       component: DashboardView,
-    },
-    {
-      path: '/myapplication',
-      name: 'myapplication',
-      component: MyApplication,
     },
   ],
 })
