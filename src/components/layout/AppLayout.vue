@@ -1,6 +1,6 @@
 <script setup>
 import { isAuthenticated } from '@/utils/supabase'
-import ProfileHeader from './ProfileHeader.vue'
+// import ProfileHeader from './ProfileHeader.vue'
 import { onMounted, ref } from 'vue'
 import { useDisplay } from 'vuetify'
 
@@ -9,7 +9,7 @@ const drawer = ref(false)
 
 // Navigation items for drawer
 const items = ref([
-  { title: 'Overview', icon: 'mdi-view-dashboard', to: '/' },
+  { title: 'Overview', icon: 'mdi-view-dashboard', to: '/dashboard' },
   { title: 'My Bookings', icon: 'mdi-calendar-check', to: '/bookings' },
   { title: 'Events', icon: 'mdi-calendar-multiselect', to: '/events' },
   { title: 'Payments', icon: 'mdi-credit-card-outline', to: '/payments' },
@@ -63,7 +63,7 @@ onMounted(() => {
         </v-navigation-drawer>
 
         <v-main>
-          <ProfileHeader v-if="isLoggedIn" />
+          <!-- <ProfileHeader v-if="isLoggedIn" /> -->
           <slot name="content"></slot>
           <!-- This is the named slot -->
         </v-main>

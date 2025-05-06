@@ -91,13 +91,12 @@ import TopNavbar from '@/components/layout/TopNavbar.vue'
             ></v-expansion-panel>
             <v-expansion-panel
               title="What payment methods do you accept?"
-              text="We accept all major credit cards, including Visa, Mastercard, American Express, and
-                Discover."
+              text="We accept GCash and over-the-counter payments."
             ></v-expansion-panel>
             <v-expansion-panel
               title="How do I become a campus partner?"
               text="If you're interested in listing your campus events on our platform, please contact
-                our Campus Relations team at partners@campusvendor.com."
+                our Campus Relations team at partners@vendorvantage.com."
             ></v-expansion-panel>
           </v-expansion-panels>
         </v-col>
