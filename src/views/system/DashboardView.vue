@@ -85,6 +85,10 @@ const submitApplication = () => {
     lineOfBusiness: 'food',
   }
 }
+// Cancel booking
+const cancelBooking = (bookingIndex) => {
+  bookings.value.splice(bookingIndex, 1)
+}
 </script>
 
 <template>
@@ -246,8 +250,9 @@ const submitApplication = () => {
               <span class="text-caption text-grey-darken-1">Manage your event bookings</span>
             </div>
             <v-row>
-              <v-col cols="12" md="6" v-for="booking in bookings" :key="booking.id">
+              <v-col cols="12" md="6" v-for="(booking, index) in bookings" :key="index">
                 <v-card class="pa-4" elevation="2" rounded>
+                  <v-img :src="booking.image" height="150px" width="150px" class="mb-3"></v-img>
                   <v-card-title class="text-h6 font-weight-bold">{{ booking.name }}</v-card-title>
                   <v-card-subtitle class="text-caption">
                     <p>{{ booking.date }}</p>
@@ -258,6 +263,11 @@ const submitApplication = () => {
                   <v-card-text class="text-caption">
                     Line of Business: {{ booking.lineOfBusiness }}
                   </v-card-text>
+                  <v-card-actions>
+                    <v-btn color="red " variant="outlined" @click="cancelBooking(index)">
+                      Cancel Booking
+                    </v-btn>
+                  </v-card-actions>
                 </v-card>
               </v-col>
             </v-row>
