@@ -6,17 +6,9 @@ import {
   confirmedValidator,
 } from '@/utils/validators'
 import { ref } from 'vue'
-import AlertNotification from '../common/AlertNotification.vue'
-import { supabase, formActionDefault } from '@/utils/supabase.js'
-import { useRouter } from 'vue-router'
+import AlertNotification from '@/components/common/AlertNotification.vue'
+import { supabase, formActionDefault } from '@/utils/supabase'
 
-const isPasswordVisible = ref(false)
-const isConfirmationVisible = ref(false)
-const refVForm = ref()
-
-const router = useRouter()
-
-//Load variables
 const formDataDefault = {
   firstname: '',
   lastname: '',
@@ -33,11 +25,13 @@ const formAction = ref({
   ...formActionDefault,
 })
 
-// Register Functionality
-const onRegister = async () => {
-  //Reset Form Action utils
+const isPasswordVisible = ref(false)
+const isPasswordConfirmVisible = ref(false)
+const refVForm = ref()
+
+// Functions
+const onSubmit = async () => {
   formAction.value = { ...formActionDefault }
-  // Turn on proccesing
   formAction.value.formProcess = true
 
   const { data, error } = await supabase.auth.signUp({
@@ -47,30 +41,27 @@ const onRegister = async () => {
       data: {
         firstname: formData.value.firstname,
         lastname: formData.value.lastname,
-        //is_admin:true
+        is_admin: false, // Just turn to true if admin account
       },
     },
   })
 
   if (error) {
-    // Add error message and status code
+    // Add Error Message and Status Code
     formAction.value.formErrorMessage = error.message
     formAction.value.formStatus = error.status
   } else if (data) {
-    //Add success messsage
-    formAction.value.formSuccessMessage = 'Successfully Registered Account!'
-    router.replace('/dashboard')
+    console.log(data)
+    formAction.value.formSuccessMessage = 'Successfully Registered Account'
+    //Can Add more actions here
   }
-
-  //Reset Form
   refVForm.value?.reset()
-  //Turn off proccesing
   formAction.value.formProcess = false
 }
 
-const onSubmit = () => {
+const onFormSubmit = () => {
   refVForm.value?.validate().then(({ valid }) => {
-    if (valid) onRegister()
+    if (valid) onSubmit()
   })
 }
 </script>
@@ -80,82 +71,71 @@ const onSubmit = () => {
     :form-success-message="formAction.formSuccessMessage"
     :form-error-message="formAction.formErrorMessage"
   ></AlertNotification>
-
-  <v-form class="mt-5" ref="refVForm" @submit.prevent="onSubmit">
-    <br />
+  <v-form ref="refVForm" @submit.prevent="onFormSubmit">
     <v-row>
-      <v-col cols="12" md="6">
+      <v-col col="12" md="6">
         <v-text-field
           v-model="formData.firstname"
-          prepend-inner-icon="mdi-account"
-          :counter="10"
-          label="First name"
-          required
+          label="Firstname"
           variant="outlined"
           :rules="[requiredValidator]"
         ></v-text-field>
       </v-col>
-
-      <v-col cols="12" md="6">
+      <v-col col="12" md="6">
         <v-text-field
           v-model="formData.lastname"
-          :counter="10"
-          label="Last name"
-          required
+          label="Last Name"
           variant="outlined"
           :rules="[requiredValidator]"
         ></v-text-field>
       </v-col>
-    </v-row>
-    <v-text-field
-      class="pt-2"
-      v-model="formData.email"
-      label="Email"
-      variant="outlined"
-      prepend-inner-icon="mdi-email"
-      :rules="[requiredValidator, emailValidator]"
-    ></v-text-field>
-
-    <v-row>
-      <v-col cols="12" md="6">
+      <v-col col="12" md="12">
         <v-text-field
-          class="pt-2"
-          v-model="formData.password"
-          prepend-inner-icon="mdi-lock"
-          label="Password"
+          v-model="formData.email"
+          label="Email address"
+          prepend-inner-icon="mdi-email-outline"
           variant="outlined"
+          :rules="[requiredValidator, emailValidator]"
+        ></v-text-field>
+      </v-col>
+      <v-col col="12" md="6">
+        <v-text-field
+          v-model="formData.password"
+          :append-inner-icon="isPasswordVisible ? 'mdi-eye-off' : 'mdi-eye'"
           :type="isPasswordVisible ? 'text' : 'password'"
-          :append-inner-icon="isPasswordVisible ? 'mdi-eye' : 'mdi-eye-off'"
+          label="Password"
+          prepend-inner-icon="mdi-lock-outline"
+          variant="outlined"
           @click:append-inner="isPasswordVisible = !isPasswordVisible"
           :rules="[requiredValidator, passwordValidator]"
-        ></v-text-field
-      ></v-col>
-      <v-col cols="12" md="6"
-        ><v-text-field
+        ></v-text-field>
+      </v-col>
+      <v-col col="12" md="6">
+        <v-text-field
           v-model="formData.password_confirmation"
+          :append-inner-icon="isPasswordConfirmVisible ? 'mdi-eye-off' : 'mdi-eye'"
+          :type="isPasswordConfirmVisible ? 'text' : 'password'"
           label="Password Confirmation"
+          prepend-inner-icon="mdi-lock-outline"
           variant="outlined"
-          :type="isConfirmationVisible ? 'text' : 'password'"
-          :append-inner-icon="isConfirmationVisible ? 'mdi-eye' : 'mdi-eye-off'"
-          @click:append-inner="isConfirmationVisible = !isConfirmationVisible"
+          @click:append-inner="isPasswordConfirmVisible = !isPasswordConfirmVisible"
           :rules="[
             requiredValidator,
             confirmedValidator(formData.password_confirmation, formData.password),
           ]"
         ></v-text-field>
       </v-col>
+      <v-btn
+        class="mt-2"
+        elevation="12"
+        type="submit"
+        block
+        color="grey-darken-1"
+        prepend-icon="mdi-account-plus"
+        :disabled="formAction.formProcess"
+        :loading="formAction.formProcess"
+        >Register</v-btn
+      >
     </v-row>
-
-    <v-btn
-      class="mt-2"
-      type="submit"
-      block
-      color="green-darken-3"
-      elevation="5"
-      prepend-icon="mdi-account-plus"
-      :disabled="formAction.formProcess"
-      :loading="formAction.formProcess"
-      >Register</v-btn
-    >
   </v-form>
 </template>

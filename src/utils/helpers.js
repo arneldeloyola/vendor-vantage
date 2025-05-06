@@ -2,7 +2,7 @@
 export const getAvatarText = (name) => {
   const nameParts = name.trim().split(' ').filter(Boolean)
 
-  const initials = nameParts.slice(0, 2).map((part) => part[0].toUpperCase())
+  const initials = nameParts.slice(0, 3).map((part) => part[0].toUpperCase())
 
   return initials.join('')
 }
@@ -25,7 +25,7 @@ export const getMoneyText = (value) => {
     style: 'currency',
     currency: 'PHP',
     minimumFractionDigits: 2,
-    maximumFractionDigits: 2
+    maximumFractionDigits: 2,
   }).format(value)
 }
 
@@ -51,7 +51,7 @@ export const getRandomCode = (length = 6) => {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 
   return Array.from({ length }, () => chars.charAt(Math.floor(Math.random() * chars.length))).join(
-    ''
+    '',
   )
 }
 
@@ -162,4 +162,3 @@ export const generateCSVTrim = (string) => {
 
   return string.replace(/,/g, ' ').replace(/\s+/g, ' ').trim()
 }
-  

@@ -8,7 +8,7 @@ import { onMounted, ref } from 'vue'
 const router = useRouter()
 
 //load variables
-const userdata = ref({
+const userData = ref({
   initials: '',
   email: '',
   fullname: '',
@@ -22,15 +22,16 @@ const formAction = ref({
 const onLogout = async () => {
   formAction.value = { ...formActionDefault }
   formAction.value.formProcess = true
-}
 
-const { error } = await supabase.auth.signOut()
-if (error) {
-  console.error('Error during logout:', error)
-}
+  const { error } = await supabase.auth.signOut()
+  if (error) {
+    console.error('Error during logout:', error)
+    return
+  }
 
-formAction.value.formProcess = false
-router.replace('/')
+  formAction.value.formProcess = false
+  router.replace('/')
+}
 
 //Getting user information functionality
 const getUser = async () => {
@@ -40,9 +41,9 @@ const getUser = async () => {
     },
   } = await supabase.auth.getUser()
 
-  userdata.value.email = metadata.email
-  userdata.value.fullname = metadata.fullname + '' + metadata.lastname
-  userdata.value.initials = getAvatarText(userdata.value.fullname)
+  userData.value.email = metadata.email
+  userData.value.fullname = metadata.firstname + '' + metadata.lastname
+  userData.value.initials = getAvatarText(userData.value.fullname)
 }
 
 //Load functions during compoenent rendering
@@ -55,17 +56,17 @@ onMounted(() => {
   <v-menu min-width="200px" rounded>
     <template #activator="{ props }">
       <v-btn icon v-bind="props">
-        <v-avatar color="deep-orange-lighten-1" size="large">
-          <span class="text-h5">{{ userdata.initials }}</span>
+        <v-avatar color="success" size="large">
+          <span class="text-h5">{{ userData.initials }}</span>
         </v-avatar>
       </v-btn>
     </template>
     <v-card class="mt-1">
       <v-card-text>
-        <v-list :subtitle="userdata.email" :title="userData.fullname">
+        <v-list :subtitle="userData.email" :title="userData.fullname">
           <template #prepend>
             <v-avatar color="deep-orange-lighten-1" size="large">
-              <span class="text-h5">{{ userdata.initials }}</span>
+              <span class="text-h5">{{ userData.initials }}</span>
             </v-avatar>
           </template>
         </v-list>
