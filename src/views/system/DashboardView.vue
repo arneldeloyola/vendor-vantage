@@ -46,7 +46,7 @@ const tab = ref('one')
               <v-col cols="12" md="3">
                 <v-card class="pa-4" elevation="2" rounded>
                   <div class="d-flex align-center mb-2">
-                    <div class="text-subtitle-2 font-weight-medium">Spring Festival</div>
+                    <div class="text-subtitle-2 font-weight-medium">Total Bookings</div>
                     <v-icon class="ms-auto" size="small">mdi-calendar-check</v-icon>
                   </div>
                   <div class="text-h5 font-weight-bold">2</div>

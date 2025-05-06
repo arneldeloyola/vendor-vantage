@@ -1,214 +1,82 @@
 <script setup>
-import { ref, computed } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { ref } from 'vue'
+import TopNavbar from '@/components/layout/TopNavbar.vue'
 
-const router = useRouter()
-const route = useRoute()
-const eventId = route.params.id
-
-const selectedBooth = ref(null)
-const isLoading = ref(false)
-const successDialog = ref(false)
-
-const event = {
-  id: eventId,
-  name: 'Spring Festival',
-  date: 'May 15, 2025',
-  location: 'Main Quad',
-  description:
-    'Annual spring celebration with music, food, and activities. Join us for a day of fun, entertainment, and community engagement. This event attracts thousands of students and community members each year.',
-  availableBooths: 12,
-  booths: [
-    { id: '1', number: '1', available: true },
-    { id: '2', number: '2', available: true },
-    { id: '3', number: '3', available: false },
-    { id: '4', number: '4', available: true },
-    { id: '5', number: '5', available: true },
-    { id: '6', number: '6', available: false },
-    { id: '7', number: '7', available: true },
-    { id: '8', number: '8', available: true },
-    { id: '9', number: '9', available: true },
-    { id: '10', number: '10', available: false },
-    { id: '11', number: '11', available: true },
-    { id: '12', number: '12', available: true },
-  ],
-  price: 150,
-}
-
-const availableBoothsCount = computed(() => event.booths.filter((b) => b.available).length)
-
-const getBoothNumber = (id) => {
-  return event.booths.find((b) => b.id === id)?.number || ''
-}
-
-const handleBookNow = () => {
-  if (!selectedBooth.value) return
-
-  isLoading.value = true
-  setTimeout(() => {
-    isLoading.value = false
-    successDialog.value = true
-  }, 1500)
-}
-
-const goToDashboard = () => {
-  router.push('/dashboard?tab=bookings')
-}
+const events = ref([
+  {
+    id: 1,
+    name: 'Spring Festival',
+    date: 'May 15, 2025',
+    location: 'Main Quad',
+    description: 'Annual spring celebration with music, food, and activities',
+    availableBooths: 12,
+  },
+  {
+    id: 2,
+    name: 'Tech Expo',
+    date: 'June 10, 2025',
+    location: 'Engineering Building',
+    description: 'Showcase of the latest technology innovations from students and local businesses',
+    availableBooths: 8,
+  },
+  {
+    id: 3,
+    name: 'Welcome Week',
+    date: 'September 5, 2025',
+    location: 'Student Center',
+    description:
+      'Orientation event for new students with various activities and information booths',
+    availableBooths: 15,
+  },
+])
 </script>
 
 <template>
-  <v-container fluid>
-    <v-app-bar flat color="white" class="border-b">
-      <v-container class="d-flex align-center justify-space-between">
-        <RouterLink to="/" class="d-flex align-center text-decoration-none">
-          <v-icon class="mr-2">mdi-store</v-icon>
-          <span class="font-weight-bold">CampusVendor</span>
-        </RouterLink>
-        <div class="d-flex gap-4">
-          <RouterLink to="/events" class="text-subtitle-2">Events</RouterLink>
-          <RouterLink to="/dashboard" class="text-subtitle-2">Dashboard</RouterLink>
-        </div>
-      </v-container>
-    </v-app-bar>
+  <v-app>
+    <TopNavbar />
 
-    <v-main class="py-4">
-      <v-container>
-        <RouterLink to="/events">
-          <v-btn variant="text" prepend-icon="mdi-arrow-left">Back to Events</v-btn>
-        </RouterLink>
-
-        <v-row class="mt-6" dense>
-          <v-col cols="12" md="8">
-            <v-card>
-              <v-card-title class="text-h5">{{ event.name }}</v-card-title>
-              <v-card-subtitle>
-                <v-row class="mb-1">
-                  <v-col cols="auto" class="d-flex align-center">
-                    <v-icon size="18" class="mr-1">mdi-calendar</v-icon>
-                    {{ event.date }}
-                  </v-col>
-                  <v-col cols="auto" class="d-flex align-center">
-                    <v-icon size="18" class="mr-1">mdi-map-marker</v-icon>
-                    {{ event.location }}
-                  </v-col>
-                </v-row>
-              </v-card-subtitle>
-              <v-card-text>
-                <p>{{ event.description }}</p>
-
-                <div class="mt-6">
-                  <h3 class="text-subtitle-1 mb-2">Select a Booth</h3>
-                  <v-row dense>
-                    <v-col
-                      v-for="booth in event.booths"
-                      :key="booth.id"
-                      cols="4"
-                      sm="3"
-                      md="4"
-                      lg="3"
-                    >
-                      <v-btn
-                        :disabled="!booth.available"
-                        :color="selectedBooth === booth.id ? 'primary' : 'grey lighten-2'"
-                        @click="() => (selectedBooth = booth.id)"
-                        block
-                      >
-                        Booth #{{ booth.number }}
-                      </v-btn>
-                    </v-col>
-                  </v-row>
-                  <p class="text-caption mt-2">
-                    {{ availableBoothsCount }} booths available out of {{ event.booths.length }}
-                  </p>
-                </div>
-              </v-card-text>
-            </v-card>
+    <v-main>
+      <v-container fluid class="py-16 px-4 px-md-16">
+        <v-row align="center" class="mb-10" no-gutters>
+          <v-col>
+            <div>
+              <h1 class="text-h5 text-md-h4 font-weight-bold mb-1">Campus Events</h1>
+              <p class="text-subtitle-2 text-grey mb-0">
+                Find and book vendor booths for upcoming events
+              </p>
+            </div>
           </v-col>
 
-          <v-col cols="12" md="4">
-            <v-card>
-              <v-card-title>Booking Summary</v-card-title>
-              <v-card-text>
-                <v-row dense>
-                  <v-col cols="6">Event</v-col>
-                  <v-col cols="6" class="text-right">{{ event.name }}</v-col>
+          <v-col cols="12" md="4" class="ml-auto">
+            <v-text-field
+              prepend-inner-icon="mdi-magnify"
+              placeholder="Search events..."
+              density="compact"
+              hide-details
+              variant="outlined"
+              class="search-field mx-2"
+              style="max-width: 250px; font-size: 0.85rem"
+            ></v-text-field>
+          </v-col>
+        </v-row>
 
-                  <v-col cols="6">Date</v-col>
-                  <v-col cols="6" class="text-right">{{ event.date }}</v-col>
+        <h2 class="text-h5 font-weight-bold mb-6 text-left">All Events</h2>
 
-                  <v-col cols="6" v-if="selectedBooth">Booth</v-col>
-                  <v-col cols="6" class="text-right" v-if="selectedBooth">
-                    #{{ getBoothNumber(selectedBooth) }}
-                  </v-col>
-
-                  <v-col cols="12"><v-divider class="my-2" /></v-col>
-
-                  <v-col cols="6" class="font-weight-bold">Total</v-col>
-                  <v-col cols="6" class="text-right font-weight-bold">
-                    ${{ event.price }}.00
-                  </v-col>
-                </v-row>
-              </v-card-text>
-              <v-card-actions>
-                <v-btn
-                  color="primary"
-                  block
-                  :loading="isLoading"
-                  :disabled="!selectedBooth"
-                  @click="handleBookNow"
-                >
-                  Book Now
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-
-            <v-card class="mt-4" outlined>
-              <v-card-title class="text-subtitle-1">Booking Information</v-card-title>
-              <v-card-text>
-                <v-list dense>
-                  <v-list-item>
-                    <v-chip small outlined>Note</v-chip>
-                    <span class="ml-2">Bookings are confirmed after payment</span>
-                  </v-list-item>
-                  <v-list-item>
-                    <v-chip small outlined>Note</v-chip>
-                    <span class="ml-2">Cancellations allowed up to 7 days before event</span>
-                  </v-list-item>
-                  <v-list-item>
-                    <v-chip small outlined>Note</v-chip>
-                    <span class="ml-2">Setup begins 2 hours before event start</span>
-                  </v-list-item>
-                </v-list>
-              </v-card-text>
+        <v-row>
+          <v-col v-for="event in events" :key="event.id" cols="12" md="6" lg="4" class="mb-6">
+            <v-card class="pa-4 text-left">
+              <h3 class="text-h6 font-weight-bold mb-1">{{ event.name }}</h3>
+              <p class="text-subtitle-2 mb-1">{{ event.date }}</p>
+              <p class="text-subtitle-2 text-grey mb-3">{{ event.location }}</p>
+              <p class="text-body-2 mb-3">{{ event.description }}</p>
+              <p class="text-caption text-grey mb-4">
+                {{ event.availableBooths }} booths available
+              </p>
+              <v-btn color="black" block :to="`/events/${event.id}`">Book Now</v-btn>
             </v-card>
           </v-col>
         </v-row>
       </v-container>
     </v-main>
-
-    <v-footer class="border-t pa-4">
-      <v-container class="text-center text-caption text-muted">
-        © 2025 CampusVendor. All rights reserved.
-      </v-container>
-    </v-footer>
-
-    <!-- Success Dialog -->
-    <v-dialog v-model="successDialog" width="400">
-      <v-card>
-        <v-card-title class="text-h6">Booking Successful!</v-card-title>
-        <v-card-text>
-          Your booth has been reserved. Please complete the payment to confirm your booking.
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="primary" @click="goToDashboard">Go to Dashboard</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-container>
+  </v-app>
 </template>
-
-<style scoped>
-.text-muted {
-  color: #6c757d;
-}
-</style>
