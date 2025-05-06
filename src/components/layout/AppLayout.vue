@@ -9,8 +9,11 @@ const drawer = ref(false)
 
 // Navigation items for drawer
 const items = ref([
-  { title: 'Home', icon: 'mdi-home', to: '/' },
-  { title: 'Files', icon: 'mdi-folder', to: '/files' },
+  { title: 'Overview', icon: 'mdi-view-dashboard', to: '/' },
+  { title: 'My Bookings', icon: 'mdi-calendar-check', to: '/bookings' },
+  { title: 'Events', icon: 'mdi-calendar-multiselect', to: '/events' },
+  { title: 'Payments', icon: 'mdi-credit-card-outline', to: '/payments' },
+  { title: 'Profile', icon: 'mdi-account-circle', to: '/profile' },
   { title: 'Settings', icon: 'mdi-cog', to: '/settings' },
 ])
 
@@ -44,12 +47,19 @@ onMounted(() => {
       <v-layout>
         <v-app-bar color="grey-lighten-3">
           <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer" />
-          <v-toolbar-title>My Vendor</v-toolbar-title>
+          <img src="/public/images/VendorVantage.png" alt="" height="40px" width="100px" />
           <v-spacer />
         </v-app-bar>
 
         <v-navigation-drawer v-model="drawer" :location="mobile ? 'bottom' : undefined" temporary>
-          <v-list :items="items" />
+          <v-list>
+            <v-list-item v-for="item in items" :key="item.title" :to="item.to" link>
+              <v-list-item-content class="d-flex align-center gap-3">
+                <v-icon>{{ item.icon }}</v-icon>
+                <span>{{ item.title }}</span>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
         </v-navigation-drawer>
 
         <v-main>
