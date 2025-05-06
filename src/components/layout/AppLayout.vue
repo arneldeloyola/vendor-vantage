@@ -4,78 +4,60 @@ import ProfileHeader from './ProfileHeader.vue'
 import { onMounted, ref } from 'vue'
 import { useDisplay } from 'vuetify'
 
-const props = defineProps(['isWithAppBarNavIcon'])
+// Navigation drawer state
+const drawer = ref(false)
 
-const emit = defineEmits(['isDrawerVisible'])
+// Navigation items for drawer
+const items = ref([
+  { title: 'Home', icon: 'mdi-home', to: '/' },
+  { title: 'Files', icon: 'mdi-folder', to: '/files' },
+  { title: 'Settings', icon: 'mdi-cog', to: '/settings' },
+])
 
-//Utilize predefined functions
+// Utilize predefined functions
 const { mobile } = useDisplay()
-const theme = ref(localStorage.getItem('theme') ?? 'light')
+// const theme = ref(localStorage.getItem('theme') ?? 'light')
 
-//Load Variables
+// Load Variables
 const isLoggedIn = ref(false)
 
-// toggle theme
-function onToggleThene() {
-  theme.value = theme.value === 'light' ? 'dark' : 'light'
-  localStorage.setItem('theme', theme.value)
-}
+// Toggle theme
+// function onToggleTheme() {
+//   theme.value = theme.value === 'light' ? 'dark' : 'light'
+//   localStorage.setItem('theme', theme.value)
+// }
 
-//Get Authentication status form supabase
+// Get Authentication status from supabase
 const getLoggedStatus = async () => {
   isLoggedIn.value = await isAuthenticated()
 }
 
-//Load functions durinfg component rendering
+// Load functions during component rendering
 onMounted(() => {
   getLoggedStatus()
 })
 </script>
+
 <template>
   <v-responsive>
-    <v-app :theme="theme">
-      <v-app-bar
-        class="px-3"
-        :color="theme === 'light' ? 'grey-lighten-2' : 'grey-darken-1'"
-        border
-      >
-        <v-app-bar-nav-icon
-          v-if="props.isWithAppBarNavIcon"
-          icon="mdi-menu"
-          :theme="theme"
-          @click="emit('isDrawerVisible')"
-        ></v-app-bar-nav-icon>
-        <v-spacer></v-spacer>
+    <v-app>
+      <v-layout>
+        <v-app-bar color="grey-lighten-3">
+          <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer" />
+          <v-toolbar-title>My Vendor</v-toolbar-title>
+          <v-spacer />
+        </v-app-bar>
 
-        <v-btn
-          class="me-2 bg-success"
-          :icon="theme === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
-          variant="elevated"
-          text="Toggle Theme"
-          slim
-          @click="onToggleThene"
-        ></v-btn>
+        <v-navigation-drawer v-model="drawer" :location="mobile ? 'bottom' : undefined" temporary>
+          <v-list :items="items" />
+        </v-navigation-drawer>
 
-        <ProfileHeader v-if="isLoggedIn"></ProfileHeader>
-      </v-app-bar>
-
-      <slot name="navigation "></slot>
-
-      <v-main>
-        <slot name="content"></slot>
-      </v-main>
-
-      <v-footer
-        class="font-weight-bold d-flex justify-center"
-        :class="mobile ? 'text-caption' : ''"
-        :color="theme === 'light' ? 'grey-lighten-2' : 'grey-darken-1'"
-        border
-        app
-      >
-        <div :class="mobile ? 'w-100 text-center' : ''">
-          Copyright 2024 - Vendor Management System | All Rights Reserved
-        </div>
-      </v-footer>
+        <v-main>
+          <ProfileHeader v-if="isLoggedIn" />
+          <slot name="content"></slot>
+          <!-- This is the named slot -->
+        </v-main>
+      </v-layout>
     </v-app>
   </v-responsive>
 </template>
