@@ -1,59 +1,54 @@
 <script setup>
+import AlertNotification from '@/components/common/AlertNotification.vue'
 import { requiredValidator, emailValidator } from '@/utils/validators'
+import { useLogin } from '@/composables/auth/login'
 import { ref } from 'vue'
 
-const isPasswordVisible = ref(false) // This controls password visibility toggle
+const { formData, formAction, refVForm, onFormSubmit } = useLogin()
 
-const refVForm = ref()
-
-const formDataDefault = {
-  email: '',
-  password: '',
-}
-
-const formData = ref({ ...formDataDefault })
-
-const onSubmit = () => {
-  // alert(formData.value.email)
-}
-
-const onFormSubmit = () => {
-  refVForm.value?.validate().then(({ valid }) => {
-    if (valid) onSubmit()
-  })
-}
+const isPasswordVisible = ref(false)
 </script>
 
 <template>
-  <v-form ref="refVForm" @submit.prevent="onFormSubmit">
-    <v-text-field
-      class="mb-3"
-      v-model="formData.email"
-      label="Email"
-      prepend-inner-icon="mdi-email-outline"
-      variant="outlined"
-      :rules="[requiredValidator, emailValidator]"
-    ></v-text-field>
+  <AlertNotification
+    :form-success-message="formAction.formSuccessMessage"
+    :form-error-message="formAction.formErrorMessage"
+  ></AlertNotification>
 
-    <v-text-field
-      v-model="formData.password"
-      prepend-inner-icon="mdi-lock-outline"
-      variant="outlined"
-      label="Password"
-      :type="isPasswordVisible ? 'text' : 'password'"
-      :append-inner-icon="isPasswordVisible ? 'mdi-eye-off' : 'mdi-eye'"
-      @click:append-inner="isPasswordVisible = !isPasswordVisible"
-      :rules="[requiredValidator]"
-    ></v-text-field>
+  <v-form ref="refVForm" @submit.prevent="onFormSubmit">
+    <v-row dense>
+      <v-col cols="12">
+        <v-text-field
+          v-model="formData.email"
+          label="Email"
+          prepend-inner-icon="mdi-email-outline"
+          :rules="[requiredValidator, emailValidator]"
+        ></v-text-field>
+      </v-col>
+
+      <v-col cols="12">
+        <v-text-field
+          v-model="formData.password"
+          prepend-inner-icon="mdi-lock-outline"
+          label="Password"
+          :type="isPasswordVisible ? 'text' : 'password'"
+          :append-inner-icon="isPasswordVisible ? 'mdi-eye-off' : 'mdi-eye'"
+          @click:append-inner="isPasswordVisible = !isPasswordVisible"
+          :rules="[requiredValidator]"
+        ></v-text-field>
+      </v-col>
+    </v-row>
+
     <v-btn
       class="mt-2"
-      elevation="12"
       type="submit"
-      block
-      color="grey-darken-1"
+      color="red-darken-4"
       prepend-icon="mdi-login"
-      >Login</v-btn
+      :disabled="formAction.formProcess"
+      :loading="formAction.formProcess"
+      block
     >
-    <v-divider class="my-5"></v-divider>
+      Login
+    </v-btn>
   </v-form>
 </template>
