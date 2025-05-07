@@ -1,34 +1,43 @@
 <script setup>
 import { isAuthenticated } from '@/utils/supabase'
-// import ProfileHeader from './ProfileHeader.vue'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, inject } from 'vue'
 import { useDisplay } from 'vuetify'
+import { useRouter } from 'vue-router'
+
+// Try to inject activeTab if it exists (will be null if not provided)
+const activeTab = inject('activeTab', null)
 
 // Navigation drawer state
 const drawer = ref(false)
+const router = useRouter()
 
 // Navigation items for drawer
 const items = ref([
-  { title: 'Overview', icon: 'mdi-view-dashboard', to: '/dashboard' },
-  { title: 'My Bookings', icon: 'mdi-calendar-check', to: '/bookings' },
-  { title: 'Events', icon: 'mdi-calendar-multiselect', to: '/events' },
-  { title: 'Payments', icon: 'mdi-credit-card-outline', to: '/payments' },
-  { title: 'Profile', icon: 'mdi-account-circle', to: '/profile' },
-  { title: 'Settings', icon: 'mdi-cog', to: '/settings' },
+  { title: 'Overview', icon: 'mdi-view-dashboard', tab: 'overview', path: '/dashboard' },
+  { title: 'My Bookings', icon: 'mdi-calendar-check', tab: 'bookings', path: '/bookings' },
+  { title: 'Events', icon: 'mdi-calendar-multiselect', tab: 'events', path: '/events' },
+  { title: 'Payments', icon: 'mdi-credit-card-outline', tab: 'payments', path: '/payments' },
+  { title: 'Profile', icon: 'mdi-account-circle', tab: 'profile', path: '/profile' },
+  { title: 'Settings', icon: 'mdi-cog', tab: 'settings', path: '/settings' },
 ])
 
 // Utilize predefined functions
 const { mobile } = useDisplay()
-// const theme = ref(localStorage.getItem('theme') ?? 'light')
 
 // Load Variables
 const isLoggedIn = ref(false)
 
-// Toggle theme
-// function onToggleTheme() {
-//   theme.value = theme.value === 'light' ? 'dark' : 'light'
-//   localStorage.setItem('theme', theme.value)
-// }
+// Handle navigation - either update tab or navigate to path
+const handleNavigation = (item) => {
+  if (activeTab && window.location.pathname === '/dashboard') {
+    // If we're on the dashboard and activeTab is provided, just update the tab
+    activeTab.value = item.tab
+    drawer.value = false // Close drawer after selection on mobile
+  } else {
+    // Otherwise navigate to the path
+    router.push(item.path)
+  }
+}
 
 // Get Authentication status from supabase
 const getLoggedStatus = async () => {
@@ -53,19 +62,23 @@ onMounted(() => {
 
         <v-navigation-drawer v-model="drawer" :location="mobile ? 'bottom' : undefined" temporary>
           <v-list>
-            <v-list-item v-for="item in items" :key="item.title" :to="item.to" link>
-              <v-list-item-content class="d-flex align-center gap-3">
+            <v-list-item
+              v-for="item in items"
+              :key="item.title"
+              @click="handleNavigation(item)"
+              :active="activeTab === item.tab && window.location.pathname === '/dashboard'"
+              link
+            >
+              <template v-slot:prepend>
                 <v-icon>{{ item.icon }}</v-icon>
-                <span>{{ item.title }}</span>
-              </v-list-item-content>
+              </template>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-navigation-drawer>
 
         <v-main>
-          <!-- <ProfileHeader v-if="isLoggedIn" /> -->
           <slot name="content"></slot>
-          <!-- This is the named slot -->
         </v-main>
       </v-layout>
     </v-app>
