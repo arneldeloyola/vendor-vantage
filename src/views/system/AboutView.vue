@@ -1,5 +1,7 @@
 <script setup>
+import { ref } from 'vue'
 import TopNavbar from '@/components/layout/TopNavbar.vue'
+import RegisterForm from '../../components/auth/RegisterForm.vue'
 
 const faqs = [
   {
@@ -27,6 +29,7 @@ const faqs = [
       "You'll usually bring your own table covers, signage, and products. Some events provide tables/chairs.",
   },
 ]
+const registerDialog = ref(false)
 </script>
 
 <template>
@@ -57,15 +60,7 @@ const faqs = [
           </v-col>
 
           <v-col cols="12" md="6" class="d-flex align-center justify-center">
-            <v-sheet
-              elevation="2"
-              class="d-flex align-center justify-center"
-              height="200"
-              width="300"
-              rounded
-            >
-              <v-icon size="64">mdi-store</v-icon>
-            </v-sheet>
+            <img src="/public/images/VendorVantage.png" alt="" height="250" />
           </v-col>
         </v-row>
       </v-container>
@@ -139,9 +134,51 @@ const faqs = [
         <p class="text-subtitle-1 text-grey mb-4">
           Join CampusVendor today and start connecting with campus events.
         </p>
-        <v-btn color="primary" class="ma-2" size="large" to="/register">
-          Register Now <v-icon end>mdi-arrow-right</v-icon>
+        <v-btn
+          @click="registerDialog = true"
+          color="black"
+          elavation="16"
+          size="large"
+          append-icon="mdi-arrow-right"
+        >
+          Register Now
         </v-btn>
+        <v-dialog v-model="registerDialog" width="800">
+          <v-card color="grey-lighten-5" flat>
+            <v-card-actions class="justify-end">
+              <v-btn icon @click="registerDialog = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-card-actions>
+
+            <v-card-title class="text-h3 text-center text-green-darken-4 mt-n14">
+              Vendor Vantage
+            </v-card-title>
+
+            <v-card-text>
+              <p class="text-center text-grey mt-n10 mb-8">Create your account</p>
+              <RegisterForm />
+            </v-card-text>
+
+            <v-card-actions class="justify-center">
+              <p>
+                Already have an account?
+                <v-btn
+                  variant="text"
+                  color="green"
+                  @click="
+                    () => {
+                      registerDialog = false
+                      loginDialog = true
+                    }
+                  "
+                >
+                  Sign in
+                </v-btn>
+              </p>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
         <v-btn variant="outlined" class="ma-2" size="large" to="/events">Browse Events</v-btn>
       </v-container>
     </v-main>

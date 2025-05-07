@@ -1,5 +1,44 @@
 <!-- DashboardOverview.vue -->
-<script setup></script>
+<script setup>
+import { ref, computed } from 'vue'
+
+const eventHandler = ref([{ num_event: '5' }, { days: '30' }])
+
+// Access values cleanly using computed
+const numEvents = computed(() => eventHandler.value[0].num_event)
+const numDays = computed(() => eventHandler.value[1].days)
+
+const dashboardStats = ref({
+  totalBookings: { count: 5, fromLastMonth: 30 },
+  upcomingEvents: { count: 1, nextInDays: 5 },
+  pendingPayments: { amount: 150, forEvent: 'Spring Festival' },
+  profileStatus: { status: 'Verified', updatedAgo: '2 days ago' },
+})
+
+const upcomingBookings = ref([
+  {
+    title: 'Spring Festival',
+    date: 'May 15, 2025',
+    booth: 'Booth #12',
+    status: 'Confirmed',
+    color: 'success',
+  },
+  {
+    title: 'Tech Expo',
+    date: 'June 10, 2025',
+    booth: 'Booth #5',
+    status: 'Pending Payment',
+    color: 'warning',
+  },
+])
+
+const businessInfo = ref({
+  shopName: 'Kwek Kwek papart',
+  contact: '+63-917-1234-5678',
+  type: 'food',
+  memberSince: '1/15/2025',
+})
+</script>
 
 <template>
   <v-row class="mx-2">
@@ -9,8 +48,8 @@
           <div class="text-subtitle-2 font-weight-medium">Total Bookings</div>
           <v-icon class="ms-auto" size="small">mdi-calendar-check</v-icon>
         </div>
-        <div class="text-h5 font-weight-bold">2</div>
-        <div class="text-caption text-grey-darken-1">+1 from last month</div>
+        <div class="text-h5 font-weight-bold">{{ numEvents }}</div>
+        <div class="text-caption text-grey-darken-1">{{ numDays }} from last month</div>
       </v-card>
     </v-col>
 
@@ -21,8 +60,10 @@
           <div class="text-subtitle-2 font-weight-medium">Upcoming Events</div>
           <v-icon class="ms-auto" size="small">mdi-calendar</v-icon>
         </div>
-        <div class="text-h5 font-weight-bold">1</div>
-        <div class="text-caption text-grey-darken-1">Next event in 5 days</div>
+        <div class="text-h5 font-weight-bold">{{ dashboardStats.upcomingEvents.count }}</div>
+        <div class="text-caption text-grey-darken-1">
+          Next event in {{ dashboardStats.upcomingEvents.nextInDays }} days
+        </div>
       </v-card>
     </v-col>
 
@@ -33,8 +74,10 @@
           <div class="text-subtitle-2 font-weight-medium">Pending Payments</div>
           <v-icon class="ms-auto" size="small">mdi-currency-usd</v-icon>
         </div>
-        <div class="text-h5 font-weight-bold">P150</div>
-        <div class="text-caption text-grey-darken-1">For Spring Festival</div>
+        <div class="text-h5 font-weight-bold">P{{ dashboardStats.pendingPayments.amount }}</div>
+        <div class="text-caption text-grey-darken-1">
+          For {{ dashboardStats.pendingPayments.forEvent }}
+        </div>
       </v-card>
     </v-col>
 
@@ -45,10 +88,15 @@
           <div class="text-subtitle-2 font-weight-medium">Profile Status</div>
           <v-icon class="ms-auto" size="small">mdi-account-check</v-icon>
         </div>
-        <div class="text-h6 font-weight-bold text-success">Verified</div>
-        <div class="text-caption text-grey-darken-1">Last updated 2 days ago</div>
+        <div class="text-h6 font-weight-bold text-success">
+          {{ dashboardStats.profileStatus.status }}
+        </div>
+        <div class="text-caption text-grey-darken-1">
+          Last updated {{ dashboardStats.profileStatus.updatedAgo }}
+        </div>
       </v-card>
     </v-col>
+    <!-- Upcoming Bookings -->
     <v-col cols="12" md="7">
       <v-card class="elevation-2" rounded>
         <v-card-title class="text-h6 font-weight-bold py-3">
@@ -56,39 +104,30 @@
           Upcoming Bookings
         </v-card-title>
 
-        <v-list lines="two">
-          <v-list-item>
-            <v-list-item-title class="font-weight-bold text-body-2"
-              >Spring Festival</v-list-item-title
-            >
-            <v-list-item-subtitle>
-              <div class="d-flex flex-column">
-                <span class="text-caption">May 15, 2025</span>
-              </div>
-              <v-chip size="x-small"> Booth #12 </v-chip>
-            </v-list-item-subtitle>
-            <template v-slot:append>
-              <v-chip color="success" size="small">Confirmed</v-chip>
-            </template>
-          </v-list-item>
+        <v-list>
+          <template v-for="(booking, index) in upcomingBookings" :key="index">
+            <v-list-item>
+              <v-list-item-title class="font-weight-bold text-body-2">
+                {{ booking.title }}
+              </v-list-item-title>
+              <v-list-item-subtitle>
+                <div class="d-flex flex-column">
+                  <span class="text-caption">{{ booking.date }}</span>
+                </div>
+                <v-chip size="x-small">{{ booking.booth }}</v-chip>
+              </v-list-item-subtitle>
+              <template v-slot:append>
+                <v-chip :color="booking.color" size="small">{{ booking.status }}</v-chip>
+              </template>
+            </v-list-item>
 
-          <v-divider></v-divider>
-
-          <v-list-item>
-            <v-list-item-title class="font-weight-bold text-body-2">Tech Expo</v-list-item-title>
-            <v-list-item-subtitle>
-              <div class="d-flex flex-column">
-                <span class="text-caption">June 10, 2025</span>
-              </div>
-              <v-chip size="x-small"> Booth #5 </v-chip>
-            </v-list-item-subtitle>
-            <template v-slot:append>
-              <v-chip color="warning" size="small">Pending Payment</v-chip>
-            </template>
-          </v-list-item>
+            <v-divider v-if="index < upcomingBookings.length - 1" />
+          </template>
         </v-list>
       </v-card>
     </v-col>
+
+    <!-- Your Business -->
     <v-col cols="12" md="5">
       <v-card class="elevation-2" rounded>
         <v-card-title class="text-h6 font-weight-bold py-3">
@@ -100,35 +139,35 @@
           <v-list-item>
             <v-list-item-title class="text-grey">Shop Name</v-list-item-title>
             <template v-slot:append>
-              <span class="font-weight-medium">Kwek Kwek papart</span>
+              <span class="font-weight-medium">{{ businessInfo.shopName }}</span>
             </template>
           </v-list-item>
 
           <v-list-item>
             <v-list-item-title class="text-grey">Contact</v-list-item-title>
             <template v-slot:append>
-              <span class="font-weight-medium">+63-917-1234-5678</span>
+              <span class="font-weight-medium">{{ businessInfo.contact }}</span>
             </template>
           </v-list-item>
 
           <v-list-item>
             <v-list-item-title class="text-grey">Business Type</v-list-item-title>
             <template v-slot:append>
-              <v-chip size="small" class="text-capitalize">food</v-chip>
+              <v-chip size="small" class="text-capitalize">{{ businessInfo.type }}</v-chip>
             </template>
           </v-list-item>
 
           <v-list-item>
             <v-list-item-title class="text-grey">Member Since</v-list-item-title>
             <template v-slot:append>
-              <span class="font-weight-medium">1/15/2025</span>
+              <span class="font-weight-medium">{{ businessInfo.memberSince }}</span>
             </template>
           </v-list-item>
         </v-list>
 
         <v-card-actions class="pa-4">
           <v-spacer></v-spacer>
-          <v-btn variant="outlined" prepend-icon="mdi-pencil"> Edit Profile </v-btn>
+          <v-btn variant="outlined" prepend-icon="mdi-pencil">Edit Profile</v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
