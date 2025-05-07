@@ -41,6 +41,7 @@ const businessInfo = ref({
 </script>
 
 <template>
+  <h1 class="mt-n10 ml-5 mb-4">Overview</h1>
   <v-row class="mx-2">
     <v-col cols="12" md="3">
       <v-card class="pa-4" elevation="2" rounded>

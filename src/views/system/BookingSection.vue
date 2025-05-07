@@ -4,7 +4,7 @@
   <div class="mx-2">
     <v-sheet :elevation="6" height="auto" width="auto" class="pb-10 px-2" rounded>
       <div class="px-5 mb-6">
-        <h1 class="tight-heading pt-4">My Bookings</h1>
+        <h1 class="tight-heading pt-4 mt-n12">My Bookings</h1>
         <span class="text-caption text-grey-darken-1">Manage your event bookings</span>
       </div>
       <div>

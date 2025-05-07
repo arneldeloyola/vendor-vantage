@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <div class="mx-4">
+  <div class="mx-4 mt-n11">
     <v-sheet :elevation="6" height="auto" width="auto" class="pb-10 px-2" rounded>
       <div class="px-5 mb-6">
         <h1 class="tight-heading pt-4">Available Events</h1>
