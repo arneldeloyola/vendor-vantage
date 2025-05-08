@@ -9,6 +9,15 @@ const { search, headers, filteredVendors, fetchVendors, viewDetails, verifyVendo
 
 // Fetch vendors when component is mounted
 onMounted(fetchVendors)
+
+// Updated verifyVendor function to also update the profile status
+const verifyVendorAndUpdateStatus = async (vendor) => {
+  // Update the profile status to 'verified'
+  await verifyVendor(vendor)
+
+  // Optionally refetch the vendors to make sure data is updated in the UI
+  fetchVendors()
+}
 </script>
 
 <template>
@@ -56,8 +65,8 @@ onMounted(fetchVendors)
                     <v-list-item-title>View</v-list-item-title>
                   </v-list-item>
                   <v-list-item
-                    @click="verifyVendor(item.raw)"
-                    :disabled="item.raw.profile_status === 'verified'"
+                    @click="verifyVendorAndUpdateStatus(item.raw)"
+                    :disabled="item.profile_status === 'Verified'"
                   >
                     <v-list-item-title>Verify</v-list-item-title>
                   </v-list-item>
