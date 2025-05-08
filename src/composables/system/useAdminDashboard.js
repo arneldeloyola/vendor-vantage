@@ -21,8 +21,8 @@ export function useAdminDashboard() {
       subtitle: `${activeEvents.value} active events`,
       icon: 'mdi-calendar',
       iconColor: 'teal',
-      linkTo: '/admin/events',
-      linkText: 'Manage events',
+      linkTo: '/admin/event',
+      linkText: 'Manage event',
     },
     {
       title: 'Registered Vendors',
@@ -30,8 +30,8 @@ export function useAdminDashboard() {
       subtitle: `${newVendorsThisMonth.value} new this month`,
       icon: 'mdi-account-group-outline',
       iconColor: 'teal',
-      linkTo: '/admin/vendors',
-      linkText: 'View vendors',
+      linkTo: '/admin/vendor',
+      linkText: 'View vendor',
     },
     {
       title: 'Active Bookings',
@@ -39,8 +39,8 @@ export function useAdminDashboard() {
       subtitle: `${pendingBookings.value} pending approval`,
       icon: 'mdi-book-account',
       iconColor: 'teal',
-      linkTo: '/admin/bookings',
-      linkText: 'Manage bookings',
+      linkTo: '/admin/booking',
+      linkText: 'Manage booking',
     },
   ])
 
