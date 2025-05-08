@@ -2,45 +2,24 @@
 import AlertNotification from '@/components/common/AlertNotification.vue'
 import { requiredValidator, emailValidator } from '@/utils/validators'
 import { useLogin } from '@/composables/auth/login'
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { supabase } from '@/utils/supabase'
+import { ref, watch, onMounted } from 'vue'
 
-const { formData, formAction, refVForm, onFormSubmit: baseSubmit } = useLogin()
+const { formData, formAction, refVForm, onFormSubmit } = useLogin()
 
 const isPasswordVisible = ref(false)
-const selectedRole = ref('vendor') // default
-const router = useRouter()
+const selectedRole = ref('vendor')
 
-const onFormSubmit = async () => {
-  await baseSubmit()
+// Sync toggle with login formData
+watch(selectedRole, (value) => {
+  console.log('Role changed to:', value)
+  formData.loginAsAdmin = value === 'admin'
+})
 
-  if (formAction.formSuccess) {
-    const { data, error } = await supabase
-      .from('users')
-      .select('is_admin')
-      .eq('email', formData.email)
-      .single()
-
-    if (error || !data) {
-      formAction.formErrorMessage = 'Unable to verify user role.'
-      return
-    }
-
-    const isAdmin = data.is_admin
-
-    if (
-      (selectedRole.value === 'admin' && !isAdmin) ||
-      (selectedRole.value === 'vendor' && isAdmin)
-    ) {
-      formAction.formErrorMessage = 'Incorrect role selected.'
-      return
-    }
-
-    // Redirect based on role
-    router.push({ name: isAdmin ? 'AdminDashboard' : 'VendorDashboard' })
-  }
-}
+// Initialize the role correctly on component mount
+onMounted(() => {
+  formData.loginAsAdmin = selectedRole.value === 'admin'
+  console.log('Component mounted, initial loginAsAdmin value:', formData.loginAsAdmin)
+})
 </script>
 
 <template>
