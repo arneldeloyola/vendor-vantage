@@ -15,7 +15,7 @@ onMounted(fetchDashboardData)
     <template #content>
       <v-container>
         <div class="mb-6">
-          <h1 class="text-h4 font-weight-bold">Admin Dashboard</h1>
+          <h1 class="text-h5 font-weight-bold">Admin Dashboard</h1>
           <p class="text-subtitle-1 text-medium-emphasis">Manage events, vendors, and bookings</p>
         </div>
         <v-row>
