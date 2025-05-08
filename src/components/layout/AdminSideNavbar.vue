@@ -36,13 +36,6 @@ const { mobile } = useDisplay()
 
       <v-divider class="my-2" />
 
-      <v-list-item to="/admin/profile" link exact>
-        <template #prepend>
-          <v-icon>mdi-account-cog</v-icon>
-        </template>
-        <v-list-item-title v-if="!mobile">Profile</v-list-item-title>
-      </v-list-item>
-
       <v-list-item to="/" link exact>
         <template #prepend>
           <v-icon>mdi-logout</v-icon>

@@ -76,7 +76,7 @@ onMounted(fetchDashboardData)
                     </template>
                   </v-list-item>
                 </v-list>
-                <v-btn to="/admin/bookings" variant="outlined" class="mt-4" block>
+                <v-btn to="/admin/booking" variant="outlined" class="mt-4" block>
                   View all bookings
                 </v-btn>
               </v-card-text>
@@ -108,7 +108,7 @@ onMounted(fetchDashboardData)
                     </template>
                   </v-list-item>
                 </v-list>
-                <v-btn to="/admin/events" variant="outlined" class="mt-4" block>
+                <v-btn to="/admin/event" variant="outlined" class="mt-4" block>
                   Manage events
                 </v-btn>
               </v-card-text>

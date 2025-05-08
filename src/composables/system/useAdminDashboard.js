@@ -1,9 +1,20 @@
 // src/composables/useAdminDashboard.js
+
 import { ref, computed } from 'vue'
 import { supabase } from '@/utils/supabase'
 
+// Utility function to get event status
+const getStatus = (startDate, endDate) => {
+  const today = new Date()
+  const start = new Date(startDate)
+  const end = new Date(endDate)
+
+  if (today < start) return 'Upcoming'
+  else if (today >= start && today <= end) return 'Active'
+  else return 'Completed'
+}
+
 export function useAdminDashboard() {
-  // Refs
   const totalEvents = ref(0)
   const activeEvents = ref(0)
   const totalVendors = ref(0)
@@ -13,7 +24,6 @@ export function useAdminDashboard() {
   const recentBookings = ref([])
   const upcomingEvents = ref([])
 
-  // Computed stats for cards
   const stats = computed(() => [
     {
       title: 'Total Events',
@@ -44,24 +54,23 @@ export function useAdminDashboard() {
     },
   ])
 
-  // Fetch dashboard data
   const fetchDashboardData = async () => {
     // EVENTS
-    const { count: totalEventCount } = await supabase
+    const { data: allEventsData, count: totalEventCount } = await supabase
       .from('events')
-      .select('*', { count: 'exact', head: true })
+      .select('id, start_date, end_date', { count: 'exact' })
+
     totalEvents.value = totalEventCount || 0
 
-    const { count: activeEventCount } = await supabase
-      .from('events')
-      .select('*', { count: 'exact', head: true })
-      .eq('status', 'active')
-    activeEvents.value = activeEventCount || 0
+    const activeCount =
+      allEventsData?.filter((e) => getStatus(e.start_date, e.end_date) === 'Active').length || 0
+    activeEvents.value = activeCount
 
     // VENDORS
     const { count: totalVendorCount } = await supabase
       .from('vendors')
       .select('*', { count: 'exact', head: true })
+
     totalVendors.value = totalVendorCount || 0
 
     const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString()
@@ -69,21 +78,24 @@ export function useAdminDashboard() {
       .from('vendors')
       .select('*', { count: 'exact', head: true })
       .gte('created_at', startOfMonth)
+
     newVendorsThisMonth.value = newVendorCount || 0
 
     // BOOKINGS
     const { count: activeBookingCount } = await supabase
       .from('bookings')
       .select('*', { count: 'exact', head: true })
+
     activeBookings.value = activeBookingCount || 0
 
     const { count: pendingBookingCount } = await supabase
       .from('bookings')
       .select('*', { count: 'exact', head: true })
       .eq('status', 'Pending')
+
     pendingBookings.value = pendingBookingCount || 0
 
-    // RECENT BOOKINGS (limit 3)
+    // RECENT BOOKINGS
     const { data: bookingsData } = await supabase
       .from('bookings')
       .select('id, status, vendors(name), events(name)')
@@ -97,16 +109,17 @@ export function useAdminDashboard() {
         status: b.status,
       })) || []
 
-    // UPCOMING EVENTS (within 30 days)
+    // UPCOMING EVENTS (next 30 days)
     const today = new Date()
     const nextMonth = new Date()
     nextMonth.setDate(today.getDate() + 30)
+
     const { data: eventsData } = await supabase
       .from('events')
-      .select('name, date, location, booths_left')
-      .gte('date', today.toISOString())
-      .lte('date', nextMonth.toISOString())
-      .order('date', { ascending: true })
+      .select('name, start_date, location, booths_left')
+      .gte('start_date', today.toISOString())
+      .lte('start_date', nextMonth.toISOString())
+      .order('start_date', { ascending: true })
 
     upcomingEvents.value = eventsData || []
   }
