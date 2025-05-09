@@ -1,49 +1,21 @@
 <script setup>
-import { ref } from 'vue'
-import { inject } from 'vue'
+import { ref, onMounted } from 'vue'
+import { supabase } from '@/utils/supabase'
 
-const activeTab = inject('activeTab')
+const events = ref([])
 
-const goToBoothSelection = () => {
-  activeTab.value = 'BoothSelection'
+// Function to fetch events from Supabase
+const fetchEvents = async () => {
+  const { data, error } = await supabase.from('events').select('*')
+  if (error) {
+    console.error('Error fetching events:', error)
+  } else {
+    events.value = data
+  }
 }
 
-// Sample events data with updated details
-const events = ref([
-  {
-    id: 1,
-    name: 'Summer Craft Fair',
-    startDate: 'July 15, 2025',
-    endDate: 'July 16, 2025',
-    location: 'Central Park, New York',
-    price: '$150',
-    boothsLeft: '12',
-    description: 'Annual summer craft fair featuring local artisans and vendors.',
-    duration: '2 days',
-  },
-  {
-    id: 2,
-    name: 'Winter Market',
-    startDate: 'December 5, 2025',
-    endDate: 'December 6, 2025',
-    location: 'Convention Center, Chicago',
-    price: '$200',
-    boothsLeft: '8',
-    description: 'Holiday themed market with handcrafted gifts and seasonal items.',
-    duration: '2 days',
-  },
-  {
-    id: 3,
-    name: 'Spring Festival',
-    startDate: 'April 20, 2025',
-    endDate: 'April 21, 2025',
-    location: 'Riverfront Park, Portland',
-    price: '$175',
-    boothsLeft: '15',
-    description: 'Celebrate spring with this outdoor festival featuring food, crafts, and music.',
-    duration: '2 days',
-  },
-])
+// Fetch events when the component is mounted
+onMounted(fetchEvents)
 </script>
 
 <template>
@@ -61,38 +33,38 @@ const events = ref([
             <v-card height="100%" class="event-card mx-auto my-4" max-width="450">
               <v-card-text>
                 <div class="mb-4">
-                  <div class="text-h4 font-weight-bold">{{ event.name }}</div>
+                  <div class="text-h4 font-weight-bold">{{ event.event_name }}</div>
                   <div class="text-body-1 text-grey-darken-1">{{ event.description }}</div>
                 </div>
 
                 <div class="d-flex align-center my-3">
+                  <v-icon color="teal" class="mr-2">mdi-store</v-icon>
+                  <span class="text-body-1">Booths slots: {{ event.max_booths }}</span>
+                </div>
+
+                <div class="d-flex align-center my-3">
                   <v-icon color="teal" class="mr-2">mdi-calendar</v-icon>
-                  <span class="text-body-1">Start Date: {{ event.startDate }}</span>
+                  <span class="text-body-1">Start Date: {{ event.start_date }}</span>
                 </div>
 
                 <div class="d-flex align-center my-3">
                   <v-icon color="teal" class="mr-2">mdi-calendar-end</v-icon>
-                  <span class="text-body-1">End Date: {{ event.endDate }}</span>
+                  <span class="text-body-1">End Date: {{ event.end_date }}</span>
                 </div>
 
                 <div class="d-flex align-center my-3">
                   <v-icon color="teal" class="mr-2">mdi-map-marker</v-icon>
-                  <span class="text-body-1">{{ event.location }}</span>
+                  <span class="text-body-1">{{ event.event_location }}</span>
                 </div>
 
                 <div class="d-flex align-center my-3">
                   <v-icon color="teal" class="mr-2">mdi-currency-usd</v-icon>
-                  <span class="text-body-1">Booth Price: {{ event.price }}</span>
-                </div>
-
-                <div class="d-flex align-center my-3">
-                  <v-icon color="teal" class="mr-2">mdi-store</v-icon>
-                  <span class="text-body-1">Available Booths: {{ event.boothsLeft }}</span>
+                  <span class="text-body-1">Booth Price: {{ event.booth_price }}</span>
                 </div>
 
                 <div class="d-flex align-center my-3">
                   <v-icon color="teal" class="mr-2">mdi-timer</v-icon>
-                  <span class="text-body-1">Duration: {{ event.duration }}</span>
+                  <span class="text-body-1">Duration: {{ event.event_duration }}</span>
                 </div>
               </v-card-text>
 
