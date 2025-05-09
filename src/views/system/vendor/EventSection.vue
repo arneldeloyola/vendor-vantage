@@ -1,6 +1,13 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { supabase } from '@/utils/supabase'
+import { inject } from 'vue'
+
+const activeTab = inject('activeTab')
+
+const goToBoothSelection = () => {
+  activeTab.value = 'BoothSelection'
+}
 
 const events = ref([])
 
@@ -13,6 +20,8 @@ const fetchEvents = async () => {
     events.value = data
   }
 }
+
+
 
 // Fetch events when the component is mounted
 onMounted(fetchEvents)
