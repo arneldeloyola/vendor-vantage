@@ -4,7 +4,9 @@ import AppLayout from '@/components/layout/AppLayout.vue'
 import DashboardOverview from './DashboardOverview.vue'
 import BookingSection from './BookingSection.vue'
 import EventSection from './EventSection.vue'
-
+import profileSection from './ProfileSection.vue'
+import BoothSelection from './BoothSelection.vue'
+import ApplicationForm from './ApplicationForm.vue'
 // Using tab names that match the side navigation
 const activeTab = ref('overview') // default to overview tab
 provide('activeTab', activeTab) // Provide this to the layout for active highlighting
@@ -14,6 +16,9 @@ const tabComponents = {
   overview: DashboardOverview,
   bookings: BookingSection,
   events: EventSection,
+  profile: profileSection,
+  BoothSelection: BoothSelection,
+  ApplicationForm: ApplicationForm,
 }
 </script>
 

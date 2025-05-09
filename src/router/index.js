@@ -6,8 +6,12 @@ import DashboardView from '@/views/system/DashboardView.vue'
 import ContactView from '@/views/system/ContactView.vue'
 import AboutView from '@/views/system/AboutView.vue'
 import EventView from '@/views/system/EventView.vue'
-import ProfileView from '@/views/system/ProfileView.vue'
+import DashboardOverview from '@/views/system/DashboardOverview.vue'
+import EventSection from '@/views/system/EventSection.vue'
 import AdminDashboard from '@/views/system/AdminDashboard.vue'
+import ProfileSection from '@/views/system/ProfileSection.vue'
+import ApplicationForm from '@/views/system/ApplicationForm.vue'
+import BoothSelection from '@/views/system/BoothSelection.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -47,15 +51,36 @@ const router = createRouter({
       name: 'event',
       component: EventView,
     },
-    {
-      path: '/profile',
-      name: 'profile',
-      component: ProfileView,
-    },
+
     {
       path: '/admin/dashboard',
       name: 'admin',
       component: AdminDashboard,
+    },
+    {
+      path: '/',
+      name: 'Dashboard',
+      component: DashboardOverview,
+    },
+    {
+      path: '/events',
+      name: 'EventSection',
+      component: EventSection,
+    },
+    {
+      path: '/ProfileSection',
+      name: 'ProfileSection',
+      component: ProfileSection,
+    },
+    {
+      path: '/BoothSelection',
+      name: 'BoothSelection',
+      component: BoothSelection,
+    },
+    {
+      path: '/ApplicationForm',
+      name: 'ApplicationForm',
+      component: ApplicationForm,
     },
   ],
 })

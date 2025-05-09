@@ -1,182 +1,175 @@
-<!-- DashboardOverview.vue -->
 <script setup>
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
+import { inject } from 'vue'
 
-const eventHandler = ref([{ num_event: '5' }, { days: '30' }])
+const activeTab = inject('activeTab')
 
-// Access values cleanly using computed
-const numEvents = computed(() => eventHandler.value[0].num_event)
-const numDays = computed(() => eventHandler.value[1].days)
+const viewAllEvents = () => {
+  activeTab.value = 'events'
+}
 
-const dashboardStats = ref({
-  totalBookings: { count: 5, fromLastMonth: 30 },
-  upcomingEvents: { count: 1, nextInDays: 5 },
-  pendingPayments: { amount: 150, forEvent: 'Spring Festival' },
-  profileStatus: { status: 'Verified', updatedAgo: '2 days ago' },
+const goToBookings = () => {
+  activeTab.value = 'bookings'
+}
+
+const goToProfile = () => {
+  activeTab.value = 'profile'
+}
+// Dashboard data
+const upcomingEvents = ref({
+  count: 3,
+  description: 'Events in the next 30 days',
 })
 
-const upcomingBookings = ref([
+const activeBookings = ref({
+  count: 2,
+  description: 'Confirmed booth bookings',
+})
+
+const profileCompletion = ref({
+  percentage: 80,
+  description: 'Complete your profile for better visibility',
+})
+
+// Recent activity data
+const recentActivities = ref([
   {
-    title: 'Spring Festival',
-    date: 'May 15, 2025',
-    booth: 'Booth #12',
-    status: 'Confirmed',
-    color: 'success',
+    type: 'event',
+    title: 'New Event Added',
+    message: 'Summer Craft Fair has been added to available events.',
+    timeAgo: '2 days ago',
+    icon: 'mdi-calendar-plus',
   },
   {
-    title: 'Tech Expo',
-    date: 'June 10, 2025',
-    booth: 'Booth #5',
-    status: 'Pending Payment',
-    color: 'warning',
+    type: 'booking',
+    title: 'Booking Confirmed',
+    message: 'Your booth for Spring Market has been confirmed.',
+    timeAgo: '1 week ago',
+    icon: 'mdi-check-circle',
   },
 ])
-
-const businessInfo = ref({
-  shopName: 'Kwek Kwek papart',
-  contact: '+63-917-1234-5678',
-  type: 'food',
-  memberSince: '1/15/2025',
-})
 </script>
 
 <template>
-  <h1 class="mt-n10 ml-5 mb-4">Overview</h1>
-  <v-row class="mx-2">
-    <v-col cols="12" md="3">
-      <v-card class="pa-4" elevation="2" rounded>
-        <div class="d-flex align-center mb-2">
-          <div class="text-subtitle-2 font-weight-medium">Total Bookings</div>
-          <v-icon class="ms-auto" size="small">mdi-calendar-check</v-icon>
-        </div>
-        <div class="text-h5 font-weight-bold">{{ numEvents }}</div>
-        <div class="text-caption text-grey-darken-1">{{ numDays }} from last month</div>
-      </v-card>
-    </v-col>
+  <div class="mx-4 mt-n11">
+    <v-sheet :elevation="6" height="auto" width="auto" class="pb-10 px-2 pt-3" rounded>
+      <div class="px-5 mb-6">
+        <h1 class="text-h3 font-weight-bold">Dashboard</h1>
+        <span class="text-caption text-grey-darken-1">Welcome to your vendor dashboard</span>
+      </div>
 
-    <!-- Upcoming Events -->
-    <v-col cols="12" md="3">
-      <v-card class="pa-4" elevation="2" rounded>
-        <div class="d-flex align-center mb-2">
-          <div class="text-subtitle-2 font-weight-medium">Upcoming Events</div>
-          <v-icon class="ms-auto" size="small">mdi-calendar</v-icon>
-        </div>
-        <div class="text-h5 font-weight-bold">{{ dashboardStats.upcomingEvents.count }}</div>
-        <div class="text-caption text-grey-darken-1">
-          Next event in {{ dashboardStats.upcomingEvents.nextInDays }} days
-        </div>
-      </v-card>
-    </v-col>
+      <v-row>
+        <!-- Upcoming Events Card -->
+        <v-col cols="12" md="4 ">
+          <v-card height="100%" class="pa-4" elevation="5">
+            <div class="d-flex justify-space-between align-center">
+              <h2 class="text-h6">Upcoming Events</h2>
+              <v-icon color="teal" size="small">mdi-calendar</v-icon>
+            </div>
 
-    <!-- Pending Payments -->
-    <v-col cols="12" md="3">
-      <v-card class="pa-4" elevation="2" rounded>
-        <div class="d-flex align-center mb-2">
-          <div class="text-subtitle-2 font-weight-medium">Pending Payments</div>
-          <v-icon class="ms-auto" size="small">mdi-currency-usd</v-icon>
-        </div>
-        <div class="text-h5 font-weight-bold">P{{ dashboardStats.pendingPayments.amount }}</div>
-        <div class="text-caption text-grey-darken-1">
-          For {{ dashboardStats.pendingPayments.forEvent }}
-        </div>
-      </v-card>
-    </v-col>
+            <div class="my-4">
+              <div class="text-h3 font-weight-bold">{{ upcomingEvents.count }}</div>
+              <div class="text-body-2 text-medium-emphasis">{{ upcomingEvents.description }}</div>
+            </div>
 
-    <!-- Profile Status -->
-    <v-col cols="12" md="3">
-      <v-card class="pa-4" elevation="2" rounded>
-        <div class="d-flex align-center mb-2">
-          <div class="text-subtitle-2 font-weight-medium">Profile Status</div>
-          <v-icon class="ms-auto" size="small">mdi-account-check</v-icon>
-        </div>
-        <div class="text-h6 font-weight-bold text-success">
-          {{ dashboardStats.profileStatus.status }}
-        </div>
-        <div class="text-caption text-grey-darken-1">
-          Last updated {{ dashboardStats.profileStatus.updatedAgo }}
-        </div>
-      </v-card>
-    </v-col>
-    <!-- Upcoming Bookings -->
-    <v-col cols="12" md="7">
-      <v-card class="elevation-2" rounded>
-        <v-card-title class="text-h6 font-weight-bold py-3">
-          <v-icon start class="me-2">mdi-calendar-clock</v-icon>
-          Upcoming Bookings
+            <v-btn variant="outlined" color="teal" class="px-2" @click="viewAllEvents">
+              View all events
+            </v-btn>
+          </v-card>
+        </v-col>
+
+        <!-- Active Bookings Card -->
+        <v-col cols="12" md="4">
+          <v-card height="100%" class="pa-4" elevation="5">
+            <div class="d-flex justify-space-between align-center">
+              <h2 class="text-h6">Active Bookings</h2>
+              <v-icon color="teal" size="small">mdi-bookmark-check</v-icon>
+            </div>
+
+            <div class="my-4">
+              <div class="text-h3 font-weight-bold">{{ activeBookings.count }}</div>
+              <div class="text-body-2 text-medium-emphasis">{{ activeBookings.description }}</div>
+            </div>
+
+            <v-btn color="teal" variant="outlined" @click="goToBookings"> Manage Bookings </v-btn>
+          </v-card>
+        </v-col>
+
+        <!-- Profile Completion Card -->
+        <v-col cols="12" md="4">
+          <v-card height="100%" class="pa-4" elevation="5">
+            <div class="d-flex justify-space-between align-center">
+              <h2 class="text-h6">Profile Completion</h2>
+              <v-icon color="teal" size="small">mdi-account-check</v-icon>
+            </div>
+
+            <div class="my-4">
+              <div class="d-flex align-center mb-1">
+                <div class="text-h3 font-weight-bold">{{ profileCompletion.percentage }}%</div>
+              </div>
+              <div class="text-body-2 text-medium-emphasis">
+                {{ profileCompletion.description }}
+              </div>
+            </div>
+
+            <v-btn color="teal" variant="outlined" @click="goToProfile"> Update Profile </v-btn>
+          </v-card>
+        </v-col>
+      </v-row>
+
+      <v-card class="mt-6" elevation="5">
+        <v-card-title class="d-flex align-center py-4 px-4">
+          <h2 class="text-h5 font-weight-bold">Recent Activity</h2>
         </v-card-title>
+        <v-card-subtitle class="px-4 pb-0"> Your recent actions and notifications </v-card-subtitle>
 
-        <v-list>
-          <template v-for="(booking, index) in upcomingBookings" :key="index">
-            <v-list-item>
-              <v-list-item-title class="font-weight-bold text-body-2">
-                {{ booking.title }}
-              </v-list-item-title>
-              <v-list-item-subtitle>
-                <div class="d-flex flex-column">
-                  <span class="text-caption">{{ booking.date }}</span>
-                </div>
-                <v-chip size="x-small">{{ booking.booth }}</v-chip>
-              </v-list-item-subtitle>
-              <template v-slot:append>
-                <v-chip :color="booking.color" size="small">{{ booking.status }}</v-chip>
+        <v-card-text class="pb-0">
+          <v-list>
+            <v-list-item v-for="(activity, index) in recentActivities" :key="index" class="px-0">
+              <template v-slot:prepend>
+                <v-avatar color="teal" class="mr-4" size="48">
+                  <v-icon color="white" size="24">
+                    {{ activity.type === 'event' ? 'mdi-calendar-plus' : 'mdi-check-circle' }}
+                  </v-icon>
+                </v-avatar>
               </template>
+
+              <v-list-item-title class="font-weight-bold">
+                {{ activity.title }}
+              </v-list-item-title>
+
+              <v-list-item-subtitle>
+                {{ activity.message }}
+              </v-list-item-subtitle>
+
+              <v-list-item-subtitle class="text-caption text-grey-darken-1 mt-1">
+                {{ activity.timeAgo }}
+              </v-list-item-subtitle>
             </v-list-item>
-
-            <v-divider v-if="index < upcomingBookings.length - 1" />
-          </template>
-        </v-list>
+          </v-list>
+        </v-card-text>
       </v-card>
-    </v-col>
-
-    <!-- Your Business -->
-    <v-col cols="12" md="5">
-      <v-card class="elevation-2" rounded>
-        <v-card-title class="text-h6 font-weight-bold py-3">
-          <v-icon start class="me-2">mdi-store</v-icon>
-          Your Business
-        </v-card-title>
-
-        <v-list density="compact">
-          <v-list-item>
-            <v-list-item-title class="text-grey">Shop Name</v-list-item-title>
-            <template v-slot:append>
-              <span class="font-weight-medium">{{ businessInfo.shopName }}</span>
-            </template>
-          </v-list-item>
-
-          <v-list-item>
-            <v-list-item-title class="text-grey">Contact</v-list-item-title>
-            <template v-slot:append>
-              <span class="font-weight-medium">{{ businessInfo.contact }}</span>
-            </template>
-          </v-list-item>
-
-          <v-list-item>
-            <v-list-item-title class="text-grey">Business Type</v-list-item-title>
-            <template v-slot:append>
-              <v-chip size="small" class="text-capitalize">{{ businessInfo.type }}</v-chip>
-            </template>
-          </v-list-item>
-
-          <v-list-item>
-            <v-list-item-title class="text-grey">Member Since</v-list-item-title>
-            <template v-slot:append>
-              <span class="font-weight-medium">{{ businessInfo.memberSince }}</span>
-            </template>
-          </v-list-item>
-        </v-list>
-
-        <v-card-actions class="pa-4">
-          <v-spacer></v-spacer>
-          <v-btn variant="outlined" prepend-icon="mdi-pencil">Edit Profile</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+    </v-sheet>
+  </div>
+  <div></div>
 </template>
 
 <style scoped>
-.tight-heading {
-  margin-bottom: -6px;
+.v-card {
+  border-radius: 8px;
+  transition: box-shadow 0.3s ease;
+}
+
+.v-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.v-list-item {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 16px 16px;
+}
+
+.v-list-item:last-child {
+  border-bottom: none;
 }
 </style>
