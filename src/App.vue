@@ -9,3 +9,9 @@ import { RouterView } from 'vue-router'
     </v-main>
   </v-app>
 </template>
+
+<style>
+body {
+  font-family: 'Poppins';
+}
+</style>
