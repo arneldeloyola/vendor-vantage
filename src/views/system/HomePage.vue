@@ -43,19 +43,43 @@ const registerDialog = ref(false)
                 >
                   Register Now
                 </v-btn>
-                <v-dialog v-model="registerDialog" width="800px">
-                  <v-card color="grey-lighten-3" flat>
+                <v-dialog v-model="registerDialog" width="800">
+                  <v-card color="grey-lighten-5" flat>
+                    <v-card-actions class="justify-end">
+                      <v-btn icon @click="registerDialog = false">
+                        <v-icon>mdi-close</v-icon>
+                      </v-btn>
+                    </v-card-actions>
+
+                    <v-card-title class="text-h3 text-center text-green-darken-4 mt-n14">
+                      Vendor Vantage
+                    </v-card-title>
+
                     <v-card-text>
+                      <p class="text-center text-grey mt-n10 mb-8">Create your account</p>
                       <RegisterForm />
                     </v-card-text>
 
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn text @click="registerDialog = false">Close</v-btn>
+                    <v-card-actions class="justify-center">
+                      <p>
+                        Already have an account?
+                        <v-btn
+                          variant="text"
+                          color="green"
+                          @click="
+                            () => {
+                              registerDialog = false
+                              loginDialog = true
+                            }
+                          "
+                        >
+                          Sign in
+                        </v-btn>
+                      </p>
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
-                <v-btn @click="Events = true" color="white mx-4" elavation="16" class="mt-4">
+                <v-btn @click="Events = true" color="white mx-4" elevation="16" class="mt-4">
                   Browse Event
                 </v-btn>
               </v-col>
