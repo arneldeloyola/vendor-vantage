@@ -97,13 +97,13 @@ onMounted(() => {
 
             <v-col cols="12" md="6">
               <v-text-field
-  label="Applicant Name"
-  v-model="applicantName"
-  variant="outlined"
-  prepend-inner-icon="mdi-account"
-  density="comfortable"
-  disabled
-></v-text-field>
+                label="Applicant Name"
+                v-model="applicantName"
+                variant="outlined"
+                prepend-inner-icon="mdi-account"
+                density="comfortable"
+                disabled
+              ></v-text-field>
 
 
             </v-col>
