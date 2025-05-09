@@ -6,7 +6,7 @@ import BookingSection from '@/views/system/vendor/BookingSection.vue'
 import EventSection from '@/views/system/vendor/EventSection.vue'
 import ProfileSection from '@/views/system/vendor/ProfileSection.vue'
 import BoothSelection from '@/views/system/vendor/BoothSelection.vue'
-import ApplicationForm from '@/views/system/ApplicationForm.vue'
+import ApplicationForm from '@/views/system/vendor/ApplicationForm.vue'
 
 // Using tab names that match the side navigation
 const activeTab = ref('overview')
