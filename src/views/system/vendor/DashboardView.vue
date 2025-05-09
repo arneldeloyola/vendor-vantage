@@ -1,15 +1,16 @@
 <script setup>
 import { ref, provide } from 'vue'
 import AppLayout from '@/components/layout/AppLayout.vue'
-import DashboardOverview from '@/views/system/vendor/DashboardOverview.vue'
-import BookingSection from '@/views/system/BookingSection.vue'
-import EventSection from '@/views/system/EventSection.vue'
-import ProfileSection from '@/views/system/ProfileSection.vue'
-import BoothSelection from '@/views/system/BoothSelection.vue'
+import DashboardOverview from '@/views/system/Admin/DashboardOverview.vue'
+import BookingSection from '@/views/system/vendor/BookingSection.vue'
+import EventSection from '@/views/system/vendor/EventSection.vue'
+import ProfileSection from '@/views/system/vendor/ProfileSection.vue'
+import BoothSelection from '@/views/system/vendor/BoothSelection.vue'
 import ApplicationForm from '@/views/system/ApplicationForm.vue'
+
 // Using tab names that match the side navigation
-const activeTab = ref('overview') // default to overview tab
-provide('activeTab', activeTab) // Provide this to the layout for active highlighting
+const activeTab = ref('overview')
+provide('activeTab', activeTab)
 
 // Map of tab names to components
 const tabComponents = {

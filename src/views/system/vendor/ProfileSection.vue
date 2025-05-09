@@ -17,7 +17,6 @@ const vendorData = ref({
 // Form submission handler
 const saveChanges = () => {
   console.log('Saving vendor profile:', vendorData.value)
-  // Add your API call or data processing here
 }
 </script>
 
