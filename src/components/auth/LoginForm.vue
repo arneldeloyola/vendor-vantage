@@ -1,59 +1,72 @@
 <script setup>
+import AlertNotification from '@/components/common/AlertNotification.vue'
 import { requiredValidator, emailValidator } from '@/utils/validators'
-import { ref } from 'vue'
+import { useLogin } from '@/composables/auth/login'
+import { ref, watch, onMounted } from 'vue'
 
-const isPasswordVisible = ref(false) // This controls password visibility toggle
+const { formData, formAction, refVForm, onFormSubmit } = useLogin()
 
-const refVForm = ref()
+const isPasswordVisible = ref(false)
+const selectedRole = ref('vendor')
 
-const formDataDefault = {
-  email: '',
-  password: '',
-}
+// Sync toggle with login formData
+watch(selectedRole, (value) => {
+  console.log('Role changed to:', value)
+  formData.loginAsAdmin = value === 'admin'
+})
 
-const formData = ref({ ...formDataDefault })
-
-const onSubmit = () => {
-  // alert(formData.value.email)
-}
-
-const onFormSubmit = () => {
-  refVForm.value?.validate().then(({ valid }) => {
-    if (valid) onSubmit()
-  })
-}
+// Initialize the role correctly on component mount
+onMounted(() => {
+  formData.loginAsAdmin = selectedRole.value === 'admin'
+  console.log('Component mounted, initial loginAsAdmin value:', formData.loginAsAdmin)
+})
 </script>
 
 <template>
+  <AlertNotification
+    :form-success-message="formAction.formSuccessMessage"
+    :form-error-message="formAction.formErrorMessage"
+  />
+  <v-col cols="12" class="text-center">
+    <v-btn-toggle v-model="selectedRole" mandatory class="mt-n10" color="black">
+      <v-btn value="vendor">Vendor</v-btn>
+      <v-btn value="admin">Admin</v-btn>
+    </v-btn-toggle>
+  </v-col>
   <v-form ref="refVForm" @submit.prevent="onFormSubmit">
-    <v-text-field
-      class="mb-3"
-      v-model="formData.email"
-      label="Email"
-      prepend-inner-icon="mdi-email-outline"
-      variant="outlined"
-      :rules="[requiredValidator, emailValidator]"
-    ></v-text-field>
+    <v-row dense>
+      <v-col cols="12">
+        <v-text-field
+          v-model="formData.email"
+          label="Email"
+          prepend-inner-icon="mdi-email-outline"
+          :rules="[requiredValidator, emailValidator]"
+        />
+      </v-col>
 
-    <v-text-field
-      v-model="formData.password"
-      prepend-inner-icon="mdi-lock-outline"
-      variant="outlined"
-      label="Password"
-      :type="isPasswordVisible ? 'text' : 'password'"
-      :append-inner-icon="isPasswordVisible ? 'mdi-eye-off' : 'mdi-eye'"
-      @click:append-inner="isPasswordVisible = !isPasswordVisible"
-      :rules="[requiredValidator]"
-    ></v-text-field>
+      <v-col cols="12">
+        <v-text-field
+          v-model="formData.password"
+          prepend-inner-icon="mdi-lock-outline"
+          label="Password"
+          :type="isPasswordVisible ? 'text' : 'password'"
+          :append-inner-icon="isPasswordVisible ? 'mdi-eye-off' : 'mdi-eye'"
+          @click:append-inner="isPasswordVisible = !isPasswordVisible"
+          :rules="[requiredValidator]"
+        />
+      </v-col>
+    </v-row>
+
     <v-btn
       class="mt-2"
-      elevation="12"
       type="submit"
-      block
-      color="grey-darken-1"
+      color="black"
       prepend-icon="mdi-login"
-      >Login</v-btn
+      :disabled="formAction.formProcess"
+      :loading="formAction.formProcess"
+      block
     >
-    <v-divider class="my-5"></v-divider>
+      Login
+    </v-btn>
   </v-form>
 </template>

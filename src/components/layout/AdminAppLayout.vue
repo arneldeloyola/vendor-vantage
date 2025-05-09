@@ -1,7 +1,7 @@
 <script setup>
 import { isAuthenticated } from '@/utils/supabase'
 import { onMounted, ref } from 'vue'
-import SideNavbar from './SideNavbar.vue'
+import AdminSideNavbar from './AdminSideNavbar.vue'
 
 const itemsVendor = ref([
   { title: 'Dashboard', icon: 'mdi-view-dashboard', tab: 'overview', path: '/dashboard' },
@@ -31,7 +31,7 @@ onMounted(async () => {
         <v-spacer />
       </v-app-bar>
 
-      <SideNavbar :nav-items="itemsVendor" />
+      <AdminSideNavbar :nav-items="itemsVendor" />
 
       <v-main>
         <slot name="content"></slot>
