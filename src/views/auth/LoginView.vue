@@ -1,7 +1,7 @@
 <script setup>
 import AppLayout from '@/components/layout/AppLayout.vue'
 import LoginForm from '@/components/auth/LoginForm.vue'
-// 
+
 </script>
 
 <template>
