@@ -25,7 +25,9 @@ const fetchBookings = async () => {
         shop_name
       )
     `)
-
+    .in('status', ['pending'],
+      'payment_status', ['pending']
+    )
   if (error) {
     console.error('Failed to fetch bookings:', error)
     bookings.value = []
@@ -39,11 +41,6 @@ const fetchBookings = async () => {
 // Updated updateStatus function
 const updateStatus = async (id, newStatus) => {
   const updateData = { status: newStatus }
-
-  // If status is 'approved', also update payment_status to 'completed'
-  if (newStatus === 'approved') {
-    updateData.payment_status = 'completed'
-  }
 
   const { error } = await supabase.from('vendor_bookings').update(updateData).eq('id', id)
 
@@ -107,9 +104,7 @@ onMounted(fetchBookings)
           <!-- Custom Cell: Booking Status -->
           <template #[`item.status`]="{ item }">
             <v-chip
-              :color="
-                item.status === 'approved' ? 'green' : item.status === 'rejected' ? 'red' : 'grey'
-              "
+              :color="item.payment_status === 'completed' ? 'success' : 'warning'"
               size="small"
             >
               {{ item.status }}

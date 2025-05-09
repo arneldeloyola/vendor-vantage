@@ -1,81 +1,139 @@
 <script setup>
-import { onMounted } from 'vue'
-import { useVendor } from '@/composables/system/useVendor'
+import { ref, onMounted } from 'vue'
+import { supabase } from '@/utils/supabase'
 import AdminAppLayout from '@/components/layout/AdminAppLayout.vue'
+import { getMoneyText, prepareDate } from '@/utils/helpers'
 
-// Use the vendor composable
-const { search, headers, filteredVendors, fetchVendors, viewDetails, verifyVendor, loading } =
-  useVendor()
+const bookings = ref([])
+const loading = ref(false)
 
-// Fetch vendors when component is mounted
-onMounted(fetchVendors)
+const fetchBookings = async () => {
+  loading.value = true
+  const { data, error } = await supabase.from('vendor_bookings').select(`
+      id,
+      status,
+      payment_status,
+      payment_amount,
+      created_at,
+      booths (
+        number,
+        events (
+          event_name
+        )
+      ),
+      vendors (
+        shop_name
+      )
+    `)
+    .in('status', ['approved'],
+      'payment_status', ['pending']
+    )
 
-// Updated verifyVendor function to also update the profile status
-const verifyVendorAndUpdateStatus = async (vendor) => {
-  // Update the profile status to 'verified'
-  await verifyVendor(vendor)
+  if (error) {
+    console.error('Failed to fetch bookings:', error)
+    bookings.value = []
+  } else {
+    bookings.value = data
+  }
 
-  // Optionally refetch the vendors to make sure data is updated in the UI
-  fetchVendors()
+  loading.value = false
 }
+
+// Updated updateStatus function
+const updateStatus = async (id) => {
+  console.log('Updating booking with ID:', id, 'Type:', typeof id)
+  
+  const { error } = await supabase.from('vendor_bookings')
+    .update({ payment_status: 'completed' })
+    .eq('id', id)
+
+  if (error) {
+    console.error(`Failed to update booking ${id}:`, error)
+  } else {
+    fetchBookings() 
+  }
+}
+
+
+// Format payment amount using the utility function
+const formatAmount = (amount) => {
+  return getMoneyText(amount)
+}
+
+// Format date using the utility function
+const formatDate = (dateString) => {
+  return prepareDate(dateString)
+}
+
+onMounted(fetchBookings)
 </script>
 
 <template>
   <AdminAppLayout>
     <template #content>
-      <v-container fluid>
-        <v-card class="mx-4 my-4 pa-4" elevation="2" rounded>
-          <v-card-title class="d-flex justify-space-between align-center">
-            <span class="text-h6 font-weight-bold">All Vendors</span>
-            <v-text-field
-              v-model="search"
-              placeholder="Search vendors..."
-              density="compact"
-              variant="outlined"
-              hide-details
-              append-inner-icon="mdi-magnify"
-              class="ma-2"
+      <v-card class="ma-4 pa-4" elevation="2" rounded>
+        <v-card-title class="text-h6 font-weight-bold">All Vendors </v-card-title>
+
+        <v-data-table
+          :items="bookings"
+          :loading="loading"
+          class="rounded border"
+          item-value="id"
+          :headers="[
+            { title: 'Vendor', key: 'vendors.shop_name' },
+            { title: 'Booth #', key: 'booths.number' },
+            { title: 'Event', key: 'booths.events.event_name' },
+             { title: 'Status', key: 'status' },
+            { title: 'Payment', key: 'payment_status' },
+            { title: 'Amount', key: 'payment_amount' },
+            { title: 'Date', key: 'created_at' },
+            { title: 'Actions', key: 'actions', sortable: false },
+          ]"
+        >
+          <!-- Custom Cell: Payment Status -->
+          <template #[`item.payment_status`]="{ item }">
+            <v-chip
+              :color="item.payment_status === 'completed' ? 'success' : 'warning'"
+              size="small"
+            >
+              {{ item.payment_status }}
+            </v-chip>
+          </template>
+
+          <!-- Custom Cell: Booking Status -->
+          <template #[`item.status`]="{ item }">
+            <v-chip
+              :color="
+                item.status === 'approved' ? 'green' : item.status === 'rejected' ? 'red' : 'grey'
+              "
+              size="small"
+            >
+              {{ item.status }}
+            </v-chip>
+          </template>
+
+          <!-- Custom Cell: Amount with proper formatting -->
+          <template #[`item.payment_amount`]="{ item }">
+            {{ formatAmount(item.payment_amount) }}
+          </template>
+
+          <!-- Custom Cell: Date -->
+          <template #[`item.created_at`]="{ item }">
+            {{ formatDate(item.created_at) }}
+          </template>
+
+          <!-- Actions -->
+          <template #[`item.actions`]="{ item }">
+            <v-btn
+              size="small"
+              color="green"
+              icon="mdi-check"
+              :disabled="item.payment_status === 'completed'"
+             @click="updateStatus(item.id)"
             />
-          </v-card-title>
-          <v-data-table
-            :headers="headers"
-            :items="filteredVendors"
-            :loading="loading"
-            class="rounded border"
-            item-value="id"
-          >
-            <!-- Status column formatting -->
-            <template #[`item.profile_status`]="{ item }">
-              <v-chip
-                v-if="item?.profile_status"
-                :color="item.profile_status === 'Verified' ? 'success' : 'warning'"
-                size="small"
-              >
-                {{ item.profile_status }}
-              </v-chip>
-            </template>
-            <!-- Actions column -->
-            <template #[`item.actions`]="{ item }">
-              <v-menu>
-                <template #activator="{ props }">
-                  <v-btn icon="mdi-dots-vertical" v-bind="props" variant="text" size="small" />
-                </template>
-                <v-list>
-                  <v-list-item @click="viewDetails(item.raw)">
-                    <v-list-item-title>View</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item
-                    @click="verifyVendorAndUpdateStatus(item.raw)"
-                    :disabled="item.profile_status === 'Verified'"
-                  >
-                    <v-list-item-title>Verify</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </template>
-          </v-data-table>
-        </v-card>
-      </v-container>
+          </template>
+        </v-data-table>
+      </v-card>
     </template>
   </AdminAppLayout>
 </template>
