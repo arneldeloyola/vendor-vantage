@@ -1,23 +1,70 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import { supabase } from '@/utils/supabase'
 
-// Form data
-const vendorData = ref({
-  businessName: 'Artisan Crafts',
-  contactName: 'Jane Smith',
-  email: 'jane@artisancrafts.com',
-  phone: '555-123-4567',
-  website: 'https://artisancrafts.com',
-  description: 'Handcrafted jewelry and accessories made with sustainable materials.',
-  instagram: 'artisan_crafts',
-  facebook: 'ArtisanCraftsOfficial',
-  twitter: '@username',
+const userData = ref({
+  lastname: '',
+  firstname: '',
+  email: '',
+  business: '',
+  business_description: '',
+  contactNo: ''
 })
 
-// Form submission handler
-const saveChanges = () => {
-  console.log('Saving vendor profile:', vendorData.value)
+const getUser = async () => {
+  const { data: { user } } = await supabase.auth.getUser()
+  if (user) {
+    userData.value.lastname = user.user_metadata?.lastname
+    userData.value.firstname = user.user_metadata?.firstname
+    userData.value.email = user.email
+    userData.value.business = user.user_metadata?.business
+    userData.value.business_description = user.user_metadata?.business_description
+    userData.value.contactNo = user.user_metadata?.contactNo
+  }
 }
+
+const application = async () => {
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    alert("Please log in to place an order.")
+    return
+  }
+
+  const { error } = await supabase.from('vendor_bookings').insert([
+    {
+      vendor_id: user.id,
+      booth_id: booth_id, // make sure booth_id is defined somewhere
+      lastname: userData.value.lastname,
+      firstname: userData.value.firstname,
+      email: userData.value.email,
+      business: userData.value.business,
+      business_description: userData.value.business_description,
+      contactNo: userData.value.contactNo
+    }
+  ])
+
+  if (error) {
+    console.error('Application failed:', error)
+    alert("Failed to apply.")
+  } else {
+    alert("Application placed successfully!")
+  }
+}
+
+const applicantName = computed({
+  get: () => `${userData.value.firstname || ''} ${userData.value.lastname || ''}`.trim(),
+  set: (val) => {
+    const [first, ...rest] = val.split(' ')
+    userData.value.firstname = first || ''
+    userData.value.lastname = rest.join(' ') || ''
+  }
+})
+
+
+onMounted(() => {
+  getUser()
+})
 </script>
 
 <template>
@@ -38,38 +85,44 @@ const saveChanges = () => {
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="vendorData.businessName"
                 label="Business Name"
-                variant="outlined"
+                v-model="userData.business"
+                variant="filled"
                 prepend-inner-icon="mdi-store"
                 density="comfortable"
-              ></v-text-field>
+              >
+            </v-text-field>
+              
             </v-col>
 
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="vendorData.contactName"
-                label="Contact Name"
-                variant="outlined"
-                prepend-inner-icon="mdi-account"
-                density="comfortable"
-              ></v-text-field>
+  label="Applicant Name"
+  v-model="applicantName"
+  variant="outlined"
+  prepend-inner-icon="mdi-account"
+  density="comfortable"
+  disabled
+></v-text-field>
+
+
             </v-col>
 
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="vendorData.email"
                 label="Email"
+                v-model="userData.email"
                 variant="outlined"
                 prepend-inner-icon="mdi-email"
                 density="comfortable"
                 type="email"
+                disabled
               ></v-text-field>
             </v-col>
 
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="vendorData.phone"
+                v-model="userData.contactNo"
                 label="Phone"
                 variant="outlined"
                 prepend-inner-icon="mdi-phone"
@@ -79,7 +132,7 @@ const saveChanges = () => {
 
             <v-col cols="12">
               <v-textarea
-                v-model="vendorData.description"
+                v-model="userData.business_description"
                 label="Business Description"
                 prepend-inner-icon="mdi-information"
                 variant="outlined"
@@ -92,7 +145,7 @@ const saveChanges = () => {
 
         <!-- Save Changes Button -->
         <v-card-actions class="justify-end pa-4">
-          <v-btn color="teal" @click="saveChanges" variant="outlined"> Save Changes </v-btn>
+          <v-btn color="teal" variant="outlined" @click="application"> Save Changes </v-btn>
         </v-card-actions>
       </v-card>
     </v-sheet>
