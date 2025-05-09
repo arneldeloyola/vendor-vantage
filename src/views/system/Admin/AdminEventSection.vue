@@ -5,6 +5,7 @@ import AdminAppLayout from '@/components/layout/AdminAppLayout.vue'
 
 const events = ref([])
 const showAddDialog = ref(false)
+const search = ref('')
 
 const newEvent = ref({
   event_name: '',
@@ -99,7 +100,7 @@ const resetForm = () => {
     <template #content>
       <v-container fluid class="py-6">
         <!-- Header Card -->
-        <v-card class="mb-6 rounded-lg elevation-2 px-6 py-4">
+        <v-card class="mb-3 rounded-lg elevation-2 px-6 py-4">
           <v-row align="center" justify="space-between" no-gutters>
             <v-col cols="12" sm="8">
               <h1 class="font-weight-bold mb-1">Event Management</h1>
@@ -112,6 +113,17 @@ const resetForm = () => {
         <v-card class="rounded-lg elevation-2 mb-6">
           <v-card-title class="px-6 py-4 d-flex justify-space-between align-center">
             <span class="font-weight-bold"><h2>Events List</h2></span>
+            <!-- Search Bar -->
+            <v-text-field
+              v-model="search"
+              placeholder="Search events..."
+              density="compact"
+              variant="outlined"
+              hide-details
+              prepend-inner-icon="mdi-magnify"
+              class="ml-sm-auto mr-2"
+              style="max-width: 300px"
+            />
             <v-btn color="teal-darken-2" class="text-white" @click="showAddDialog = true">
               + Add Event
             </v-btn>
@@ -126,8 +138,9 @@ const resetForm = () => {
               item-value="id"
               class="rounded border"
               density="comfortable"
-              height="450"
+              height="500"
               fixed-header
+              :search="search"
             >
               <!-- Row Number -->
               <template #[`item.row_number`]="{ index }">
