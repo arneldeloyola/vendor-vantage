@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from 'vue'
-
 import { inject } from 'vue'
 
 const activeTab = inject('activeTab')
@@ -8,59 +7,38 @@ const activeTab = inject('activeTab')
 const goToApplicationForm = () => {
   activeTab.value = 'ApplicationForm'
 }
+
 // Event details
 const eventDetails = ref({
   name: 'Summer Craft Fair',
-  description: 'Annual summer craft fair featuring local artisans and vendors.',
-  date: 'July 15, 2025',
+  startDate: 'July 15, 2025',
+  endDate: 'July 16, 2025',
   location: 'Central Park, New York',
   price: '$150',
-  deadline: 'June 30, 2025',
+  boothsLeft: '12',
+  description: 'Annual summer craft fair featuring local artisans and vendors.',
+  duration: '2 days',
 })
 
 // Available booths data
 const booths = ref([
   {
-    id: 'A1',
-    location: 'Main Entrance',
-    size: '10×10',
-    price: '$150',
-    features: ['Corner', 'Electricity'],
+    id: '1',
     status: 'Available',
   },
   {
-    id: 'A2',
-    location: 'Main Entrance',
-    size: '10×10',
-    price: '$150',
-    features: ['Electricity'],
+    id: '2',
     status: 'Available',
   },
   {
-    id: 'B1',
-    location: 'Food Court',
-    size: '8×8',
-    price: '$120',
-    features: ['Electricity', 'Water'],
+    id: '3',
     status: 'Booked',
   },
   {
-    id: 'C1',
-    location: 'Center Stage',
-    size: '12×12',
-    price: '$200',
-    features: ['Premium', 'Corner', 'Electricity'],
+    id: '4',
     status: 'Available',
   },
 ])
-
-// // Function to book a booth
-// const bookBooth = (boothId) => {
-//   const booth = booths.value.find((b) => b.id === boothId)
-//   if (booth && booth.status === 'Available') {
-//     // In a real app, this would trigger a booking process/API call
-//     alert(`Booking booth #${boothId}`)
-//   }
 </script>
 
 <template>
@@ -82,8 +60,16 @@ const booths = ref([
                 <div class="d-flex align-center mb-4">
                   <v-icon color="teal" class="mr-2">mdi-calendar</v-icon>
                   <div>
-                    <div class="text-subtitle-2">Event Date</div>
-                    <div>{{ eventDetails.date }}</div>
+                    <div class="text-subtitle-2">Start Date</div>
+                    <div>{{ eventDetails.startDate }}</div>
+                  </div>
+                </div>
+
+                <div class="d-flex align-center mb-4">
+                  <v-icon color="teal" class="mr-2">mdi-calendar-end</v-icon>
+                  <div>
+                    <div class="text-subtitle-2">End Date</div>
+                    <div>{{ eventDetails.endDate }}</div>
                   </div>
                 </div>
 
@@ -91,7 +77,7 @@ const booths = ref([
                   <v-icon color="teal" class="mr-2">mdi-currency-usd</v-icon>
                   <div>
                     <div class="text-subtitle-2">Booth Price</div>
-                    <div>Starting at {{ eventDetails.price }}</div>
+                    <div>{{ eventDetails.price }}</div>
                   </div>
                 </div>
               </v-col>
@@ -105,11 +91,19 @@ const booths = ref([
                   </div>
                 </div>
 
-                <div class="d-flex align-center">
-                  <v-icon color="teal" class="mr-2">mdi-calendar-clock</v-icon>
+                <div class="d-flex align-center mb-4">
+                  <v-icon color="teal" class="mr-2">mdi-store</v-icon>
                   <div>
-                    <div class="text-subtitle-2">Registration Deadline</div>
-                    <div>{{ eventDetails.deadline }}</div>
+                    <div class="text-subtitle-2">Available Booths</div>
+                    <div>{{ eventDetails.boothsLeft }}</div>
+                  </div>
+                </div>
+
+                <div class="d-flex align-center">
+                  <v-icon color="teal" class="mr-2">mdi-timer</v-icon>
+                  <div>
+                    <div class="text-subtitle-2">Duration</div>
+                    <div>{{ eventDetails.duration }}</div>
                   </div>
                 </div>
               </v-col>
@@ -128,7 +122,6 @@ const booths = ref([
                 <div class="d-flex justify-space-between pa-4">
                   <div>
                     <div class="text-h5 font-weight-bold">Booth #{{ booth.id }}</div>
-                    <div class="text-subtitle-2">{{ booth.location }}</div>
                   </div>
                   <v-chip
                     :color="booth.status === 'Available' ? 'success-lighten-4' : 'grey-lighten-1'"
@@ -138,36 +131,6 @@ const booths = ref([
                     {{ booth.status }}
                   </v-chip>
                 </div>
-
-                <v-divider></v-divider>
-
-                <v-card-text>
-                  <div class="d-flex justify-space-between mb-2">
-                    <span class="text-body-1">Size:</span>
-                    <span class="text-body-1 font-weight-medium">{{ booth.size }}</span>
-                  </div>
-
-                  <div class="d-flex justify-space-between mb-2">
-                    <span class="text-body-1">Price:</span>
-                    <span class="text-body-1 font-weight-medium">{{ booth.price }}</span>
-                  </div>
-
-                  <div class="mb-2">
-                    <div class="text-body-1 mb-1">Features:</div>
-                    <div class="d-flex flex-wrap gap-1">
-                      <v-chip
-                        v-for="feature in booth.features"
-                        :key="feature"
-                        size="x-small"
-                        class="mr-1 mb-1"
-                        color="teal"
-                        text-color="teal"
-                      >
-                        {{ feature }}
-                      </v-chip>
-                    </div>
-                  </div>
-                </v-card-text>
 
                 <v-card-actions class="pa-4 pt-0">
                   <v-btn

@@ -90,48 +90,8 @@ const saveChanges = () => {
             </v-col>
           </v-row>
         </v-card-text>
-      </v-card>
 
-      <v-card elevation="6">
-        <v-card-text>
-          <h2 class="text-h6 font-weight-bold mb-1">Social Media</h2>
-          <p class="text-subtitle-2 text-medium-emphasis mb-4">
-            Connect your social media accounts
-          </p>
-
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="vendorData.instagram"
-                label="Instagram"
-                variant="outlined"
-                density="comfortable"
-                prepend-inner-icon="mdi-instagram"
-              ></v-text-field>
-            </v-col>
-
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="vendorData.facebook"
-                label="Facebook"
-                variant="outlined"
-                density="comfortable"
-                prepend-inner-icon="mdi-facebook"
-              ></v-text-field>
-            </v-col>
-
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="vendorData.twitter"
-                label="Twitter"
-                variant="outlined"
-                density="comfortable"
-                prepend-inner-icon="mdi-twitter"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-        </v-card-text>
-
+        <!-- Save Changes Button -->
         <v-card-actions class="justify-end pa-4">
           <v-btn color="teal" @click="saveChanges" variant="outlined"> Save Changes </v-btn>
         </v-card-actions>
@@ -141,7 +101,6 @@ const saveChanges = () => {
 </template>
 
 <style scoped>
-/* Any additional custom styles can be added here */
 .v-card {
   border-radius: 8px;
 }

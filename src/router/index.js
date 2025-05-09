@@ -6,7 +6,7 @@ import DashboardView from '@/views/system/DashboardView.vue'
 import ContactView from '@/views/system/ContactView.vue'
 import AboutView from '@/views/system/AboutView.vue'
 import EventView from '@/views/system/EventView.vue'
-import ProfileView from '@/views/system/ProfileView.vue'
+
 import AdminDashboard from '@/views/system/Admin/AdminDashboard.vue'
 import AdminEventSection from '@/views/system/Admin/AdminEventSection.vue'
 import AdminBookingSection from '@/views/system/Admin/AdminBookingSection.vue'
