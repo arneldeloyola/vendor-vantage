@@ -17,9 +17,9 @@ onMounted(fetchDashboardData)
         <!-- Header -->
         <v-card class="mb-6 pa-6 rounded-lg elevation-1">
           <v-card-item class="pa-0">
-            <v-card-title class="text-h3 font-weight-bold"> Admin Dashboard </v-card-title>
-            <v-card-subtitle class="text-h6 text-high-emphasis mt-1">
-              Manage events, vendors, and bookings
+            <v-card-title class="font-weight-bold"> <h1>Admin Dashboard</h1> </v-card-title>
+            <v-card-subtitle class="text-high-emphasis mt-1">
+              <p>Manage events, vendors, and bookings</p>
             </v-card-subtitle>
           </v-card-item>
         </v-card>
@@ -33,24 +33,24 @@ onMounted(fetchDashboardData)
             >
               <!-- Header -->
               <div class="d-flex align-center mb-4">
-                <v-icon :icon="stat.icon" :color="stat.iconColor" size="65" class="me-3" />
-                <div class="text-h5 font-weight-bold">
-                  {{ stat.title }}
+                <v-icon :icon="stat.icon" :color="stat.iconColor" size="75" class="me-3" />
+                <div class="font-weight-bold">
+                  <h2>{{ stat.title }}</h2>
                 </div>
               </div>
 
               <!-- Content -->
               <div class="flex-grow-1 d-flex flex-column justify-end">
-                <div class="text-h4 font-weight-bold mb-1">
-                  {{ stat.value }}
+                <div class="font-weight-bold mb-1">
+                  <h1>{{ stat.value }}</h1>
                 </div>
-                <div class="text-body-1 text-medium-emphasis mb-4">
-                  {{ stat.subtitle }}
+                <div class="text-medium-emphasis mb-4">
+                  <p>{{ stat.subtitle }}</p>
                 </div>
                 <v-btn
                   :to="stat.linkTo"
                   variant="elevated"
-                  class="pl-0 text-none text-subtitle font-weight-medium align-self-start"
+                  class="font-weight-medium"
                   :color="stat.iconColor"
                   style="
                     text-transform: none;
@@ -73,11 +73,9 @@ onMounted(fetchDashboardData)
           <v-col cols="12" md="6">
             <v-card class="rounded-lg elevation-1">
               <v-card-item>
-                <v-card-title class="text-subtitle-1 font-weight-bold">
-                  Recent Bookings
-                </v-card-title>
-                <v-card-subtitle class="text-body-1 text-high-emphasis">
-                  Latest booth bookings from vendors
+                <v-card-title class="font-weight-bold"> Recent Bookings </v-card-title>
+                <v-card-subtitle class="text-high-emphasis pt-1">
+                  <span>Latest booth bookings from vendors</span>
                 </v-card-subtitle>
               </v-card-item>
               <v-divider />
@@ -108,7 +106,7 @@ onMounted(fetchDashboardData)
                 <v-btn
                   to="/admin/booking"
                   variant="elevated"
-                  class="text-white pl-0 text-none text-subtitle font-weight-medium align-self-start"
+                  class="text-white pl-0"
                   block
                   style="
                     text-transform: none;
@@ -129,11 +127,9 @@ onMounted(fetchDashboardData)
           <v-col cols="12" md="6">
             <v-card class="rounded-lg elevation-1">
               <v-card-item>
-                <v-card-title class="text-subtitle-1 font-weight-bold">
-                  Upcoming Events
-                </v-card-title>
-                <v-card-subtitle class="text-body-1 text-high-emphasis">
-                  Events scheduled in the next 30 days
+                <v-card-title class="font-weight-bold"> Upcoming Events </v-card-title>
+                <v-card-subtitle class="text-high-emphasis pt-1">
+                  <span>Events scheduled in the next 30 days</span>
                 </v-card-subtitle>
               </v-card-item>
               <v-divider />
@@ -160,7 +156,7 @@ onMounted(fetchDashboardData)
                 <v-btn
                   to="/admin/event"
                   variant="elevated"
-                  class="text-white pl-0 text-none text-subtitle font-weight-medium align-self-start"
+                  class="text-white font-weight-medium"
                   block
                   style="
                     text-transform: none;
