@@ -6,12 +6,11 @@ import DashboardView from '@/views/system/DashboardView.vue'
 import ContactView from '@/views/system/ContactView.vue'
 import AboutView from '@/views/system/AboutView.vue'
 import EventView from '@/views/system/EventView.vue'
-import DashboardOverview from '@/views/system/DashboardOverview.vue'
-import EventSection from '@/views/system/EventSection.vue'
-import AdminDashboard from '@/views/system/AdminDashboard.vue'
-import ProfileSection from '@/views/system/ProfileSection.vue'
-import ApplicationForm from '@/views/system/ApplicationForm.vue'
-import BoothSelection from '@/views/system/BoothSelection.vue'
+import ProfileView from '@/views/system/ProfileView.vue'
+import AdminDashboard from '@/views/system/Admin/AdminDashboard.vue'
+import AdminEventSection from '@/views/system/Admin/AdminEventSection.vue'
+import AdminBookingSection from '@/views/system/Admin/AdminBookingSection.vue'
+import AdminVendorSection from '@/views/system/Admin/AdminVendorSection.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -54,33 +53,23 @@ const router = createRouter({
 
     {
       path: '/admin/dashboard',
-      name: 'admin',
+      name: 'AdminDashboard',
       component: AdminDashboard,
     },
     {
-      path: '/',
-      name: 'Dashboard',
-      component: DashboardOverview,
+      path: '/admin/event',
+      name: 'AdminEvents',
+      component: AdminEventSection,
     },
     {
-      path: '/events',
-      name: 'EventSection',
-      component: EventSection,
+      path: '/admin/booking',
+      name: 'AdminBookings',
+      component: AdminBookingSection,
     },
     {
-      path: '/ProfileSection',
-      name: 'ProfileSection',
-      component: ProfileSection,
-    },
-    {
-      path: '/BoothSelection',
-      name: 'BoothSelection',
-      component: BoothSelection,
-    },
-    {
-      path: '/ApplicationForm',
-      name: 'ApplicationForm',
-      component: ApplicationForm,
+      path: '/admin/vendor',
+      name: 'AdminVendor',
+      component: AdminVendorSection,
     },
   ],
 })
