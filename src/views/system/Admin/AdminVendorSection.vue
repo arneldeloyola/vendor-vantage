@@ -23,9 +23,6 @@ const fetchBookings = async () => {
         events (
           event_name
         )
-      ),
-      vendors (
-        shop_name
       )
     `,
     )

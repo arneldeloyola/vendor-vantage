@@ -23,13 +23,11 @@ const fetchBookings = async () => {
         events (
           event_name
         )
-      ),
-      vendors (
-        shop_name
       )
     `,
     )
-    .in('status', ['pending'], 'payment_status', ['pending'])
+    .in('status', ['pending'])
+    .in('payment_status', ['pending']);
 
   if (error) {
     console.error('Failed to fetch bookings:', error)
