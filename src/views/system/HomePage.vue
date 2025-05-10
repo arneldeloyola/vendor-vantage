@@ -18,12 +18,13 @@ const registerDialog = ref(false)
           class="pa-6"
           width="100%"
           style="
-            background-image: url('/public/images/v-background.jpg');
+            background-image: url('/images/v-background.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
           "
         >
+
           <v-card style="background-color: rgba(228, 224, 226, 0.8)">
             <v-row class="pt-16">
               <v-col cols="12" md="1"></v-col>
@@ -85,7 +86,7 @@ const registerDialog = ref(false)
               </v-col>
 
               <v-col cols="12" md="6" class="d-flex justify-center pr-16 mb-10">
-                <img src="../../../public/images/EventPoster2.jpeg" alt="" height="400px" />
+                <v-img src="/images/EventPoster2.jpeg" alt="1" height="400px" />
               </v-col>
               ><br /><br />
               ><br /><br /> </v-row
@@ -107,7 +108,8 @@ const registerDialog = ref(false)
                 <v-img
                   class="align-end text-white"
                   height="200"
-                  src="/public/images/UpcomingBackground.jpg"
+                  src="/images/UpcomingBackground.jpg"
+                  alt="2"
                   cover
                 ></v-img>
                 <v-card-title class="text-h6 font-weight-bold">Kumbati 2024</v-card-title>
@@ -137,7 +139,8 @@ const registerDialog = ref(false)
                 <v-img
                   class="align-end text-white"
                   height="200"
-                  src="/public/images/dagyaw.jpg"
+                  src="/images/dagyaw.jpg"
+                  alt="3"
                   cover
                 ></v-img>
                 <v-card-title class="text-h6 font-weight-bold">Dagyaw 2025</v-card-title>
@@ -167,7 +170,8 @@ const registerDialog = ref(false)
                 <v-img
                   class="align-end text-white"
                   height="200"
-                  src="/public/images/entrada2024.jpg"
+                  src="/images/entrada2024.jpg"
+                  alt="4"
                   cover
                 ></v-img>
                 <v-card-title class="text-h6 font-weight-bold">Entrada 2024</v-card-title>
@@ -303,10 +307,5 @@ p {
 .v-btn:hover {
   background-color: rgba(0, 0, 0, 0.12);
 }
-.background-section {
-  background-image: url('/public/images/v-background.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
+
 </style>
