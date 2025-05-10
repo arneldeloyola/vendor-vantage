@@ -5,8 +5,8 @@ import { inject } from 'vue'
 
 const activeTab = inject('activeTab')
 
-const goToBoothSelection = () => {
-  activeTab.value = 'BoothSelection'
+const goToApplicationform = () => {
+  activeTab.value = 'ApplicationForm'
 }
 
 const events = ref([])
@@ -83,9 +83,9 @@ onMounted(fetchEvents)
                   color="teal"
                   class="text-white"
                   variant="flat"
-                  @click="goToBoothSelection"
+                  @click="goToApplicationform"
                 >
-                  View Booths
+                  Apply
                 </v-btn>
               </v-card-actions>
             </v-card>
