@@ -18,12 +18,13 @@ const registerDialog = ref(false)
           class="pa-6"
           width="100%"
           style="
-            background-image: url('/public/images/v-background.jpg');
+            background-image: url('/images/v-background.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
           "
         >
+
           <v-card style="background-color: rgba(228, 224, 226, 0.8)">
             <v-row class="pt-16">
               <v-col cols="12" md="1"></v-col>
@@ -85,7 +86,7 @@ const registerDialog = ref(false)
               </v-col>
 
               <v-col cols="12" md="6" class="d-flex justify-center pr-16 mb-10">
-                <img src="/images/EventPoster2.jpeg" alt="1" height="400px" />
+                <v-img src="/images/EventPoster2.jpeg" alt="1" height="400px" />
               </v-col>
               ><br /><br />
               ><br /><br /> </v-row
