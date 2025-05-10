@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { supabase } from '@/utils/supabase'
+ // or fetch it from an API or parent component
 
 const userData = ref({
   lastname: '',
@@ -23,32 +24,34 @@ const getUser = async () => {
   }
 }
 
-const application = async () => {
-  const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) {
-    alert("Please log in to place an order.")
+const saveChanges = async () => {
+  const { data: { user }, error: userError } = await supabase.auth.getUser()
+  
+  if (userError) {
+    console.error('Error fetching user:', userError)
+    alert('Failed to fetch user information. Please try again.')
     return
   }
 
-  const { error } = await supabase.from('vendor_bookings').insert([
-    {
-      vendor_id: user.id,
-      booth_id: booth_id, // make sure booth_id is defined somewhere
-      lastname: userData.value.lastname,
-      firstname: userData.value.firstname,
-      email: userData.value.email,
-      business: userData.value.business,
-      business_description: userData.value.business_description,
-      contactNo: userData.value.contactNo
-    }
-  ])
+  if (user) {
+    const { error } = await supabase.auth.updateUser({
+      data: {
+        lastname: userData.value.lastname,
+        firstname: userData.value.firstname,
+        business: userData.value.business,
+        business_description: userData.value.business_description,
+        contactNo: userData.value.contactNo
+      }
+    })
 
-  if (error) {
-    console.error('Application failed:', error)
-    alert("Failed to apply.")
+    if (error) {
+      console.error('Error updating user data:', error)
+      alert('Failed to save changes. Please try again.')
+    } else {
+      alert('Changes saved successfully!')
+    }
   } else {
-    alert("Application placed successfully!")
+    alert('User not logged in')
   }
 }
 
@@ -60,7 +63,6 @@ const applicantName = computed({
     userData.value.lastname = rest.join(' ') || ''
   }
 })
-
 
 onMounted(() => {
   getUser()
@@ -145,7 +147,7 @@ onMounted(() => {
 
         <!-- Save Changes Button -->
         <v-card-actions class="justify-end pa-4">
-          <v-btn color="teal" variant="outlined" @click="application"> Save Changes </v-btn>
+          <v-btn color="teal" variant="outlined" @click="saveChanges"> Save Changes </v-btn>
         </v-card-actions>
       </v-card>
     </v-sheet>
