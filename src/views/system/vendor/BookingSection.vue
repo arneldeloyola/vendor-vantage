@@ -1,123 +1,135 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { supabase } from '@/utils/supabase'
+import { computed } from 'vue'
 
-const bookings = ref([
-  {
-    id: 1,
-    eventName: 'Summer Craft Fair',
-    boothNumber: '1',
-    eventDate: 'July 15, 2025',
-    location: 'Central Park, New York',
-    amount: '$150',
-    bookingDate: 'May 20, 2025',
-    isPaid: true,
-  },
-  {
-    id: 2,
-    eventName: 'Spring Festival',
-    boothNumber: '2',
-    eventDate: 'April 20, 2025',
-    location: 'Riverfront Park, Portland',
-    amount: '$175',
-    bookingDate: 'February 15, 2025',
-    isPaid: false,
-  },
-])
+const bookings = ref([]) 
+const loading = ref(true) 
 
-const viewDetails = (booking) => {
-  console.log('Viewing details for', booking.eventName)
+const fetchBookings = async () => {
+  loading.value = true
+
+  const { data: { user }, error: userError } = await supabase.auth.getUser()
+  if (userError || !user) {
+    console.error("User not found:", userError)
+    loading.value = false
+    return
+  }
+
+  const { data: bookingsData, error: bookingError } = await supabase
+    .from('vendor_bookings')
+    .select(`
+      id,
+      status,
+      payment_status,
+      permit_url,
+      booth_id,
+      booths ( number, event_id )
+    `)
+    .eq('user_id', user.id)
+
+  console.log('Fetched Bookings:', bookingsData)
+
+  if (bookingError) {
+    console.error('Error fetching bookings:', bookingError)
+    loading.value = false
+    return
+  }
+
+  const { data: eventsData, error: eventsError } = await supabase
+    .from('events')
+    .select('id, event_name')
+
+  console.log('Fetched Events:', eventsData)
+
+  if (eventsError) {
+    console.error('Error fetching events:', eventsError)
+    loading.value = false
+    return
+  }
+
+  bookings.value = bookingsData.map(booking => {
+    const booth = booking.booths
+    const event = eventsData.find(e => e.id === booth?.event_id) 
+
+    return {
+      ...booking,
+      event_name: event?.event_name || 'N/A'
+    }
+  })
+
+  loading.value = false
 }
 
-const downloadReceipt = (booking) => {
-  console.log('Downloading receipt for', booking.eventName)
-}
+const groupedBookings = computed(() => {
+  const groups = {}
 
-const completePayment = (booking) => {
-  console.log('Completing payment for', booking.eventName)
-}
+  bookings.value.forEach(booking => {
+    if (!groups[booking.event_name]) {
+      groups[booking.event_name] = []
+    }
+    groups[booking.event_name].push(booking)
+  })
+
+  return groups
+})
+
+onMounted(() => {
+  fetchBookings()
+})
 </script>
 
 <template>
-  <div class="mx-4 mt-n11">
-    <v-sheet :elevation="6" height="auto" width="auto" class="pb-10 px-2 pt-3" rounded>
-      <div class="px-5 mb-6">
-        <h1 class="text-h3 font-weight-bold">My Bookings</h1>
-        <span class="text-caption text-grey-darken-1">Manage your booth bookings</span>
-      </div>
-      <div>
-        <v-row class="d-flex justify-center">
-          <v-col v-for="booking in bookings" :key="booking.id" cols="12" md="12">
-            <v-card class="pa-4" elevation="2" rounded>
-              <v-card-title class="text-h6 font-weight-bold">
-                <div class="d-flex align-center justify-space-between w-100">
-                  <span>{{ booking.eventName }}</span>
-                  <v-chip
-                    :color="booking.isPaid ? 'success' : 'warning'"
-                    :text-color="booking.isPaid ? 'white' : 'black'"
-                    size="small"
-                    class="font-weight-medium"
-                  >
-                    {{ booking.isPaid ? 'Paid' : 'Payment Pending' }}
-                  </v-chip>
-                </div>
+
+    <div class="px-5 mb-6">
+      <h1 class="text-h3 font-weight-bold">Bookings</h1>
+      <span class="text-caption text-grey-darken-1">Your booked booths</span>
+    </div>
+      <v-card-subtitle v-if="!loading && bookings.length === 0">
+        <v-alert type="info" class="mt-4" elevation="2">
+          You have no bookings yet.
+        </v-alert>
+      </v-card-subtitle>
+
+      <v-card-subtitle v-if="loading" class="mt-4">
+        <v-skeleton-loader :loading="loading" :height="'300px'" type="card"></v-skeleton-loader>
+      </v-card-subtitle>
+
+      <v-card-subtitle v-for="(eventBookings, eventName) in groupedBookings" :key="eventName">
+        <v-divider class="my-4" />
+        
+        <div class="text-h5 font-weight-bold bg-blue-3 text-white py-2 px-4 rounded-lg">
+          {{ eventName }}
+        </div>
+
+        <v-row class="mt-4">
+          <v-col v-for="booking in eventBookings" :key="booking.id" cols="12" sm="6" md="4">
+            <v-card class="ma-2" elevation="3" outlined>
+              <v-card-title class="bg-teal text-white rounded-t-lg py-2">
+                <div class="text-h6">Booth Number: {{ booking.booths?.number }}</div>
               </v-card-title>
-
-              <v-card-subtitle class="text-caption">
-                <v-chip color="teal" text-color="white" size="small" class="font-weight-medium">
-                  Booth #{{ booking.boothNumber }}
-                </v-chip>
+              <v-card-subtitle class="pt-2">
+                <div><strong>Status:</strong> 
+                  <span :class="{
+                    'text-green-6': booking.status === 'confirmed', 
+                    'text-red-6': booking.status === 'pending'
+                  }">{{ booking.status }}</span>
+                </div>
+                <div><strong>Payment:</strong>
+                  <span :class="{
+                    'text-green-6': booking.payment_status === 'Paid', 
+                    'text-yellow-8': booking.payment_status === 'Pending'
+                  }">{{ booking.payment_status }}</span>
+                </div>
               </v-card-subtitle>
-
-              <v-card-text class="pt-0">
-                <div class="d-flex align-center mb-2">
-                  <v-icon size="small" color="teal" class="mr-2">mdi-calendar</v-icon>
-                  <span class="text-caption">Event Date: {{ booking.eventDate }}</span>
-                </div>
-
-                <div class="d-flex align-center mb-2">
-                  <v-icon size="small" color="teal" class="mr-2">mdi-map-marker</v-icon>
-                  <span class="text-caption">{{ booking.location }}</span>
-                </div>
-
-                <div class="d-flex align-center mb-2">
-                  <v-icon size="small" color="teal" class="mr-2">mdi-currency-usd</v-icon>
-                  <span class="text-caption">Amount: {{ booking.amount }}</span>
-                </div>
-
-                <div class="text-caption text-grey mt-3">Booked on: {{ booking.bookingDate }}</div>
-              </v-card-text>
-
-              <v-card-actions class="justify-space-between">
-                <v-btn size="small" variant="outlined" color="black" @click="viewDetails(booking)"
-                  >View Details</v-btn
-                >
-                <v-btn
-                  size="small"
-                  variant="outlined"
-                  color="teal"
-                  v-if="booking.isPaid"
-                  @click="downloadReceipt(booking)"
-                  >Download Receipt</v-btn
-                >
-                <v-btn
-                  size="small"
-                  variant="elevated"
-                  color="teal"
-                  v-else
-                  @click="completePayment(booking)"
-                  >Complete Payment</v-btn
-                >
+              <v-card-actions class="d-flex justify-end">
+                <v-btn v-if="booking.permit_url" :href="booking.permit_url" target="_blank" color="teal">
+                  View Permit
+                </v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
         </v-row>
-      </div>
-    </v-sheet>
-  </div>
+      </v-card-subtitle>
+  
 </template>
-
-<style scoped>
-.tight-heading {
-  margin-bottom: -6px;
-}
-</style>
