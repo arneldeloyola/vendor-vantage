@@ -18,7 +18,7 @@ const registerDialog = ref(false)
           class="pa-6"
           width="100%"
           style="
-            background-image: url('/public/images/v-background.jpg');
+            background-image: url('/images/v-background.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
