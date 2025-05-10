@@ -2,18 +2,29 @@
 import { isAuthenticated } from '@/utils/supabase'
 import { onMounted, ref } from 'vue'
 import SideNavbar from './SideNavbar.vue'
+import ProfileHeader from './ProfileHeader.vue'
 
 const itemsVendor = ref([
   { title: 'Dashboard', icon: 'mdi-view-dashboard', tab: 'overview', path: '/dashboard' },
   { title: 'My Bookings', icon: 'mdi-calendar-check', tab: 'bookings', path: '/bookings' },
   { title: 'Events', icon: 'mdi-calendar-multiselect', tab: 'events', path: '/events' },
-  { title: 'Profile', icon: 'mdi-account', tab: 'payments', path: '/profile' },
+  { title: 'Profile', icon: 'mdi-account', tab: 'profile', path: '/profileSection' },
+  {
+    title: 'ApplicationForm',
+    icon: 'mdi-application',
+    tab: 'ApplicationForm',
+    path: '/ApplicationForm',
+  },
 ])
 
 const isLoggedIn = ref(false)
 
-onMounted(async () => {
+const getLoggedStatus = async () => {
   isLoggedIn.value = await isAuthenticated()
+}
+
+onMounted(() => {
+  getLoggedStatus()
 })
 </script>
 
@@ -29,6 +40,7 @@ onMounted(async () => {
           class="ml-5"
         />
         <v-spacer />
+        <ProfileHeader v-if="isLoggedIn"></ProfileHeader>
       </v-app-bar>
 
       <SideNavbar :nav-items="itemsVendor" />

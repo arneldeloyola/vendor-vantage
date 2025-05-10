@@ -2,11 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '@/views/system/HomePage.vue'
 import LoginView from '@/views/auth/LoginView.vue'
 import RegisterView from '@/views/auth/RegisterView.vue'
-import DashboardView from '@/views/system/DashboardView.vue'
+import DashboardView from '@/views/system/vendor/DashboardView.vue'
 import ContactView from '@/views/system/ContactView.vue'
 import AboutView from '@/views/system/AboutView.vue'
 import EventView from '@/views/system/EventView.vue'
-import ProfileView from '@/views/system/ProfileView.vue'
+
 import AdminDashboard from '@/views/system/Admin/AdminDashboard.vue'
 import AdminEventSection from '@/views/system/Admin/AdminEventSection.vue'
 import AdminBookingSection from '@/views/system/Admin/AdminBookingSection.vue'
@@ -50,11 +50,7 @@ const router = createRouter({
       name: 'event',
       component: EventView,
     },
-    {
-      path: '/profile',
-      name: 'profile',
-      component: ProfileView,
-    },
+
     {
       path: '/admin/dashboard',
       name: 'AdminDashboard',
