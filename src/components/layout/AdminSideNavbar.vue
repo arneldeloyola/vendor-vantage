@@ -20,8 +20,8 @@ const { mobile } = useDisplay()
             <v-icon icon="mdi-shield-account" color="white" />
           </v-avatar>
         </template>
-        <v-list-item-title v-if="!mobile" class="text-subtitle-1 font-weight-bold">
-          Admin Panel
+        <v-list-item-title v-if="!mobile" class="font-weight-bold">
+          <h2>Admin Panel</h2>
         </v-list-item-title>
       </v-list-item>
 
