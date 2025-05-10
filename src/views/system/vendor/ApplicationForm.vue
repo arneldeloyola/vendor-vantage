@@ -13,9 +13,9 @@ const userData = ref({
   contactNo: ''
 })
 
-const boothOptions = ref([]) // Store booth numbers for the selected event
-const eventOptions = ref([]) // Store available events
-const selectedEventId = ref(null) // Stores the selected event ID
+const boothOptions = ref([]) 
+const eventOptions = ref([]) 
+const selectedEventId = ref(null)
 
 const businessType = ref('')
 const number = ref(null)
@@ -23,7 +23,6 @@ const event_name = ref(null)
 const productDescription = ref('')
 const businessPermit = ref(null)
 
-// Fetch user data
 const getUser = async () => {
   const { data: { user } } = await supabase.auth.getUser()
   if (user) {
@@ -45,13 +44,11 @@ const applicantName = computed({
   }
 })
 
-
-// Fetch available events
 const getEvents = async () => {
   const { data, error } = await supabase
     .from('events')
     .select('id, event_name')
-  
+
   if (error) {
     console.error(error)
   } else {
@@ -59,14 +56,13 @@ const getEvents = async () => {
   }
 }
 
-// Fetch available booths based on selected event
 const getBooths = async (eventId) => {
   const { data, error } = await supabase
     .from('booths')
-    .select('number')
+    .select('id, number') 
     .eq('event_id', eventId)
-    .eq('is_available', true) // Ensure the booth is available
-  
+    .eq('is_available', true) 
+
   if (error) {
     console.error(error)
   } else {
@@ -74,40 +70,85 @@ const getBooths = async (eventId) => {
   }
 }
 
-// Handle event change and fetch booths
 const onEventChange = async (eventId) => {
-  number.value = null // Clear previous booth selection
+  number.value = null 
   await getBooths(eventId)
 }
 
-
 const submitForm = async () => {
-  const selectedEvent = eventOptions.value.find(event => event.id === selectedEventId.value)
+
+  const { data: { user }, error: userError } = await supabase.auth.getUser()
+
+  if (userError || !user) {
+    console.error("User fetch error:", userError)
+    alert("Failed to retrieve user.")
+    return
+  }
+
+  if (!number.value) {
+    alert("Please select a booth.")
+    return
+  }
+
+  const { data: boothData, error: boothError } = await supabase
+    .from('booths')
+    .select('id, number, event_id')
+    .eq('number', number.value)
+    .eq('event_id', selectedEventId.value)  
+    .single()  
+
+  if (boothError || !boothData) {
+    console.error("Booth not found:", boothError)
+    alert("Selected booth does not exist or is unavailable.")
+    return
+  }
+
+  let permitUrl = ''
+  if (businessPermit.value) {
+    const file = businessPermit.value
+    const fileExt = file.name.split('.').pop()
+    const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`
+    const filePath = `permits/${user.id}/${fileName}` 
+
+    const { error: uploadError } = await supabase.storage
+      .from('permits')
+      .upload(filePath, file)
+
+    if (uploadError) {
+      console.error("Permit upload failed:", uploadError)
+      alert("Business permit upload failed.")
+      return
+    }
+
+    const { data: publicUrlData } = supabase.storage
+      .from('permits')
+      .getPublicUrl(filePath)
+
+    permitUrl = publicUrlData.publicUrl
+  }
+
   const formData = {
-    applicant_name: `${userData.value.firstname} ${userData.value.lastname}`,
-    business_name: userData.value.business,
-    contact_no: userData.value.contactNo,
-    business_type: businessType.value,
-    number: number.value,
-    event_name: event_name.value,
-    product_description: productDescription.value,
-    business_permit: businessPermit.value
+    booth_id: boothData.id,
+    user_id: user.id,
+    status: 'pending',
+    payment_status: 'pending', 
+    permit_url: permitUrl 
   }
 
   const { error } = await supabase
-    .from('applications') // Assuming you have an 'applications' table for storing submissions
+    .from('vendor_bookings')
     .insert([formData])
 
   if (error) {
-    console.error(error)
+    console.error("Booking insert failed:", error)
+    alert("Booking failed.")
   } else {
-    // Handle success (e.g., show a success message, redirect, etc.)
+    alert("Booking submitted successfully!")
+   
   }
 }
 
-const cancelForm = () => {
-  // Handle form cancellation (reset the form or navigate away)
-}
+
 
 onMounted(() => {
   getUser()
@@ -210,11 +251,10 @@ onMounted(() => {
 
           <v-row justify="end" class="mt-4 justify-space-between mx-2">
             <v-btn color="teal" variant="elevated" @click="submitForm">Submit</v-btn>
-            <v-btn color="red" variant="outlined" class="mr-2" @click="cancelForm">Cancel</v-btn>
+
           </v-row>
         </v-form>
       </v-card>
     </v-sheet>
   </div>
 </template>
-
