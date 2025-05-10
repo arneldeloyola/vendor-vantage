@@ -5,7 +5,6 @@ import DashboardOverview from '@/views/system/Admin/DashboardOverview.vue'
 import BookingSection from '@/views/system/vendor/BookingSection.vue'
 import EventSection from '@/views/system/vendor/EventSection.vue'
 import ProfileSection from '@/views/system/vendor/ProfileSection.vue'
-import BoothSelection from '@/views/system/vendor/BoothSelection.vue'
 import ApplicationForm from '@/views/system/vendor/ApplicationForm.vue'
 
 // Using tab names that match the side navigation
@@ -18,7 +17,7 @@ const tabComponents = {
   bookings: BookingSection,
   events: EventSection,
   profile: ProfileSection,
-  BoothSelection: BoothSelection,
+
   ApplicationForm: ApplicationForm,
 }
 </script>

@@ -9,7 +9,6 @@ const itemsVendor = ref([
   { title: 'My Bookings', icon: 'mdi-calendar-check', tab: 'bookings', path: '/bookings' },
   { title: 'Events', icon: 'mdi-calendar-multiselect', tab: 'events', path: '/events' },
   { title: 'Profile', icon: 'mdi-account', tab: 'profile', path: '/profileSection' },
-  { title: 'Booth Number', icon: 'mdi-cart', tab: 'BoothSelection', path: '/BoothSelection' },
   {
     title: 'ApplicationForm',
     icon: 'mdi-application',
