@@ -12,6 +12,16 @@ const { mobile } = useDisplay()
 </script>
 
 <template>
+  <v-app-bar color="grey-lighten-3">
+        <img
+          src="/images/VendorVantage.png"
+          alt="VendorVantage Logo"
+          height="40"
+          width="100"
+          class="ml-5"
+        />
+        <v-spacer />
+      </v-app-bar>
   <v-navigation-drawer expand-on-hover rail>
     <v-list nav density="comfortable">
       <v-list-item class="mb-4 mt-2">

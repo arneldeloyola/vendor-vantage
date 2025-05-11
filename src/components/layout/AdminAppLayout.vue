@@ -20,16 +20,7 @@ onMounted(async () => {
 <template>
   <v-app>
     <v-layout>
-      <v-app-bar color="grey-lighten-3">
-        <img
-          src="/images/VendorVantage.png"
-          alt="VendorVantage Logo"
-          height="40"
-          width="100"
-          class="ml-5"
-        />
-        <v-spacer />
-      </v-app-bar>
+      
 
       <AdminSideNavbar :nav-items="itemsVendor" />
 

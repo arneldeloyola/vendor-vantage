@@ -3,177 +3,148 @@ import { onMounted } from 'vue'
 import { useAdminDashboard } from '@/composables/system/useAdminDashboard'
 import AdminAppLayout from '@/components/layout/AdminAppLayout.vue'
 
-// Use the composable
 const { recentBookings, upcomingEvents, stats, fetchDashboardData } = useAdminDashboard()
-
-// Fetch data on component mount
 onMounted(fetchDashboardData)
 </script>
 
 <template>
-  <AdminAppLayout>
+  <AdminAppLayout style="background-color: #e0f2f1;">
     <template #content>
-      <v-container fluid>
-        <!-- Header -->
-        <v-card class="mb-6 pa-6 rounded-lg elevation-1">
-          <v-card-item class="pa-0">
-            <v-card-title class="font-weight-bold"> <h1>Admin Dashboard</h1> </v-card-title>
-            <v-card-subtitle class="text-high-emphasis mt-1">
-              <p>Manage events, vendors, and bookings</p>
-            </v-card-subtitle>
-          </v-card-item>
-        </v-card>
-
-        <!-- Stats Section -->
-        <v-row dense>
-          <v-col v-for="(stat, index) in stats" :key="index" cols="12" sm="6" md="4">
-            <v-card
-              class="pa-5 d-flex flex-column justify-space-between elevation-1 rounded-lg"
-              style="min-height: 240px"
-            >
-              <!-- Header -->
-              <div class="d-flex align-center mb-4">
-                <v-icon :icon="stat.icon" :color="stat.iconColor" size="75" class="me-3" />
-                <div class="font-weight-bold">
-                  <h2>{{ stat.title }}</h2>
-                </div>
-              </div>
-
-              <!-- Content -->
-              <div class="flex-grow-1 d-flex flex-column justify-end">
-                <div class="font-weight-bold mb-1">
-                  <h1>{{ stat.value }}</h1>
-                </div>
-                <div class="text-medium-emphasis mb-4">
-                  <p>{{ stat.subtitle }}</p>
-                </div>
-                <v-btn
-                  :to="stat.linkTo"
-                  variant="elevated"
-                  class="font-weight-medium"
-                  :color="stat.iconColor"
-                  style="
-                    text-transform: none;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    width: 100%;
-                  "
-                >
-                  {{ stat.linkText }}
-                </v-btn>
-              </div>
+      <!-- Add flex classes to center the card -->
+      <v-container class="d-flex justify-center">
+     
+          <v-container fluid class="pa-4">
+            <!-- Header -->
+            <v-card class="mb-4 pa-4 rounded-lg elevation-2" style="background-color: #ffffff;">
+              <v-card-title class="text-h5 font-weight-bold text-teal darken-3">Admin Dashboard</v-card-title>
+              <v-card-subtitle class="text-medium-emphasis text-teal darken-1">Manage events, vendors, and bookings</v-card-subtitle>
             </v-card>
-          </v-col>
-        </v-row>
 
-        <!-- List Sections -->
-        <v-row dense class="mt-6">
-          <!-- Recent Bookings -->
-          <v-col cols="12" md="6">
-            <v-card class="rounded-lg elevation-1">
-              <v-card-item>
-                <v-card-title class="font-weight-bold"> Recent Bookings </v-card-title>
-                <v-card-subtitle class="text-high-emphasis pt-1">
-                  <span>Latest booth bookings from vendors</span>
-                </v-card-subtitle>
-              </v-card-item>
-              <v-divider />
-              <v-card-text>
-                <v-list lines="two">
-                  <v-list-item
-                    v-for="(booking, index) in recentBookings"
-                    :key="index"
-                    :border="index !== recentBookings.length - 1"
+            <!-- Stats -->
+            <v-row dense>
+              <v-col
+                v-for="(stat, index) in stats"
+                :key="index"
+                cols="12"
+                sm="6"
+                md="4"
+              >
+                <v-card class="pa-4 elevation-2 rounded-lg" style="min-height: 180px; background-color: #ffffff;">
+                  <div class="d-flex align-center mb-3">
+                    <v-icon :icon="stat.icon" :color="stat.iconColor" size="40" class="me-3" />
+                    <div>
+                      <div class="text-subtitle-1 font-weight-medium text-teal darken-2">{{ stat.title }}</div>
+                    </div>
+                  </div>
+
+                  <div class="d-flex flex-column justify-end">
+                    <div class="text-h5 font-weight-bold text-teal darken-3">{{ stat.value }}</div>
+                    <div class="text-medium-emphasis text-body-2 mb-2">{{ stat.subtitle }}</div>
+                    <v-btn
+                      :to="stat.linkTo"
+                      variant="contained"
+                     
+                      class="text-white"
+                      size="small"
+                      style="background-color: #00796b; text-transform: none"
+                      block
+                    >
+                      {{ stat.linkText }}
+                    </v-btn>
+                  </div>
+                </v-card>
+              </v-col>
+            </v-row>
+
+            <!-- Lists -->
+            <v-row dense class="mt-5">
+              <!-- Recent Bookings -->
+              <v-col cols="12" md="6">
+                <v-card class="rounded-lg elevation-2 pa-4" style="background-color: #ffffff;">
+                  <div class="mb-2">
+                    <div class="text-subtitle-1 font-weight-bold text-teal darken-2">Recent Bookings</div>
+                    <div class="text-medium-emphasis text-caption text-teal darken-1">Latest booth bookings</div>
+                  </div>
+                  <v-divider />
+                  <v-list lines="two" density="compact">
+                    <v-list-item
+                      v-for="(booking, index) in recentBookings"
+                      :key="index"
+                      :border="index !== recentBookings.length - 1"
+                    >
+                      <v-list-item-title class="text-body-2 font-weight-medium">
+                        {{ booking.vendor }}
+                      </v-list-item-title>
+                      <v-list-item-subtitle class="text-caption text-medium-emphasis">
+                        {{ booking.details }}
+                      </v-list-item-subtitle>
+                      <template #append>
+                        <v-chip
+                          :color="booking.status === 'Pending' ? 'orange' : 'green'"
+                          variant="outlined"
+                          size="small"
+                        >
+                          {{ booking.status }}
+                        </v-chip>
+                      </template>
+                    </v-list-item>
+                  </v-list>
+                  <v-btn
+                    to="/admin/booking"
+                    variant="contained"
+                    class="text-white mt-3"
+                    size="small"
+                    block
+                    style="background-color: #00796b; text-transform: none"
                   >
-                    <v-list-item-title class="font-weight-medium">
-                      {{ booking.vendor }}
-                    </v-list-item-title>
-                    <v-list-item-subtitle class="text-medium-emphasis">
-                      {{ booking.details }}
-                    </v-list-item-subtitle>
-                    <template #append>
-                      <v-chip
-                        :color="booking.status === 'Pending' ? 'warning' : 'success'"
-                        variant="outlined"
-                        size="small"
-                      >
-                        {{ booking.status }}
-                      </v-chip>
-                    </template>
-                  </v-list-item>
-                </v-list>
-                <v-btn
-                  to="/admin/booking"
-                  variant="elevated"
-                  class="text-white pl-0"
-                  block
-                  style="
-                    text-transform: none;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    width: 100%;
-                    background-color: #009688;
-                  "
-                >
-                  View all bookings
-                </v-btn>
-              </v-card-text>
-            </v-card>
-          </v-col>
+                    View all bookings
+                  </v-btn>
+                </v-card>
+              </v-col>
 
-          <!-- Upcoming Events -->
-          <v-col cols="12" md="6">
-            <v-card class="rounded-lg elevation-1">
-              <v-card-item>
-                <v-card-title class="font-weight-bold"> Upcoming Events </v-card-title>
-                <v-card-subtitle class="text-high-emphasis pt-1">
-                  <span>Events scheduled in the next 30 days</span>
-                </v-card-subtitle>
-              </v-card-item>
-              <v-divider />
-              <v-card-text>
-                <v-list lines="two">
-                  <v-list-item
-                    v-for="(event, index) in upcomingEvents"
-                    :key="index"
-                    :border="index !== upcomingEvents.length - 1"
+              <!-- Upcoming Events -->
+              <v-col cols="12" md="6">
+                <v-card class="rounded-lg elevation-2 pa-4" style="background-color: #ffffff;">
+                  <div class="mb-2">
+                    <div class="text-subtitle-1 font-weight-bold text-teal darken-2">Upcoming Events</div>
+                    <div class="text-medium-emphasis text-caption text-teal darken-1">Next 30 days</div>
+                  </div>
+                  <v-divider />
+                  <v-list lines="two" density="compact">
+                    <v-list-item
+                      v-for="(event, index) in upcomingEvents"
+                      :key="index"
+                      :border="index !== upcomingEvents.length - 1"
+                    >
+                      <v-list-item-title class="text-body-2 font-weight-medium text-teal darken-2">
+                        {{ event.name }}
+                      </v-list-item-title>
+                      <v-list-item-subtitle class="text-caption text-medium-emphasis">
+                        {{ event.date }} • {{ event.location }}
+                      </v-list-item-subtitle>
+                      <template #append>
+                        <span class="text-caption text-medium-emphasis">
+                          {{ event.boothsLeft }} booths left
+                        </span>
+                      </template>
+                    </v-list-item>
+                  </v-list>
+                  <v-btn
+                    to="/admin/event"
+                    variant="contained"
+                    class="text-white mt-3"
+                    size="small"
+                    block
+                    style="background-color: #00796b; text-transform: none"
                   >
-                    <v-list-item-title class="font-weight-medium">
-                      {{ event.name }}
-                    </v-list-item-title>
-                    <v-list-item-subtitle class="text-medium-emphasis">
-                      {{ event.date }} • {{ event.location }}
-                    </v-list-item-subtitle>
-                    <template #append>
-                      <span class="text-caption text-medium-emphasis">
-                        {{ event.boothsLeft }} booths left
-                      </span>
-                    </template>
-                  </v-list-item>
-                </v-list>
-                <v-btn
-                  to="/admin/event"
-                  variant="elevated"
-                  class="text-white font-weight-medium"
-                  block
-                  style="
-                    text-transform: none;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    width: 100%;
-                    background-color: #009688;
-                  "
-                >
-                  Manage events
-                </v-btn>
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
+                    Manage events
+                  </v-btn>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-container>
       </v-container>
     </template>
   </AdminAppLayout>
 </template>
+
