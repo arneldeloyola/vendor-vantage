@@ -29,81 +29,90 @@ onMounted(fetchEvents)
 </script>
 
 <template>
-  <div class="mx-4 mt-n11">
-    <v-sheet :elevation="6" height="auto" width="auto" class="pb-10 px-2 pt-3" rounded>
-      <div class="px-5 mb-6">
-        <h1 class="text-h3 font-weight-bold">Upcoming Events</h1>
-        <span class="text-caption text-grey-darken-1">
-          Browse and book booths for upcoming events
-        </span>
-      </div>
-      <div>
-        <v-row>
-          <v-col v-for="event in events" :key="event.id" cols="12" md="4">
-            <v-card height="100%" class="event-card mx-auto my-4" max-width="450">
-              <v-card-text>
-                <div class="mb-4">
-                  <div class="text-h4 font-weight-bold">{{ event.event_name }}</div>
-                  <div class="text-body-1 text-grey-darken-1">{{ event.description }}</div>
-                </div>
+  <v-container fluid>
+    <v-row justify="center" class="mt-n16">
+      <v-col cols="12" md="10" lg="9">
+        <v-card
+          class="pa-8"
+          elevation="6"
+          rounded="xl"
+          style="background: linear-gradient(to bottom right, #ffffff, #f9f9f9);"
+        >
+          <div class="text-center mb-8">
+            <h1 class="text-h4 font-weight-bold text-teal-darken-3">Upcoming Events</h1>
+            <p class="text-subtitle-2 text-grey-darken-1">
+              Browse and book booths for upcoming events
+            </p>
+          </div>
 
-                <div class="d-flex align-center my-3">
-                  <v-icon color="teal" class="mr-2">mdi-store</v-icon>
-                  <span class="text-body-1">Booths slots: {{ event.max_booths }}</span>
-                </div>
+          <v-row>
+            <v-col v-for="event in events" :key="event.id" cols="12" sm="6" md="4">
+              <v-card height="100%" class="event-card mx-auto my-4" max-width="450">
+                <v-card-text>
+                  <div class="mb-4">
+                    <div class="text-h5 font-weight-bold text-teal-darken-3">{{ event.event_name }}</div>
+                    <div class="text-body-2 text-grey-darken-1">{{ event.description }}</div>
+                  </div>
 
-                <div class="d-flex align-center my-3">
-                  <v-icon color="teal" class="mr-2">mdi-calendar</v-icon>
-                  <span class="text-body-1">Start Date: {{ event.start_date }}</span>
-                </div>
+                  <div class="d-flex align-center my-2">
+                    <v-icon color="teal" class="mr-2">mdi-store</v-icon>
+                    <span class="text-body-2">Booth slots: {{ event.max_booths }}</span>
+                  </div>
 
-                <div class="d-flex align-center my-3">
-                  <v-icon color="teal" class="mr-2">mdi-calendar-end</v-icon>
-                  <span class="text-body-1">End Date: {{ event.end_date }}</span>
-                </div>
+                  <div class="d-flex align-center my-2">
+                    <v-icon color="teal" class="mr-2">mdi-calendar</v-icon>
+                    <span class="text-body-2">Start Date: {{ event.start_date }}</span>
+                  </div>
 
-                <div class="d-flex align-center my-3">
-                  <v-icon color="teal" class="mr-2">mdi-map-marker</v-icon>
-                  <span class="text-body-1">{{ event.event_location }}</span>
-                </div>
+                  <div class="d-flex align-center my-2">
+                    <v-icon color="teal" class="mr-2">mdi-calendar-end</v-icon>
+                    <span class="text-body-2">End Date: {{ event.end_date }}</span>
+                  </div>
 
-                <div class="d-flex align-center my-3">
-                  <v-icon color="teal" class="mr-2">mdi-currency-usd</v-icon>
-                  <span class="text-body-1">Booth Price: {{ event.booth_price }}</span>
-                </div>
+                  <div class="d-flex align-center my-2">
+                    <v-icon color="teal" class="mr-2">mdi-map-marker</v-icon>
+                    <span class="text-body-2">{{ event.event_location }}</span>
+                  </div>
 
-                <div class="d-flex align-center my-3">
-                  <v-icon color="teal" class="mr-2">mdi-timer</v-icon>
-                  <span class="text-body-1">Duration: {{ event.event_duration }}</span>
-                </div>
-              </v-card-text>
+                  <div class="d-flex align-center my-2">
+                    <v-icon color="teal" class="mr-2">mdi-currency-usd</v-icon>
+                    <span class="text-body-2">Booth Price: {{ event.booth_price }}</span>
+                  </div>
 
-              <v-card-actions class="pa-4 pt-0">
-                <v-btn
-                  block
-                  color="teal"
-                  class="text-white"
-                  variant="flat"
-                  @click="goToApplicationform"
-                >
-                  Apply
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-col>
-        </v-row>
-      </div>
-    </v-sheet>
-  </div>
+                  <div class="d-flex align-center my-2">
+                    <v-icon color="teal" class="mr-2">mdi-timer</v-icon>
+                    <span class="text-body-2">Duration: {{ event.event_duration }}</span>
+                  </div>
+                </v-card-text>
+
+                <v-card-actions class="pa-4 pt-0">
+                  <v-btn
+                    block
+                    color="teal"
+                    class="text-white"
+                    variant="flat"
+                    @click="goToApplicationform"
+                  >
+                    Apply
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
+
+
 
 <style scoped>
 .event-card {
-  transition:
-    transform 0.3s,
-    box-shadow 0.3s;
+  transition: transform 0.3s, box-shadow 0.3s;
   border: 1px solid #e0e0e0;
   overflow: hidden;
+  border-radius: 16px;
 }
 
 .event-card:hover {
