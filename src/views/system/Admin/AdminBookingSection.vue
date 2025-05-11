@@ -126,7 +126,7 @@ onMounted(fetchBookings)
                     ? 'green'
                     : item.status === 'rejected'
                       ? 'red'
-                      : 'grey'"
+                      : 'warning'"
                   class="text-white"
                 >
                   {{ item.status }}
