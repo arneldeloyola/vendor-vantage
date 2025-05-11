@@ -16,6 +16,7 @@ const newEvent = ref({
   max_booths: '',
   description: '',
   event_duration: '',
+  status: 'Upcoming',
 })
 
 const fetchEvents = async () => {
@@ -46,6 +47,7 @@ const headers = [
   { title: 'Booth Price', key: 'booth_price' },
   { title: 'Availability', key: 'availability' },
   { title: 'Status', key: 'status' },
+  { title: 'Action', key: 'action' },
 ]
 
 const formattedEvents = computed(() => {
@@ -54,23 +56,22 @@ const formattedEvents = computed(() => {
     date: `${e.start_date} - ${e.end_date}`,
     booth_price: e.booth_price ? `₱${parseFloat(e.booth_price).toFixed(2)}` : '₱0.00',
     availability: `${e.max_booths ?? '?'} booths`,
-    status: getStatus(e.start_date, e.end_date),
+    status: e.status || getStatus(e.start_date, e.end_date),
   }))
 })
 
 const addEvent = async () => {
-  const { error } = await supabase.from('events').insert([
-    {
-      event_name: newEvent.value.event_name,
-      start_date: newEvent.value.start_date,
-      end_date: newEvent.value.end_date,
-      event_location: newEvent.value.event_location,
-      booth_price: parseFloat(newEvent.value.booth_price),
-      max_booths: parseInt(newEvent.value.max_booths),
-      description: newEvent.value.description,
-      event_duration: newEvent.value.event_duration,
-    },
-  ])
+  const { error } = await supabase.from('events').insert([{
+    event_name: newEvent.value.event_name,
+    start_date: newEvent.value.start_date,
+    end_date: newEvent.value.end_date,
+    event_location: newEvent.value.event_location,
+    booth_price: parseFloat(newEvent.value.booth_price),
+    max_booths: parseInt(newEvent.value.max_booths),
+    description: newEvent.value.description,
+    event_duration: newEvent.value.event_duration,
+    status: newEvent.value.status,
+  }])
 
   if (error) {
     console.error('Error adding event:', error)
@@ -91,6 +92,20 @@ const resetForm = () => {
     max_booths: '',
     description: '',
     event_duration: '',
+    status: 'Upcoming',
+  }
+}
+
+const updateEventStatus = async (eventId, newStatus) => {
+  const { error } = await supabase
+    .from('events')
+    .update({ status: newStatus })
+    .eq('id', eventId)
+
+  if (error) {
+    console.error('Error updating status:', error)
+  } else {
+    fetchEvents()
   }
 }
 </script>
@@ -99,7 +114,7 @@ const resetForm = () => {
   <AdminAppLayout>
     <template #content>
       <v-container fluid class="py-6">
-        <!-- Header Card -->
+        <!-- Header -->
         <v-card class="mb-3 rounded-lg elevation-2 px-6 py-4">
           <v-row align="center" justify="space-between" no-gutters>
             <v-col cols="12" sm="8">
@@ -109,11 +124,10 @@ const resetForm = () => {
           </v-row>
         </v-card>
 
-        <!-- Events Table Card -->
+        <!-- Events Table -->
         <v-card class="rounded-lg elevation-2 mb-6">
           <v-card-title class="px-6 py-4 d-flex justify-space-between align-center">
             <span class="font-weight-bold"><h2>Events List</h2></span>
-            <!-- Search Bar -->
             <v-text-field
               v-model="search"
               placeholder="Search events..."
@@ -147,36 +161,54 @@ const resetForm = () => {
                 {{ index + 1 }}
               </template>
 
-              <!-- Booth Price Formatting -->
               <template #[`item.booth_price`]="{ item }">
                 {{ item.booth_price }}
               </template>
 
-              <!-- Availability Formatting -->
               <template #[`item.availability`]="{ item }">
                 <span>{{ item.availability }}</span>
               </template>
 
-              <!-- Date Range -->
               <template #[`item.date`]="{ item }">
                 <span>{{ item.date }}</span>
               </template>
 
-              <!-- Status with v-chip -->
               <template #[`item.status`]="{ item }">
                 <v-chip
                   size="small"
-                  :color="
-                    item.status === 'Upcoming'
-                      ? 'grey'
-                      : item.status === 'Active'
-                        ? 'green'
-                        : 'blue-grey'
-                  "
+                  :color="item.status === 'Upcoming'
+                    ? 'warning'
+                    : item.status === 'Active'
+                      ? 'green'
+                      : item.status === 'Completed'
+                        ? 'blue'
+                        : 'orange'"
                   class="text-white"
                 >
                   {{ item.status }}
                 </v-chip>
+              </template>
+
+              <!-- Actions Dropdown -->
+              <template #[`item.action`]="{ item }">
+                <v-menu>
+                  <template #activator="{ props }">
+                    <v-btn v-bind="props" icon variant="text">
+                      <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-list>
+                    <v-list-item @click="updateEventStatus(item.id, 'Upcoming')">
+                      <v-list-item-title>Mark as Upcoming</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="updateEventStatus(item.id, 'Active')">
+                      <v-list-item-title>Mark as Active</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="updateEventStatus(item.id, 'Completed')">
+                      <v-list-item-title>Mark as Completed</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
               </template>
             </v-data-table>
           </v-card-text>
@@ -203,11 +235,7 @@ const resetForm = () => {
                     <v-text-field v-model="newEvent.end_date" label="End Date" type="date" />
                   </v-col>
                   <v-col cols="12" sm="6">
-                    <v-text-field
-                      v-model="newEvent.booth_price"
-                      label="Booth Price (₱)"
-                      type="number"
-                    />
+                    <v-text-field v-model="newEvent.booth_price" label="Booth Price (₱)" type="number" />
                   </v-col>
                   <v-col cols="12" sm="6">
                     <v-text-field v-model="newEvent.max_booths" label="Max Booths" type="number" />
@@ -216,9 +244,13 @@ const resetForm = () => {
                     <v-textarea v-model="newEvent.description" label="Event Description" rows="3" />
                   </v-col>
                   <v-col cols="12">
-                    <v-text-field
-                      v-model="newEvent.event_duration"
-                      label="Event Duration (e.g., 2 days)"
+                    <v-text-field v-model="newEvent.event_duration" label="Event Duration (e.g., 2 days)" />
+                  </v-col>
+                  <v-col cols="12">
+                    <v-select
+                      v-model="newEvent.status"
+                      label="Event Status"
+                      :items="['Upcoming', 'Active', 'Completed']"
                     />
                   </v-col>
                 </v-row>
@@ -226,9 +258,7 @@ const resetForm = () => {
             </v-card-text>
             <v-divider />
             <v-card-actions class="justify-end">
-              <v-btn variant="text" color="grey-darken-1" @click="showAddDialog = false"
-                >Cancel</v-btn
-              >
+              <v-btn variant="text" color="grey-darken-1" @click="showAddDialog = false">Cancel</v-btn>
               <v-btn color="primary" @click="addEvent">Save</v-btn>
             </v-card-actions>
           </v-card>
