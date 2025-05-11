@@ -1,10 +1,9 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { supabase } from '@/utils/supabase'
-import { computed } from 'vue'
 
-const bookings = ref([]) 
-const loading = ref(true) 
+const bookings = ref([])
+const loading = ref(true)
 
 const fetchBookings = async () => {
   loading.value = true
@@ -28,8 +27,6 @@ const fetchBookings = async () => {
     `)
     .eq('user_id', user.id)
 
-  console.log('Fetched Bookings:', bookingsData)
-
   if (bookingError) {
     console.error('Error fetching bookings:', bookingError)
     loading.value = false
@@ -40,8 +37,6 @@ const fetchBookings = async () => {
     .from('events')
     .select('id, event_name')
 
-  console.log('Fetched Events:', eventsData)
-
   if (eventsError) {
     console.error('Error fetching events:', eventsError)
     loading.value = false
@@ -50,7 +45,7 @@ const fetchBookings = async () => {
 
   bookings.value = bookingsData.map(booking => {
     const booth = booking.booths
-    const event = eventsData.find(e => e.id === booth?.event_id) 
+    const event = eventsData.find(e => e.id === booth?.event_id)
 
     return {
       ...booking,
@@ -80,56 +75,97 @@ onMounted(() => {
 </script>
 
 <template>
+   <v-container class="d-flex justify-center" >
+      <v-container fluid>
+  <v-card v-if="!loading && bookings.length === 0" class="mt-4">
+    <v-alert type="info" elevation="3">
+      You have no bookings yet.
+    </v-alert>
+  </v-card>
 
-    <div class="px-5 mb-6">
-      <h1 class="text-h3 font-weight-bold">Bookings</h1>
-      <span class="text-caption text-grey-darken-1">Your booked booths</span>
-    </div>
-      <v-card-subtitle v-if="!loading && bookings.length === 0">
-        <v-alert type="info" class="mt-4" elevation="2">
-          You have no bookings yet.
-        </v-alert>
-      </v-card-subtitle>
+  <v-card v-if="loading" class="mt-4">
+    <v-skeleton-loader :loading="loading" :height="'350px'" type="card"></v-skeleton-loader>
+  </v-card>
 
-      <v-card-subtitle v-if="loading" class="mt-4">
-        <v-skeleton-loader :loading="loading" :height="'300px'" type="card"></v-skeleton-loader>
-      </v-card-subtitle>
+  <v-card  v-for="(eventBookings, eventName) in groupedBookings" :key="eventName" class="mt-6">
+    <v-card-title class="text-h3 font-weight-bold text-teal"> Bookings</v-card-title>
+    <v-card-title class="text-h6 font-weight-bold text-teal"> Your booked booths</v-card-title>
+    <v-divider />
 
-      <v-card-subtitle v-for="(eventBookings, eventName) in groupedBookings" :key="eventName">
-        <v-divider class="my-4" />
-        
-        <div class="text-h5 font-weight-bold bg-blue-3 text-white py-2 px-4 rounded-lg">
-          {{ eventName }}
-        </div>
+    <v-card-text>
+      <v-data-table
+        :headers="[
+          { title: 'Booth Number', key: 'booth_number' },
+          { title: 'Status', key: 'status' },
+          { title: 'Payment', key: 'payment_status' },
+          { title: 'Event', key: 'event_name' },
+          { title: 'Actions', key: 'actions' }
+        ]"
+        :items="eventBookings"
+        class="rounded"
+        item-value="id"
+      >
+        <template #[`item.booth_number`]="{ item }">
+          {{ item.booths?.number }}
+        </template>
 
-        <v-row class="mt-4">
-          <v-col v-for="booking in eventBookings" :key="booking.id" cols="12" sm="6" md="4">
-            <v-card class="ma-2" elevation="3" outlined>
-              <v-card-title class="bg-teal text-white rounded-t-lg py-2">
-                <div class="text-h6">Booth Number: {{ booking.booths?.number }}</div>
-              </v-card-title>
-              <v-card-subtitle class="pt-2">
-                <div><strong>Status:</strong> 
-                  <span :class="{
-                    'text-green-6': booking.status === 'confirmed', 
-                    'text-red-6': booking.status === 'pending'
-                  }">{{ booking.status }}</span>
-                </div>
-                <div><strong>Payment:</strong>
-                  <span :class="{
-                    'text-green-6': booking.payment_status === 'Paid', 
-                    'text-yellow-8': booking.payment_status === 'Pending'
-                  }">{{ booking.payment_status }}</span>
-                </div>
-              </v-card-subtitle>
-              <v-card-actions class="d-flex justify-end">
-                <v-btn v-if="booking.permit_url" :href="booking.permit_url" target="_blank" color="teal">
-                  View Permit
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-card-subtitle>
-  
+        <template #[`item.status`]="{ item }">
+          <span :class="{
+            'text-green-6': item.status === 'confirmed',
+            'text-red-6': item.status === 'pending'
+          }">{{ item.status }}</span>
+        </template>
+
+        <template #[`item.payment_status`]="{ item }">
+          <span :class="{
+            'text-green-6': item.payment_status === 'Paid',
+            'text-yellow-8': item.payment_status === 'Pending'
+          }">{{ item.payment_status }}</span>
+        </template>
+
+        <template #[`item.event_name`]="{ item }">
+          {{ item.event_name }}
+        </template>
+
+        <template #[`item.actions`]="{ item }">
+          <v-btn v-if="item.permit_url" :href="item.permit_url" target="_blank" color="teal" class="rounded-lg py-2 px-6">
+            View Permit
+          </v-btn>
+        </template>
+      </v-data-table>
+    </v-card-text>
+  </v-card>
+  </v-container>
+  </v-container>
 </template>
+
+<style scoped>
+.v-card {
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+}
+
+.v-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.text-h5 {
+  font-size: 1.5rem;
+}
+
+.text-teal {
+  color: #008080;
+}
+
+.v-btn {
+  border-radius: 20px;
+  padding: 10px 24px;
+  font-size: 0.875rem;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.v-btn:hover {
+  background-color: #00796b;
+}
+</style>

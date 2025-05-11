@@ -45,7 +45,7 @@ onMounted(() => {
 
       <SideNavbar :nav-items="itemsVendor" />
 
-      <v-main>
+      <v-main style="background-color: #e0f2f1;">
         <slot name="content"></slot>
       </v-main>
     </v-layout>
