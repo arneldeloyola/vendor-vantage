@@ -16,7 +16,7 @@ const fetchBookings = async () => {
       id,
       status,
       payment_status,
-      payment_amount,
+
       created_at,
       booths (
         number,
@@ -97,7 +97,7 @@ onMounted(fetchBookings)
                 { title: 'Booth #', key: 'booths.number' },
                 { title: 'Event', key: 'booths.events.event_name' },
                 { title: 'Payment', key: 'payment_status' },
-                { title: 'Amount', key: 'payment_amount' },
+
                 { title: 'Status', key: 'status' },
                 { title: 'Date', key: 'created_at' },
                 { title: 'Actions', key: 'actions', sortable: false },
@@ -134,11 +134,6 @@ onMounted(fetchBookings)
                 >
                   {{ item.status }}
                 </v-chip>
-              </template>
-
-              <!-- Payment Amount -->
-              <template #[`item.payment_amount`]="{ item }">
-                {{ formatAmount(item.payment_amount) }}
               </template>
 
               <!-- Date -->
