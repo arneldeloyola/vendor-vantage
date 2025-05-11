@@ -59,14 +59,15 @@ onMounted(fetchBookings)
 </script>
 
 <template>
-  <AdminAppLayout>
+  <AdminAppLayout style="background-color: #e0f2f1;">
     <template #content>
-      <v-container fluid class="py-6">
+      <v-container class="d-flex justify-center">
+      <v-container fluid >
         <!-- Header Card -->
-        <v-card class="mb-4 px-6 py-4 elevation-2 rounded-lg">
-          <v-row>
-            <v-col>
-              <h1 class="font-weight-bold">Vendor Bookings</h1>
+        <v-card class="mb-3 rounded-lg elevation-2 px-6 py-4" style="background-color: #ffffff;">
+          <v-row align="center" justify="space-between" no-gutters>
+            <v-col cols="12" sm="8">
+              <h1 class="font-weight-bold mb-1 text-teal darken-3">Vendor Bookings</h1>
               <p class="text-grey-darken-1 mb-0">
                 Review and manage pending vendor reservations for booths.
               </p>
@@ -75,10 +76,10 @@ onMounted(fetchBookings)
         </v-card>
 
         <!-- Table Card -->
-        <v-card class="elevation-2 rounded-lg mb-6">
-          <v-card-title class="px-6 py-4 d-flex justify-space-between align-center"
-            ><span class="font-weight-bold"><h2>Pending Bookings</h2></span></v-card-title
-          >
+        <v-card class="rounded-lg elevation-2 mb-6" style="background-color: #ffffff;">
+          <v-card-title class="px-6 py-4 d-flex justify-space-between align-center">
+            <span class="font-weight-bold text-teal darken-3"><h2>Pending Bookings</h2></span>
+          </v-card-title>
 
           <v-divider />
 
@@ -89,15 +90,13 @@ onMounted(fetchBookings)
               item-value="id"
               class="rounded border"
               density="comfortable"
-              height="500"
+              height="270"
               fixed-header
               :headers="[
                 { title: 'No.', key: 'row_number' },
-                { title: 'Vendor', key: 'vendors.shop_name' },
                 { title: 'Booth #', key: 'booths.number' },
                 { title: 'Event', key: 'booths.events.event_name' },
                 { title: 'Payment', key: 'payment_status' },
-
                 { title: 'Status', key: 'status' },
                 { title: 'Date', key: 'created_at' },
                 { title: 'Actions', key: 'actions', sortable: false },
@@ -111,9 +110,9 @@ onMounted(fetchBookings)
               <!-- Payment Status Chip -->
               <template #[`item.payment_status`]="{ item }">
                 <v-chip
-                  :color="item.payment_status === 'completed' ? 'success' : 'warning'"
-                  class="text-white"
                   size="small"
+                  :color="item.payment_status === 'completed' ? 'green' : 'warning'"
+                  class="text-white"
                 >
                   {{ item.payment_status }}
                 </v-chip>
@@ -122,15 +121,13 @@ onMounted(fetchBookings)
               <!-- Booking Status Chip -->
               <template #[`item.status`]="{ item }">
                 <v-chip
-                  :color="
-                    item.status === 'approved'
-                      ? 'green'
-                      : item.status === 'rejected'
-                        ? 'red'
-                        : 'grey'
-                  "
-                  class="text-white"
                   size="small"
+                  :color="item.status === 'approved'
+                    ? 'green'
+                    : item.status === 'rejected'
+                      ? 'red'
+                      : 'grey'"
+                  class="text-white"
                 >
                   {{ item.status }}
                 </v-chip>
@@ -141,7 +138,7 @@ onMounted(fetchBookings)
                 {{ formatDate(item.created_at) }}
               </template>
 
-              <!-- Action Buttons -->
+              <!-- Actions -->
               <template #[`item.actions`]="{ item }">
                 <v-btn
                   icon="mdi-check"
@@ -164,6 +161,8 @@ onMounted(fetchBookings)
           </v-card-text>
         </v-card>
       </v-container>
+      </v-container>
     </template>
   </AdminAppLayout>
 </template>
+
