@@ -194,7 +194,7 @@ onMounted(() => {
               </v-select>
             </v-col>
 
-            <v-col cols="12" md="6">
+            <v-col cols="12" md="4">
               <v-select
                 v-model="selectedEventId"
                 :items="eventOptions"
@@ -221,7 +221,7 @@ onMounted(() => {
               </v-select>
             </v-col>
 
-            <v-col cols="3">
+            <v-col cols="5">
               <v-file-input
                 v-model="businessPermit"
                 label="Upload Business Permit (Image Only)"
