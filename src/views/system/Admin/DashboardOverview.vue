@@ -1,179 +1,179 @@
 <script setup>
-import { ref } from 'vue'
-import { inject } from 'vue'
+import { ref, onMounted } from 'vue'
+import { supabase } from '@/utils/supabase'
 
-const activeTab = inject('activeTab')
+const events = ref([])
+const bookings = ref([])
+const loading = ref(false)
+
+const fetchEvents = async () => {
+  const { data, error } = await supabase.from('events').select('*')
+    .in('status', ['Upcoming'])
+  if (error) {
+    console.error('Error fetching events:', error)
+  } else {
+    events.value = data
+  }
+}
+
+const fetchBookings = async () => {
+  loading.value = true
+
+  const { data: { user }, error: userError } = await supabase.auth.getUser()
+  if (userError || !user) {
+    console.error("User not found:", userError)
+    loading.value = false
+    return
+  }
+
+  const { data: bookingsData, error: bookingError } = await supabase
+    .from('vendor_bookings')
+    .select(`
+      id,
+      status,
+      payment_status,
+      permit_url,
+      booth_id,
+      booths ( number, event_id )
+    `)
+    .eq('user_id', user.id)
+
+  if (bookingError) {
+    console.error('Error fetching bookings:', bookingError)
+    loading.value = false
+    return
+  }
+
+  const { data: eventsData, error: eventsError } = await supabase
+    .from('events')
+    .select('id, event_name')
+
+  if (eventsError) {
+    console.error('Error fetching events:', eventsError)
+    loading.value = false
+    return
+  }
+
+  bookings.value = bookingsData.map(booking => {
+    const booth = booking.booths
+    const event = eventsData.find(e => e.id === booth?.event_id)
+
+    return {
+      ...booking,
+      event_name: event?.event_name || 'N/A'
+    }
+  })
+
+  loading.value = false
+}
 
 const viewAllEvents = () => {
-  activeTab.value = 'events'
+  // Example handler, you can adjust navigation logic
+  console.log('Redirect to Events Page')
 }
 
-const goToBookings = () => {
-  activeTab.value = 'bookings'
-}
-
-const goToProfile = () => {
-  activeTab.value = 'profile'
-}
-// Dashboard data
-const upcomingEvents = ref({
-  count: 3,
-  description: 'Events in the next 30 days',
+onMounted(() => {
+  fetchEvents()
+  fetchBookings()
 })
 
-const activeBookings = ref({
-  count: 2,
-  description: 'Confirmed booth bookings',
-})
-
-const profileCompletion = ref({
-  percentage: 80,
-  description: 'Complete your profile for better visibility',
-})
-
-// Recent activity data
-const recentActivities = ref([
-  {
-    type: 'event',
-    title: 'New Event Added',
-    message: 'Summer Craft Fair has been added to available events.',
-    timeAgo: '2 days ago',
-    icon: 'mdi-calendar-plus',
-  },
-  {
-    type: 'booking',
-    title: 'Booking Confirmed',
-    message: 'Your booth for Spring Market has been confirmed.',
-    timeAgo: '1 week ago',
-    icon: 'mdi-check-circle',
-  },
-])
 </script>
 
 <template>
-  <div-container>
-    <div class="mx-4 mt-n11">
-      <v-sheet :elevation="6" height="auto" width="auto" class="pb-10 px-2 pt-3" rounded>
-        <div class="px-5 mb-6">
-          <h1 class="text-h3 font-weight-bold">Dashboard</h1>
-          <span class="text-caption text-grey-darken-1">Welcome to your vendor dashboard</span>
+  <v-row class="dashboard-cards" justify="center" align="center">
+    <!-- Upcoming Events Card -->
+    <v-col cols="12" md="4">
+      <v-card class="dashboard-card" elevation="8">
+        <div class="card-header">
+          <v-avatar size="40" class="icon-wrapper">
+            <v-icon color="white">mdi-calendar</v-icon>
+          </v-avatar>
+          <h2 class="text-subtitle-1 font-weight-bold ml-3">Upcoming Events</h2>
         </div>
 
-        <v-row>
-          <!-- Upcoming Events Card -->
-          <v-col cols="12" md="4 ">
-            <v-card height="100%" class="pa-4" elevation="5">
-              <div class="d-flex justify-space-between align-center">
-                <h2 class="text-h6">Upcoming Events</h2>
-                <v-icon color="teal" size="small">mdi-calendar</v-icon>
-              </div>
+        <div class="card-content">
+          <div class="stat-number text-teal font-weight-bold">{{ events.length }}</div>
+          <div class="text-caption text-grey-darken-1">Event(s) available to join</div>
+        </div>
 
-              <div class="my-4">
-                <div class="text-h3 font-weight-bold">{{ upcomingEvents.count }}</div>
-                <div class="text-body-2 text-medium-emphasis">{{ upcomingEvents.description }}</div>
-              </div>
+        <v-btn
+          variant="elevated"
+          color="teal"
+          class="mt-4"
+          block
+          @click="viewAllEvents"
+        >
+          View All Events
+        </v-btn>
+      </v-card>
+    </v-col>
 
-              <v-btn variant="outlined" color="teal" class="px-2" @click="viewAllEvents">
-                View all events
-              </v-btn>
-            </v-card>
-          </v-col>
+    <!-- Active Bookings Card -->
+    <v-col cols="12" md="4">
+      <v-card class="dashboard-card" elevation="8">
+        <div class="card-header">
+          <v-avatar size="40" class="icon-wrapper">
+            <v-icon color="white">mdi-bookmark-check</v-icon>
+          </v-avatar>
+          <h2 class="text-subtitle-1 font-weight-bold ml-3">Active Bookings</h2>
+        </div>
 
-          <!-- Active Bookings Card -->
-          <v-col cols="12" md="4">
-            <v-card height="100%" class="pa-4" elevation="5">
-              <div class="d-flex justify-space-between align-center">
-                <h2 class="text-h6">Active Bookings</h2>
-                <v-icon color="teal" size="small">mdi-bookmark-check</v-icon>
-              </div>
+        <div class="card-content">
+          <div class="stat-number text-teal font-weight-bold">{{ bookings.length }}</div>
+          <div class="text-caption text-grey-darken-1">Booking(s) you have made</div>
+        </div>
 
-              <div class="my-4">
-                <div class="text-h3 font-weight-bold">{{ activeBookings.count }}</div>
-                <div class="text-body-2 text-medium-emphasis">{{ activeBookings.description }}</div>
-              </div>
-
-              <v-btn color="teal" variant="outlined" @click="goToBookings"> Manage Bookings </v-btn>
-            </v-card>
-          </v-col>
-
-          <!-- Profile Completion Card -->
-          <v-col cols="12" md="4">
-            <v-card height="100%" class="pa-4" elevation="5">
-              <div class="d-flex justify-space-between align-center">
-                <h2 class="text-h6">Profile Completion</h2>
-                <v-icon color="teal" size="small">mdi-account-check</v-icon>
-              </div>
-
-              <div class="my-4">
-                <div class="d-flex align-center mb-1">
-                  <div class="text-h3 font-weight-bold">{{ profileCompletion.percentage }}%</div>
-                </div>
-                <div class="text-body-2 text-medium-emphasis">
-                  {{ profileCompletion.description }}
-                </div>
-              </div>
-
-              <v-btn color="teal" variant="outlined" @click="goToProfile"> Update Profile </v-btn>
-            </v-card>
-          </v-col>
-        </v-row>
-
-        <v-card class="mt-6" elevation="5">
-          <v-card-title class="d-flex align-center py-4 px-4">
-            <h2 class="text-h5 font-weight-bold">Recent Activity</h2>
-          </v-card-title>
-          <v-card-subtitle class="px-4 pb-0">
-            Your recent actions and notifications
-          </v-card-subtitle>
-
-          <v-card-text class="pb-0">
-            <v-list>
-              <v-list-item v-for="(activity, index) in recentActivities" :key="index" class="px-0">
-                <template v-slot:prepend>
-                  <v-avatar color="teal" class="mr-4" size="48">
-                    <v-icon color="white" size="24">
-                      {{ activity.type === 'event' ? 'mdi-calendar-plus' : 'mdi-check-circle' }}
-                    </v-icon>
-                  </v-avatar>
-                </template>
-
-                <v-list-item-title class="font-weight-bold">
-                  {{ activity.title }}
-                </v-list-item-title>
-
-                <v-list-item-subtitle>
-                  {{ activity.message }}
-                </v-list-item-subtitle>
-
-                <v-list-item-subtitle class="text-caption text-grey-darken-1 mt-1">
-                  {{ activity.timeAgo }}
-                </v-list-item-subtitle>
-              </v-list-item>
-            </v-list>
-          </v-card-text>
-        </v-card>
-      </v-sheet>
-    </div>
-    <div></div>
-  </div-container>
+        <v-btn
+          variant="elevated"
+          color="teal"
+          class="mt-4"
+          block
+        >
+          Manage Bookings
+        </v-btn>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
+
 <style scoped>
-.v-card {
-  border-radius: 8px;
-  transition: box-shadow 0.3s ease;
+.dashboard-cards {
+  margin-top: 2rem;
 }
 
-.v-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.dashboard-card {
+  border-radius: 16px;
+  padding: 24px;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  background-color: #ffffff;
 }
 
-.v-list-item {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  padding: 16px 16px;
+.dashboard-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
-.v-list-item:last-child {
-  border-bottom: none;
+.card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
 }
+
+.icon-wrapper {
+  background: linear-gradient(135deg, #009688, #004d40);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-content {
+  margin: 12px 0 20px;
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  line-height: 1.2;
+}
+
 </style>
