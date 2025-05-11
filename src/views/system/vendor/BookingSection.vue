@@ -4,6 +4,7 @@ import { supabase } from '@/utils/supabase'
 
 const bookings = ref([])
 const loading = ref(true)
+const search = ref('')
 
 const fetchBookings = async () => {
   loading.value = true
@@ -74,89 +75,128 @@ onMounted(() => {
 })
 </script>
 
+
 <template>
-   <v-container class="d-flex justify-center" >
-      <v-container fluid>
-  <v-card v-if="!loading && bookings.length === 0" class="mt-4">
-    <v-alert type="info" elevation="3">
-      You have no bookings yet.
-    </v-alert>
-  </v-card>
+  <v-container class="d-flex justify-center">
+    <v-container fluid>
+      <!-- Empty booking alert -->
+      <v-card v-if="!loading && bookings.length === 0" class="mt-4 rounded-lg shadow-lg">
+        <v-alert type="info" elevation="3">
+          You have no bookings yet.
+        </v-alert>
+      </v-card>
 
-  <v-card v-if="loading" class="mt-4">
-    <v-skeleton-loader :loading="loading" :height="'350px'" type="card"></v-skeleton-loader>
-  </v-card>
+      <!-- Loading skeleton -->
+      <v-card v-if="loading" class="mt-4 rounded-lg shadow-lg">
+        <v-skeleton-loader :loading="loading" :height="'350px'" type="card"></v-skeleton-loader>
+      </v-card>
 
-  <v-card  v-for="(eventBookings, eventName) in groupedBookings" :key="eventName" class="mt-6">
-    <v-card-title class="text-h3 font-weight-bold text-teal"> Bookings</v-card-title>
-    <v-card-title class="text-h6 font-weight-bold text-teal"> Your booked booths</v-card-title>
-    <v-divider />
+      <!-- Bookings cards loop -->
+      <v-card v-for="(eventBookings, eventName) in groupedBookings" :key="eventName" class="rounded-lg elevation-2 mb-6" style="background-color: #ffffff;">
+        <v-card-title class="px-6 py-4 d-flex justify-space-between align-center">
+          <span class="font-weight-bold text-teal darken-3"><h2>My Bookings</h2></span>
+          <v-text-field
+            v-model="search"
+            placeholder="Search bookings..."
+            density="compact"
+            variant="outlined"
+            hide-details
+            prepend-inner-icon="mdi-magnify"
+            class="ml-sm-auto mr-2"
+            style="max-width: 300px"
+          />
+        </v-card-title>
 
-    <v-card-text>
-      <v-data-table
-        :headers="[
-          { title: 'Booth Number', key: 'booth_number' },
-          { title: 'Status', key: 'status' },
-          { title: 'Payment', key: 'payment_status' },
-          { title: 'Event', key: 'event_name' },
-          { title: 'Actions', key: 'actions' }
-        ]"
-        :items="eventBookings"
-        class="rounded"
-        item-value="id"
-      >
-        <template #[`item.booth_number`]="{ item }">
-          {{ item.booths?.number }}
-        </template>
+        <v-divider />
 
-        <template #[`item.status`]="{ item }">
-          <span :class="{
-            'text-green-6': item.status === 'confirmed',
-            'text-red-6': item.status === 'pending'
-          }">{{ item.status }}</span>
-        </template>
+        <v-card-text class="px-6 pb-6 pt-4">
+          <v-data-table
+            :headers="[
+              { title: 'Booth Number', key: 'booth_number' },
+              { title: 'Status', key: 'status' },
+              { title: 'Payment Status', key: 'payment_status' },
+              { title: 'Event', key: 'event_name' },
+              { title: 'Actions', key: 'actions' }
+            ]"
+            :items="eventBookings"
+            class="rounded-lg"
+            item-value="id"
+            density="comfortable"
+            height="270"
+            fixed-header
+            :search="search"
+          >
+            <!-- Row Number -->
+            <template #[`item.row_number`]="{ index }">
+              {{ index + 1 }}
+            </template>
 
-        <template #[`item.payment_status`]="{ item }">
-          <span :class="{
-            'text-green-6': item.payment_status === 'Paid',
-            'text-yellow-8': item.payment_status === 'Pending'
-          }">{{ item.payment_status }}</span>
-        </template>
+            <!-- Booth Number Column -->
+            <template #[`item.booth_number`]="{ item }">
+              <span class="font-weight-medium">{{ item.booths?.number }}</span>
+            </template>
 
-        <template #[`item.event_name`]="{ item }">
-          {{ item.event_name }}
-        </template>
+            <!-- Status Column with Color Classes -->
+            <template #[`item.status`]="{ item }">
+              <span :class="{
+                'text-green-6': item.status === 'confirmed',
+                'text-red-6': item.status === 'pending'
+              }" class="font-weight-bold">{{ item.status }}</span>
+            </template>
 
-        <template #[`item.actions`]="{ item }">
-          <v-btn v-if="item.permit_url" :href="item.permit_url" target="_blank" color="teal" class="rounded-lg py-2 px-6">
-            View Permit
-          </v-btn>
-        </template>
-      </v-data-table>
-    </v-card-text>
-  </v-card>
-  </v-container>
+            <!-- Payment Status Column -->
+            <template #[`item.payment_status`]="{ item }">
+              <span :class="{
+                'text-green-6': item.payment_status === 'Paid',
+                'text-yellow-8': item.payment_status === 'Pending'
+              }" class="font-weight-bold">{{ item.payment_status }}</span>
+            </template>
+
+            <!-- Event Name Column -->
+            <template #[`item.event_name`]="{ item }">
+              <span class="font-weight-medium">{{ item.event_name }}</span>
+            </template>
+
+            <!-- Actions Column -->
+            <template #[`item.actions`]="{ item }">
+              <v-btn v-if="item.permit_url" :href="item.permit_url" target="_blank" color="teal" class="rounded-lg py-2 px-6 font-weight-bold">
+                View Permit
+              </v-btn>
+            </template>
+          </v-data-table>
+        </v-card-text>
+      </v-card>
+    </v-container>
   </v-container>
 </template>
 
+
 <style scoped>
+/* Global styles for v-card */
 .v-card {
+  background-color: white; /* White background for the card */
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+  padding: 20px; /* Add padding inside the card */
+  border-radius: 12px; /* Rounded corners */
 }
 
+/* Hover effect for cards */
 .v-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.1);
+  transform: translateY(-10px); /* Lift the card */
+  box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.1); /* Soft shadow */
 }
 
-.text-h5 {
-  font-size: 1.5rem;
+/* Hover effect specifically for cards displaying bookings */
+.hover-card:hover {
+  box-shadow: 0px 16px 32px rgba(0, 0, 0, 0.15); /* Slightly larger shadow */
 }
 
+/* Teal color for text */
 .text-teal {
   color: #008080;
 }
 
+/* Button styling */
 .v-btn {
   border-radius: 20px;
   padding: 10px 24px;
@@ -166,6 +206,15 @@ onMounted(() => {
 }
 
 .v-btn:hover {
-  background-color: #00796b;
+  background-color: #00796b; /* Darken the button on hover */
+}
+
+/* Add space between the cards */
+.mt-6 {
+  margin-top: 24px;
+}
+
+.mt-4 {
+  margin-top: 16px;
 }
 </style>
