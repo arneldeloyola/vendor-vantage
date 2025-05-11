@@ -1,6 +1,17 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { supabase } from '@/utils/supabase'
+import { inject } from 'vue'
+
+const activeTab = inject('activeTab')
+
+const viewAllEvents = () => {
+  activeTab.value = 'events'
+}
+
+const goToBookings = () => {
+  activeTab.value = 'bookings'
+}
 
 const events = ref([])
 const bookings = ref([])
@@ -67,10 +78,7 @@ const fetchBookings = async () => {
   loading.value = false
 }
 
-const viewAllEvents = () => {
-  // Example handler, you can adjust navigation logic
-  console.log('Redirect to Events Page')
-}
+
 
 onMounted(() => {
   fetchEvents()
@@ -128,6 +136,7 @@ onMounted(() => {
           color="teal"
           class="mt-4"
           block
+          @click="goToBookings"
         >
           Manage Bookings
         </v-btn>

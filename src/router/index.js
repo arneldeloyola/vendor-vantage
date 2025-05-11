@@ -11,6 +11,8 @@ import AdminDashboard from '@/views/system/Admin/AdminDashboard.vue'
 import AdminEventSection from '@/views/system/Admin/AdminEventSection.vue'
 import AdminBookingSection from '@/views/system/Admin/AdminBookingSection.vue'
 import AdminVendorSection from '@/views/system/Admin/AdminVendorSection.vue'
+import EventSection from '@/views/system/vendor/EventSection.vue'
+import BookingSection from '@/views/system/vendor/BookingSection.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -70,6 +72,16 @@ const router = createRouter({
       path: '/admin/vendor',
       name: 'AdminVendor',
       component: AdminVendorSection,
+    },
+    {
+      path: '/eventsection',
+      name: 'EventSection',
+      component: EventSection,
+    },
+    {
+      path: '/booking',
+      name: 'BookingSection',
+      component: BookingSection,
     },
   ],
 })
