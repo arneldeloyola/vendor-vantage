@@ -155,16 +155,13 @@ onMounted(() => {
   getEvents() // Fetch events when the component is mounted
 })
 </script>
-
 <template>
   <div class="mx-4 mt-n11">
-    <v-sheet :elevation="6" class="pb-10 px-4 pt-6" rounded>
-      <div class="px-5 mb-6">
-        <h1 class="text-h3 font-weight-bold">Application Form</h1>
-        <span class="text-caption text-grey-darken-1">Register your shop to get a slot</span>
-      </div>
-
-      <v-card elevation="5">
+    
+      <v-card elevation="5" class="hover-card">
+        <v-card-title class="px-6 py-4 d-flex justify-space-between align-center">
+          <span class="font-weight-bold text-teal darken-3"><h2>My Bookings</h2></span>
+        </v-card-title>
         <v-form class="px-4 py-4">
           <v-row dense>
             <v-col cols="12" md="6">
@@ -250,11 +247,67 @@ onMounted(() => {
           </v-row>
 
           <v-row justify="end" class="mt-4 justify-space-between mx-2">
-            <v-btn color="teal" variant="elevated" @click="submitForm">Submit</v-btn>
-
+            <v-btn color="teal" variant="elevated" @click="submitForm" class="hover-btn">Submit</v-btn>
           </v-row>
         </v-form>
       </v-card>
-    </v-sheet>
   </div>
 </template>
+
+<style scoped>
+.v-card {
+  background-color: white; /* White background for the card */
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+  padding: 16px; /* Reduced padding inside the card */
+  border-radius: 12px; /* Rounded corners */
+  max-width: 800px; /* Set max width for the card */
+  margin: 0 auto; /* Center the card horizontally */
+}
+
+/* Hover effect for cards */
+.v-card:hover {
+  transform: translateY(-8px); /* Lift the card */
+  box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+
+/* Hover effect for submit button */
+.hover-btn:hover {
+  background-color: #00796b; /* Darker shade on hover */
+  transform: translateY(-2px);
+}
+
+/* Hover effect specifically for cards displaying bookings */
+.hover-card:hover {
+  box-shadow: 0px 16px 32px rgba(0, 0, 0, 0.15); /* Slightly larger shadow */
+}
+
+/* Teal color for text */
+.text-teal {
+  color: #008080;
+}
+
+/* Input field padding */
+.v-text-field,
+.v-select,
+.v-textarea {
+  padding: 10px; /* Add padding to the fields */
+}
+
+/* Button styling */
+.v-btn {
+  border-radius: 20px;
+  padding: 10px 24px;
+  font-size: 0.875rem;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+/* Add space between the cards */
+.mt-6 {
+  margin-top: 24px;
+}
+
+.mt-4 {
+  margin-top: 16px;
+}
+</style>
