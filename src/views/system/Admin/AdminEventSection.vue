@@ -111,23 +111,24 @@ const updateEventStatus = async (eventId, newStatus) => {
 </script>
 
 <template>
-  <AdminAppLayout>
+  <AdminAppLayout style="background-color: #e0f2f1;">
     <template #content>
-      <v-container fluid class="py-6">
+      <v-container class="d-flex justify-center">
+      <v-container fluid>
         <!-- Header -->
-        <v-card class="mb-3 rounded-lg elevation-2 px-6 py-4">
+        <v-card class="mb-3 rounded-lg elevation-2 px-6 py-4" style="background-color: #ffffff;">
           <v-row align="center" justify="space-between" no-gutters>
             <v-col cols="12" sm="8">
-              <h1 class="font-weight-bold mb-1">Event Management</h1>
+              <h1 class="font-weight-bold mb-1 text-teal darken-3">Event Management</h1>
               <p class="text-grey-darken-1 mb-0">Manage your events and booth availability</p>
             </v-col>
           </v-row>
         </v-card>
 
         <!-- Events Table -->
-        <v-card class="rounded-lg elevation-2 mb-6">
+        <v-card class="rounded-lg elevation-2 mb-6" style="background-color: #ffffff;">
           <v-card-title class="px-6 py-4 d-flex justify-space-between align-center">
-            <span class="font-weight-bold"><h2>Events List</h2></span>
+            <span class="font-weight-bold text-teal darken-3"><h2>Events List</h2></span>
             <v-text-field
               v-model="search"
               placeholder="Search events..."
@@ -152,7 +153,7 @@ const updateEventStatus = async (eventId, newStatus) => {
               item-value="id"
               class="rounded border"
               density="comfortable"
-              height="500"
+              height="270"
               fixed-header
               :search="search"
             >
@@ -217,7 +218,7 @@ const updateEventStatus = async (eventId, newStatus) => {
         <!-- Add Event Dialog -->
         <v-dialog v-model="showAddDialog" max-width="1000px">
           <v-card class="rounded-lg elevation-2">
-            <v-card-title class="font-weight-bold my-2 text-center">Add New Event</v-card-title>
+            <v-card-title class="font-weight-bold my-2 text-center text-teal darken-3">Add New Event</v-card-title>
             <v-divider />
             <v-card-text>
               <v-container>
@@ -259,10 +260,11 @@ const updateEventStatus = async (eventId, newStatus) => {
             <v-divider />
             <v-card-actions class="justify-end">
               <v-btn variant="text" color="grey-darken-1" @click="showAddDialog = false">Cancel</v-btn>
-              <v-btn color="primary" @click="addEvent">Save</v-btn>
+              <v-btn color="teal-darken-2" @click="addEvent">Save</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
+      </v-container>
       </v-container>
     </template>
   </AdminAppLayout>
