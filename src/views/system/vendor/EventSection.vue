@@ -14,6 +14,7 @@ const events = ref([])
 // Function to fetch events from Supabase
 const fetchEvents = async () => {
   const { data, error } = await supabase.from('events').select('*')
+  .in('status', ['Upcoming'])
   if (error) {
     console.error('Error fetching events:', error)
   } else {
